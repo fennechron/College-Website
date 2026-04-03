@@ -2,7 +2,7 @@ import React from 'react';
 
 const Header = () => {
     return (
-        <header className="relative bg-white py-4">
+        <header className="relative bg-cream py-4">
             <div className="mx-auto flex max-w-[1280px] items-center gap-[18px] px-6">
                 <div className="flex h-16 w-16 shrink-0 flex-col items-center justify-center gap-[2px] rounded-xl bg-gradient-to-br from-coral to-coral2">
                     <span className="font-display text-[1.4rem] font-extrabold leading-none text-slate-900">

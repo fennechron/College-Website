@@ -1,41 +1,99 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+
+import bg1 from '../../assets/cec11.jpeg';
+import bg2 from '../../assets/cec12.jpg';
+import bg3 from '../../assets/cec14.jpeg';
+import bg4 from '../../assets/cec15.webp';
+
+const images = [
+    { src: bg1 },
+    { src: bg2, title: "College of Engineering Chengannur", subtitle: "Vision & Mission" },
+    { src: bg3 },
+    { src: bg4 }
+];
 
 const Hero = () => {
+    const [currentIndex, setCurrentIndex] = useState(0);
+
+    // Automatic sliding effect (change slide every 5 seconds)
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
+        }, 5000);
+        return () => clearInterval(interval);
+    }, []);
+
+    const prevSlide = () => {
+        setCurrentIndex((prevIndex) => (prevIndex === 0 ? images.length - 1 : prevIndex - 1));
+    };
+
+    const nextSlide = () => {
+        setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
+    };
+
     return (
-        <section id="home" className="relative h-[380px] overflow-hidden bg-slate-100 md:h-[500px]">
-            <div
-                className="absolute inset-0 bg-cover bg-center"
-                style={{
-                    backgroundImage: `linear-gradient(to bottom, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.9) 100%), url("https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/College_of_Engineering_Chengannur_Main_Block.jpg/1280px-College_of_Engineering_Chengannur_Main_Block.jpg")`,
-                }}
-            ></div>
-            <div className="relative z-10 mx-auto flex h-full max-w-[1200px] flex-col items-start justify-center px-5">
-                <div className="mb-[14px] rounded-[2px] border border-slate-300 bg-slate-100/50 px-[14px] py-[5px] text-[0.75rem] uppercase tracking-[0.12em] text-slate-900">
-                    Established 1999 &nbsp;&middot;&nbsp; Kerala, India
-                </div>
-                <h1 className="max-w-[680px] font-display text-[2rem] font-bold leading-[1.1] text-slate-900 drop-shadow-[0_2px_12px_rgba(0,0,0,0.3)] md:text-[3rem]">
-                    College of Engineering<br />Chengannur
-                </h1>
-                <p className="mt-[10px] font-display text-[1.05rem] italic tracking-[0.03em] text-slate-900/85">
-                    "Shaping engineers. Inspiring futures."
-                </p>
-                <div className="mt-[26px] flex flex-wrap gap-3">
-                    <a
-                        href="#about"
-                        className="border-2 border-coral bg-coral px-[26px] py-[10px] text-[0.88rem] font-semibold uppercase tracking-[0.04em] text-white transition hover:border-coral2 hover:bg-coral2"
+        <section id="home" className="relative group w-full overflow-hidden bg-slate-900 aspect-[4/3] sm:aspect-[16/9] lg:aspect-[21/9] max-h-[550px]">
+            {/* Slider track */}
+            <div 
+                className="flex h-full w-full transition-transform duration-1000 ease-in-out"
+                style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+            >
+                {images.map((imgObj, index) => (
+                    <div
+                        key={index}
+                        className="relative h-full min-w-full bg-cover bg-center flex items-center justify-center text-center"
+                        style={{ backgroundImage: `url(${imgObj.src})` }}
                     >
-                        Explore CEC
-                    </a>
-                    <a
-                        href="#admissions"
-                        className="border-2 border-slate-800 px-[26px] py-[10px] text-[0.88rem] font-semibold uppercase tracking-[0.04em] text-slate-900 transition hover:border-slate-900 hover:bg-slate-800 hover:text-white"
-                    >
-                        Admissions 2025-26
-                    </a>
-                </div>
+                        {imgObj.title && (
+                            <>
+                                <div className="absolute inset-0 bg-black/40"></div>
+                                <div className="relative z-10 p-6 md:p-12">
+                                    <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold text-white mb-4 drop-shadow-xl tracking-tight">
+                                        {imgObj.title}
+                                    </h1>
+                                    <p className="text-xl md:text-2xl font-body text-white/90 drop-shadow-md font-light">
+                                        {imgObj.subtitle}
+                                    </p>
+                                </div>
+                            </>
+                        )}
+                    </div>
+                ))}
+            </div>
+
+            {/* Manual Controls (Left & Right Arrows) */}
+            <button
+                onClick={prevSlide}
+                aria-label="Previous image"
+                className="absolute left-4 top-1/2 -translate-y-1/2 rounded-full bg-black/20 p-2 text-white/80 opacity-0 backdrop-blur-sm transition-all duration-300 hover:bg-black/50 hover:text-white hover:scale-110 group-hover:opacity-100 md:left-8 md:p-3 z-10"
+            >
+                <ChevronLeft size={36} />
+            </button>
+            <button
+                onClick={nextSlide}
+                aria-label="Next image"
+                className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full bg-black/20 p-2 text-white/80 opacity-0 backdrop-blur-sm transition-all duration-300 hover:bg-black/50 hover:text-white hover:scale-110 group-hover:opacity-100 md:right-8 md:p-3 z-10"
+            >
+                <ChevronRight size={36} />
+            </button>
+
+            {/* Indicator Dots */}
+            <div className="absolute bottom-6 left-1/2 flex -translate-x-1/2 gap-3 z-10">
+                {images.map((_, index) => (
+                    <button
+                        key={index}
+                        onClick={() => setCurrentIndex(index)}
+                        aria-label={`Go to slide ${index + 1}`}
+                        className={`h-[10px] w-[10px] rounded-full transition-all duration-300 ${
+                            currentIndex === index ? 'bg-white scale-125 w-[14px]' : 'bg-white/40 hover:bg-white/80'
+                        }`}
+                    ></button>
+                ))}
             </div>
         </section>
     );
 };
 
 export default Hero;
+

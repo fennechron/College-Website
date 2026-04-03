@@ -1,26 +1,24 @@
 import React from 'react';
 import Hero from '../components/sections/Hero.jsx';
-import About from '../components/sections/About.jsx';
-import Programs from '../components/sections/Programs.jsx';
-import Academics from '../components/sections/Academics.jsx';
-import NoticeBoard from '../components/sections/NoticeBoard.jsx';
-import Gallery from '../components/sections/Gallery.jsx';
-import PrincipalMessage from '../components/sections/PrincipalMessage.jsx';
+import NoticeUpdates from '../components/sections/NoticeUpdates.jsx';
+import AboutUs from '../components/sections/AboutUs.jsx';
 import Placement from '../components/sections/Placement.jsx';
-import Alumni from '../components/sections/Alumni.jsx';
+import EventsNews from '../components/sections/EventsNews.jsx';
+import Achievements from '../components/sections/Achievements.jsx';
+import Testimonial from '../components/sections/Testimonial.jsx';
+import PhotoGallery from '../components/sections/PhotoGallery.jsx';
 
 const Home = () => {
     return (
         <>
             <Hero />
-            <About />
-            <Programs />
-            <Academics />
-            <NoticeBoard />
-            <Gallery />
-            <PrincipalMessage />
+            <NoticeUpdates />
+            <AboutUs />
             <Placement />
-            <Alumni />
+            <EventsNews />
+            <Achievements />
+            <Testimonial />
+            <PhotoGallery />
         </>
     );
 };

@@ -1,0 +1,99 @@
+import React from 'react';
+import { motion } from 'framer-motion';
+
+const testimonials = [
+  {
+    id: 1,
+    name: "Dr. APJ Abdul Kalam",
+    role: "Former President of India",
+    image: "https://i.pravatar.cc/150?img=11",
+    quote: "The students of CEC display an extraordinary capacity for innovation and futuristic thinking."
+  },
+  {
+    id: 2,
+    name: "Sarah Jenkins",
+    role: "Director of Engineering, TechCorp",
+    image: "https://i.pravatar.cc/150?img=5",
+    quote: "The alumni we've hired from this institution have consistently pushed the boundaries of what's possible."
+  },
+  {
+    id: 3,
+    name: "David Chen",
+    role: "Startup Founder",
+    image: "https://i.pravatar.cc/150?img=12",
+    quote: "Exceptional talent pool. The practical, future-ready skills taught here are transforming the industry."
+  },
+  {
+    id: 4,
+    name: "Dr. Maya Patel",
+    role: "Lead Researcher, AI Institute",
+    image: "https://i.pravatar.cc/150?img=9",
+    quote: "A beacon of technological advancement. The campus environment perfectly nurtures out-of-the-box ideas."
+  }
+];
+
+const Testimonial = () => {
+  return (
+    <section id="testimonials" className="py-20 relative overflow-hidden bg-secondary">
+      
+      <div className="max-w-[95%] mx-auto px-4 lg:px-6 relative z-10">
+        <div className="mb-14 text-center">
+            <h2 className="text-[2.25rem] font-display font-bold text-white mb-4 tracking-wide uppercase">
+                VOICE OF ALUMNI
+            </h2>
+            <div className="w-24 h-1 bg-accent mx-auto rounded-full"></div>
+            <p className="mt-4 text-white/80 max-w-2xl mx-auto font-body">
+                Hear what our distinguished alumni have to say about their journey and our community.
+            </p>
+        </div>
+
+        <div className="relative flex overflow-hidden group">
+            {/* We duplicate the array to create an infinite scroll illusion */}
+            <motion.div 
+               className="flex space-x-6 min-w-max px-4 pb-8"
+               animate={{ x: [0, -1200] }}
+               transition={{ 
+                 repeat: Infinity,
+                 ease: "linear",
+                 duration: 25
+               }}
+            >
+                {[...testimonials, ...testimonials, ...testimonials].map((t, idx) => (
+                    <div 
+                        key={idx} 
+                        className="w-[350px] sm:w-[400px] relative rounded-2xl bg-white/10 border border-white/20 shadow-sm hover:shadow-md transition-shadow duration-300 cursor-pointer"
+                    >
+                        <div className="h-full w-full rounded-2xl p-8 flex flex-col justify-between">
+                            <div>
+                                <div className="text-accent text-5xl font-serif leading-none mb-2 opacity-50">"</div>
+                                <p className="text-white leading-relaxed font-body mb-8">
+                                    {t.quote}
+                                </p>
+                            </div>
+                            <div className="flex items-center gap-4 mt-auto">
+                                <img 
+                                    src={t.image} 
+                                    alt={t.name} 
+                                    className="w-12 h-12 rounded-full object-cover border border-white/20"
+                                    loading="lazy"
+                                />
+                                <div>
+                                    <h4 className="text-white font-bold tracking-wide text-sm">{t.name}</h4>
+                                    <p className="text-white/70 text-[0.7rem] font-semibold uppercase tracking-wider">{t.role}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </motion.div>
+            
+            {/* Fade overlays for smooth scrolling edges matching the new secondary background */}
+            <div className="absolute inset-y-0 left-0 w-16 sm:w-32 bg-gradient-to-r from-secondary to-transparent z-20 pointer-events-none"></div>
+            <div className="absolute inset-y-0 right-0 w-16 sm:w-32 bg-gradient-to-l from-secondary to-transparent z-20 pointer-events-none"></div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default Testimonial;

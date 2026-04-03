@@ -1,4 +1,5 @@
 import React from 'react';
+import aboutImg from '../../assets/cec12.jpg';
 
 const About = () => {
     return (
@@ -9,7 +10,7 @@ const About = () => {
                         <div className="absolute left-[-16px] top-[-16px] -z-10 h-[100px] w-[100px] rounded-2xl bg-gold opacity-70"></div>
                         <img
                             className="aspect-[4/3] w-full rounded-2xl object-cover shadow-hero"
-                            src="https://images.unsplash.com/photo-1562774053-701939374585?w=800&amp;q=80"
+                            src={aboutImg}
                             alt="CEC Campus"
                         />
                         <div className="absolute bottom-[-10px] right-[10px] rounded-[14px] bg-coral px-[22px] py-[18px] text-center text-white shadow-coral max-[480px]:hidden lg:bottom-[-20px] lg:right-[-20px]">

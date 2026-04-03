@@ -32,7 +32,7 @@ const NoticeBoard = () => {
     return (
         <section className="py-20">
             <div className="mx-auto max-w-[1280px] px-6">
-                <span className="mb-[10px] inline-block bg-coral/10 px-3 py-1 text-[0.72rem] font-bold uppercase tracking-[0.14em] text-coral">
+                <span className="mb-[10px] inline-block bg-accent/10 px-3 py-1 text-[0.72rem] font-bold uppercase tracking-[0.14em] text-accent">
                     Official
                 </span>
                 <h2 className="mb-7 font-display text-[2.2rem] font-bold leading-[1.2] text-text">
@@ -46,7 +46,7 @@ const NoticeBoard = () => {
                                 <button
                                     key={f}
                                     onClick={() => setFilter(f)}
-                                    className={`rounded-[20px] px-[14px] py-[6px] text-[0.78rem] font-semibold transition ${filter === f ? 'bg-coral text-white' : 'bg-black/10 text-black/60 hover:bg-coral hover:text-white'
+                                    className={`rounded-[20px] px-[14px] py-[6px] text-[0.78rem] font-semibold transition ${filter === f ? 'bg-accent text-white' : 'bg-black/10 text-black/60 hover:bg-accent hover:text-white'
                                         }`}
                                 >
                                     {f}
