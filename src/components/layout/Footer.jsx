@@ -1,5 +1,5 @@
-import React from 'react';
 import logo from '../../assets/cec122.png';
+import { Linkedin, Instagram, Facebook, Twitter, Youtube } from 'lucide-react';
 
 const Footer = () => {
     return (
@@ -13,12 +13,16 @@ const Footer = () => {
                         <p className="max-w-[280px] text-[0.95rem] leading-[1.75] text-slate-400">
                             A premier Government Engineering Institution in Kerala committed to academic excellence, research, and holistic development of future engineers.
                         </p>
-                        <div className="mt-5 flex gap-[10px]">
-                            <a className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-700 text-[0.95rem] text-slate-400 transition hover:border-coral hover:bg-coral hover:text-white" href="#" title="Facebook">f</a>
-                            <a className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-700 text-[0.95rem] text-slate-400 transition hover:border-coral hover:bg-coral hover:text-white" href="#" title="Twitter">𝕏</a>
-                            <a className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-700 text-[0.95rem] text-slate-400 transition hover:border-coral hover:bg-coral hover:text-white" href="#" title="YouTube">▶</a>
-                            <a className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-700 text-[0.95rem] text-slate-400 transition hover:border-coral hover:bg-coral hover:text-white" href="#" title="LinkedIn">in</a>
-                            <a className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-700 text-[0.95rem] text-slate-400 transition hover:border-coral hover:bg-coral hover:text-white" href="#" title="Instagram">ig</a>
+                        <div className="mt-5 flex gap-4">
+                            <a className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/5 border border-white/10 text-slate-400 transition hover:bg-accent hover:text-white hover:border-accent" href="https://www.linkedin.com/school/college-of-engineering-chengannur/" target="_blank" rel="noopener noreferrer" title="LinkedIn">
+                                <Linkedin size={18} />
+                            </a>
+                            <a className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/5 border border-white/10 text-slate-400 transition hover:bg-pink-600 hover:text-white hover:border-pink-600" href="https://www.instagram.com/cec_chengannur/" target="_blank" rel="noopener noreferrer" title="Instagram">
+                                <Instagram size={18} />
+                            </a>
+                            <a className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/5 border border-white/10 text-slate-400 transition hover:bg-blue-600 hover:text-white hover:border-blue-600" href="#" title="Facebook">
+                                <Facebook size={18} />
+                            </a>
                         </div>
                     </div>
                     <div>
@@ -28,13 +32,13 @@ const Footer = () => {
                                 <span className="shrink-0 text-[1.1rem] text-coral2">📍</span>Chengannur - 689121, Alappuzha District, Kerala, India
                             </p>
                             <p className="flex items-start gap-[10px]">
-                                <span className="shrink-0 text-[1.1rem] text-coral2">📞</span><a className="text-slate-400 hover:text-white transition" href="tel:04792453327">0479-2453327</a>
+                                <span className="shrink-0 text-[1.1rem] text-accent">📞</span><a className="text-slate-400 hover:text-white transition" href="tel:+914792454125">+91-479-2454125</a>
                             </p>
                             <p className="flex items-start gap-[10px]">
-                                <span className="shrink-0 text-[1.1rem] text-coral2">✉</span><a className="text-slate-400 hover:text-white transition" href="mailto:principal@ceconline.edu.in">principal@ceconline.edu.in</a>
+                                <span className="shrink-0 text-[1.1rem] text-accent">✉</span><a className="text-slate-400 hover:text-white transition" href="mailto:principal@ceconline.edu">principal@ceconline.edu</a>
                             </p>
                             <p className="flex items-start gap-[10px]">
-                                <span className="shrink-0 text-[1.1rem] text-coral2">🌐</span><a className="text-slate-400 hover:text-white transition" href="#">ceconline.edu.in</a>
+                                <span className="shrink-0 text-[1.1rem] text-accent">🌐</span><a className="text-slate-400 hover:text-white transition" href="https://ceconline.edu">ceconline.edu</a>
                             </p>
                         </div>
                     </div>

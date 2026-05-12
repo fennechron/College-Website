@@ -67,25 +67,25 @@ const navItems = [
         ]
     },
     {
-        name: 'PLACEMENT', path: '/placement', hasDropdown: false
+        name: 'PLACEMENT', path: '/page/placement', hasDropdown: false
     },
     {
         name: 'ORGANIZATIONS', path: '#', hasDropdown: true,
         dropdownItems: [
-            { label: 'IEEE', path: '/page/ieee' },
-            { label: 'FOCES', path: '/page/foces' },
-            { label: 'Naval NCC Unit', path: '/page/ncc' },
-            { label: 'NSS', path: '/page/nss' },
-            { label: 'PRODECC', path: '/page/prodecc' },
-            { label: 'ExCESS', path: '/page/excess' },
-            { label: 'SURGE', path: '/page/surge' }
+            { label: 'IEEE', path: '/organization/ieee' },
+            { label: 'FOCES', path: '/organization/foces' },
+            { label: 'Naval NCC Unit', path: '/organization/ncc' },
+            { label: 'NSS', path: '/organization/nss' },
+            { label: 'PRODECC', path: '/organization/prodecc' },
+            { label: 'ExCESS', path: '/organization/excess' },
+            { label: 'SURGE', path: '/organization/surge' }
         ]
     },
     {
-        name: 'DOWNLOADS', path: '/downloads', hasDropdown: false
+        name: 'DOWNLOADS', path: '/page/downloads', hasDropdown: false
     },
     {
-        name: 'CONTACT US', path: '/contact', hasDropdown: false
+        name: 'CONTACT US', path: '/page/contact', hasDropdown: false
     }
 ];
 

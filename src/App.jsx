@@ -6,6 +6,14 @@ import Navbar from './components/layout/Navbar.jsx';
 import Footer from './components/layout/Footer.jsx';
 import Home from './pages/Home.jsx';
 import ContentPage from './pages/ContentPage.jsx';
+import TeachersPage from './pages/TeachersPage.jsx';
+import TeacherDetail from './pages/TeacherDetail.jsx';
+import PlacementPage from './pages/PlacementPage.jsx';
+import DownloadsPage from './pages/DownloadsPage.jsx';
+import ContactPage from './pages/ContactPage.jsx';
+import OrganizationDetail from './pages/OrganizationDetail.jsx';
+import PrincipalPage from './pages/PrincipalPage.jsx';
+import BoardOfGovernors from './pages/BoardOfGovernors.jsx';
 
 function App() {
     useEffect(() => {
@@ -27,6 +35,14 @@ function App() {
             <main>
                 <Routes>
                     <Route path="/" element={<Home />} />
+                    <Route path="/page/teachers" element={<TeachersPage />} />
+                    <Route path="/page/placement" element={<PlacementPage />} />
+                    <Route path="/page/downloads" element={<DownloadsPage />} />
+                    <Route path="/page/contact" element={<ContactPage />} />
+                    <Route path="/organization/:id" element={<OrganizationDetail />} />
+                    <Route path="/page/principal" element={<PrincipalPage />} />
+                    <Route path="/page/board-of-governors" element={<BoardOfGovernors />} />
+                    <Route path="/teacher/:id" element={<TeacherDetail />} />
                     <Route path="/page/:slug" element={<ContentPage />} />
                 </Routes>
             </main>
