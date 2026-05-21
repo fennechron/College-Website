@@ -1,15 +1,29 @@
 {
   "files": {
-    "main.css": "/static/css/main.8819af6b.css",
-    "main.js": "/static/js/main.2aac947a.js",
+    "main.css": "/static/css/main.ffdab0fa.css",
+    "main.js": "/static/js/main.2fd60451.js",
     "static/media/cec12.jpg": "/static/media/cec12.30b84c286c8f599ecb05.jpg",
+    "static/media/cec14.jpeg": "/static/media/cec14.226600fe8dcf90e9b010.jpeg",
     "static/media/cec11.jpeg": "/static/media/cec11.4fad8538016175c3daca.jpeg",
+    "static/media/ibm.png": "/static/media/ibm.80baa0b0db9e8abad602.png",
+    "static/media/ihrd.png": "/static/media/ihrd.0d788a09b5ed21cb703d.png",
+    "static/media/excell.png": "/static/media/excell.60ad525f0e9de9f5588c.png",
+    "static/media/wipro.png": "/static/media/wipro.1cbc8c3423977d24cdbd.png",
+    "static/media/infosys.png": "/static/media/infosys.fccf21c99c081a93730d.png",
+    "static/media/lt.png": "/static/media/lt.7d3d63ecd1042f3fda4c.png",
+    "static/media/cec122.png": "/static/media/cec122.fd97ee6cfbf60312247a.png",
+    "static/media/tcs.png": "/static/media/tcs.b4285d02c1cf1e758045.png",
+    "static/media/cognizant.png": "/static/media/cognizant.3d64eb3d9e89d4a6b6e7.png",
+    "static/media/oracle.png": "/static/media/oracle.9feef55e9ed38acf0729.png",
+    "static/media/accenture.png": "/static/media/accenture.68a83e04c96ed8eb3c2c.png",
+    "static/media/ktu.png": "/static/media/ktu.666f091c14bb07eb2cfb.png",
+    "static/media/cec15.webp": "/static/media/cec15.4aaf75d55259b2db11f6.webp",
     "index.html": "/index.html",
-    "main.8819af6b.css.map": "/static/css/main.8819af6b.css.map",
-    "main.2aac947a.js.map": "/static/js/main.2aac947a.js.map"
+    "main.ffdab0fa.css.map": "/static/css/main.ffdab0fa.css.map",
+    "main.2fd60451.js.map": "/static/js/main.2fd60451.js.map"
   },
   "entrypoints": [
-    "static/css/main.8819af6b.css",
-    "static/js/main.2aac947a.js"
+    "static/css/main.ffdab0fa.css",
+    "static/js/main.2fd60451.js"
   ]
 }

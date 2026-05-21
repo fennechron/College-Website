@@ -26,7 +26,7 @@ const navItems = [
                 subItems: [
                     { label: 'FAB Lab', path: '/page/fab-lab' },
                     { label: 'Library', path: '/page/library' },
-                    { label: 'Laboratories', path: '/page/labs' }, 
+                    { label: 'Transportation Facility', path: '/page/college-bus' }, 
                     { label: 'Hostel & Mess', path: '/page/hostel' }
                 ]
             },
@@ -53,8 +53,17 @@ const navItems = [
     { 
         name: 'ACADEMICS', path: '#', hasDropdown: true,
         dropdownItems: [
-            { label: 'Department', path: '/page/department' },
-            { label: 'KTU', path: '/page/ktu' },
+            { 
+                label: 'Department', path: '#', hasSubDropdown: true,
+                subItems: [
+                    { label: 'Department of Computer Engineering', path: '/page/dept-computer-engineering' },
+                    { label: 'Department of Electrical Engineering', path: '/page/dept-electrical-engineering' },
+                    { label: 'Department of Electronics Engineering', path: '/page/dept-electronics-engineering' },
+                    { label: 'Department of General Engineering', path: '/page/dept-general-engineering' },
+                    { label: 'Department of Basic Science & Language', path: '/page/dept-basic-science-language' }
+                ]
+            },
+            { label: 'APJAKTU', path: '/page/apjaktu' },
             { label: 'AICTE', path: '/page/aicte' }
         ]
     },

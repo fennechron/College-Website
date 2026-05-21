@@ -14,6 +14,8 @@ import ContactPage from './pages/ContactPage.jsx';
 import OrganizationDetail from './pages/OrganizationDetail.jsx';
 import PrincipalPage from './pages/PrincipalPage.jsx';
 import BoardOfGovernors from './pages/BoardOfGovernors.jsx';
+import AdministrativeStaff from './pages/AdministrativeStaff.jsx';
+import LibraryStaff from './pages/LibraryStaff.jsx';
 
 function App() {
     useEffect(() => {
@@ -42,6 +44,8 @@ function App() {
                     <Route path="/organization/:id" element={<OrganizationDetail />} />
                     <Route path="/page/principal" element={<PrincipalPage />} />
                     <Route path="/page/board-of-governors" element={<BoardOfGovernors />} />
+                    <Route path="/page/administrative-staff" element={<AdministrativeStaff />} />
+                    <Route path="/page/library-staff" element={<LibraryStaff />} />
                     <Route path="/teacher/:id" element={<TeacherDetail />} />
                     <Route path="/page/:slug" element={<ContentPage />} />
                 </Routes>

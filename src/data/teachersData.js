@@ -23,8 +23,8 @@ export const teachersData = {
                 accentColor: '#1D546C',
                 icon: '💻',
                 hod: {
-                    id: 'sreeja-m',
-                    name: 'Dr. Sreeja M.',
+                    id: 'Renu-G',
+                    name: 'Dr. Renu George',
                     designation: 'Professor & Head of Department',
                     specialization: 'Machine Learning, Data Mining, Big Data Analytics',
                     qualification: 'Ph.D (Computer Science), M.Tech (CSE)',
