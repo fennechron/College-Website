@@ -16,6 +16,7 @@ import PrincipalPage from './pages/PrincipalPage.jsx';
 import BoardOfGovernors from './pages/BoardOfGovernors.jsx';
 import AdministrativeStaff from './pages/AdministrativeStaff.jsx';
 import LibraryStaff from './pages/LibraryStaff.jsx';
+import Preloader from './components/layout/Preloader.jsx';
 
 function App() {
     useEffect(() => {
@@ -33,6 +34,7 @@ function App() {
 
     return (
         <Router>
+            <Preloader/>
             <Navbar />
             <main>
                 <Routes>
