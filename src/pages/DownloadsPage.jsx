@@ -1,14 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
     Download, Search, FileText, BookOpen, 
     Calendar, ClipboardCheck, ArrowRight, File
 } from 'lucide-react';
-import { downloadCategories } from '../data/downloadsData';
+import { downloadCategories as localCategories } from '../data/downloadsData';
+import { client } from '../lib/sanity';
 
 const DownloadsPage = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [activeCategory, setActiveCategory] = useState('all');
+    const [categories, setCategories] = useState([]);
 
     const iconMap = {
         BookOpen: <BookOpen />,
@@ -17,11 +19,55 @@ const DownloadsPage = () => {
         ClipboardCheck: <ClipboardCheck />
     };
 
-    const filteredCategories = downloadCategories.filter(cat => 
+    useEffect(() => {
+        const query = `*[_type == "downloadCategory"]{
+            ...,
+            items[]{
+                ...,
+                "fileUrl": file.asset->url,
+                "fileSize": file.asset->size,
+                "fileDate": file.asset->_createdAt
+            }
+        }`;
+        
+        client.fetch(query)
+            .then(data => {
+                if (data && data.length > 0) {
+                    setCategories(data);
+                } else {
+                    setCategories(localCategories);
+                }
+            })
+            .catch(err => {
+                console.error("Error fetching download categories:", err);
+                setCategories(localCategories);
+            });
+    }, []);
+
+    const formatBytes = (bytes, decimals = 1) => {
+        if (!bytes) return '';
+        const k = 1024;
+        const dm = decimals < 0 ? 0 : decimals;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+    };
+
+    const formatDate = (dateStr) => {
+        if (!dateStr) return '';
+        try {
+            const d = new Date(dateStr);
+            return d.toISOString().split('T')[0];
+        } catch (e) {
+            return dateStr;
+        }
+    };
+
+    const filteredCategories = categories.filter(cat => 
         activeCategory === 'all' || cat.id === activeCategory
     ).map(cat => ({
         ...cat,
-        items: cat.items.filter(item => 
+        items: (cat.items || []).filter(item => 
             item.title.toLowerCase().includes(searchQuery.toLowerCase())
         )
     })).filter(cat => cat.items.length > 0);
@@ -67,7 +113,7 @@ const DownloadsPage = () => {
             {/* ─── Category Filter ─── */}
             <div className="max-w-6xl mx-auto px-6 -mt-10 relative z-20">
                 <div className="flex flex-wrap justify-center gap-4">
-                    {['all', ...downloadCategories.map(c => c.id)].map(catId => (
+                    {['all', ...categories.map(c => c.id)].map(catId => (
                         <button
                             key={catId}
                             onClick={() => setActiveCategory(catId)}
@@ -124,16 +170,28 @@ const DownloadsPage = () => {
                                                     <div>
                                                         <h3 className="font-bold text-primary leading-tight group-hover:text-accent transition-colors">{item.title}</h3>
                                                         <div className="flex items-center gap-4 mt-2 text-[0.65rem] font-black uppercase tracking-widest text-slate-400">
-                                                            <span>{item.size}</span>
+                                                            <span>{item.size || formatBytes(item.fileSize)}</span>
                                                             <span className="w-1 h-1 rounded-full bg-slate-200" />
-                                                            <span>{item.date}</span>
+                                                            <span>{item.date ? formatDate(item.date) : formatDate(item.fileDate)}</span>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 
-                                                <button className="mt-6 flex items-center justify-center gap-2 w-full py-3 bg-slate-50 rounded-xl text-[0.7rem] font-black uppercase tracking-widest text-primary hover:bg-primary hover:text-white transition-all">
-                                                    <Download size={14} /> Download
-                                                </button>
+                                                {item.fileUrl ? (
+                                                    <a 
+                                                        href={item.fileUrl} 
+                                                        target="_blank" 
+                                                        rel="noopener noreferrer"
+                                                        download
+                                                        className="mt-6 flex items-center justify-center gap-2 w-full py-3 bg-slate-50 rounded-xl text-[0.7rem] font-black uppercase tracking-widest text-primary hover:bg-primary hover:text-white transition-all cursor-pointer"
+                                                    >
+                                                        <Download size={14} /> Download
+                                                    </a>
+                                                ) : (
+                                                    <button className="mt-6 flex items-center justify-center gap-2 w-full py-3 bg-slate-50 rounded-xl text-[0.7rem] font-black uppercase tracking-widest text-primary hover:bg-primary hover:text-white transition-all">
+                                                        <Download size={14} /> Download
+                                                    </button>
+                                                )}
                                             </motion.div>
                                         ))}
                                     </div>

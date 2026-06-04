@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
     ChevronRight, Home, Mail, Phone, MapPin,
@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { teachersData } from '../data/teachersData';
+import { client, urlFor } from '../lib/sanity';
 
 // ─── HOD Card — Premium full-width university profile card ──────────────────────
 const HodCard = ({ member, accentHex }) => {
@@ -19,13 +20,13 @@ const HodCard = ({ member, accentHex }) => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-40px' }}
             transition={{ duration: 0.5 }}
-            onClick={() => navigate(`/teacher/${member.id}`)}
+            onClick={() => navigate(`/teacher/${member._id || member.id}`)}
             className="w-full bg-white rounded-2xl overflow-hidden shadow-[0_4px_40px_rgba(12,43,78,0.10)] border border-slate-100 flex flex-col sm:flex-row cursor-pointer group/card hover:shadow-[0_20px_50px_rgba(12,43,78,0.15)] transition-all duration-300"
         >
             {/* ── Photo Column ── */}
             <div className="relative sm:w-56 lg:w-64 shrink-0 min-h-[280px] overflow-hidden">
                 <img
-                    src={member.photo}
+                    src={member.photo && member.photo.asset ? urlFor(member.photo).width(500).height(500).fit('crop').url() : member.photo}
                     alt={member.name}
                     className="absolute inset-0 w-full h-full object-cover"
                     onError={(e) => {
@@ -137,7 +138,7 @@ const FacultyCard = ({ member, accentHex }) => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-60px' }}
             transition={{ duration: 0.5 }}
-            onClick={() => navigate(`/teacher/${member.id}`)}
+            onClick={() => navigate(`/teacher/${member._id || member.id}`)}
             className="bg-white rounded-2xl shadow-[0_4px_25px_rgba(12,43,78,0.06)] border border-slate-100 p-5 flex gap-5 group hover:shadow-[0_12px_35px_rgba(12,43,78,0.12)] transition-all duration-300 relative overflow-hidden cursor-pointer"
         >
             {/* Left accent border */}
@@ -146,7 +147,7 @@ const FacultyCard = ({ member, accentHex }) => {
             {/* Photo Section */}
             <div className="relative w-24 h-24 sm:w-28 sm:h-28 shrink-0 rounded-xl overflow-hidden shadow-sm border border-slate-100">
                 <img
-                    src={member.photo}
+                    src={member.photo && member.photo.asset ? urlFor(member.photo).width(400).height(400).fit('crop').url() : member.photo}
                     alt={member.name}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                     onError={(e) => {
@@ -237,8 +238,8 @@ const DeptSection = ({ dept }) => {
                         {dept.icon}
                     </span>
                     <div className="text-left">
-                        <h3 className="text-[1.4rem] sm:text-[1.75rem] font-display font-black text-primary leading-tight">{dept.label}</h3>
-                        <p className="text-[0.78rem] text-secondary/50 font-bold uppercase tracking-widest">{dept.faculty.length + 1} Faculty Members</p>
+                        <h3 className="text-[1.4rem] sm:text-[1.75rem] font-display font-black text-primary leading-tight">{dept.label || dept.name}</h3>
+                        <p className="text-[0.78rem] text-secondary/50 font-bold uppercase tracking-widest">{(dept.faculty ? dept.faculty.length : 0) + (dept.hod ? 1 : 0)} Faculty Members</p>
                     </div>
                 </div>
                 <span
@@ -338,9 +339,48 @@ const McaSection = ({ data }) => {
 const TeachersPage = () => {
     const [activeTab, setActiveTab] = useState('btech');
     const [activeDept, setActiveDept] = useState(null);
+    const [sanityBtechDepts, setSanityBtechDepts] = useState(null);
+    const [sanityMcaData, setSanityMcaData] = useState(null);
 
-    const btechDepts = teachersData.btech.departments;
-    const mcaData = teachersData.mca;
+    useEffect(() => {
+        const query = `*[_type == "department"]{
+            ...,
+            "hod": *[_type == "teacher" && references(^._id) && isHOD][0],
+            "faculty": *[_type == "teacher" && references(^._id) && !isHOD]
+        }`;
+        
+        client.fetch(query).then(data => {
+            if (data && data.length > 0) {
+                // Map to object structure expected by UI
+                const mappedBtech = {};
+                let mappedMca = null;
+                
+                data.forEach(d => {
+                    const deptObj = {
+                        label: d.name,
+                        short: d.short,
+                        color: d.color,
+                        accentColor: d.accentColor,
+                        icon: d.icon,
+                        hod: d.hod || {},
+                        faculty: d.faculty || []
+                    };
+                    
+                    if (d.short && d.short.toLowerCase() === 'mca') {
+                        mappedMca = deptObj;
+                    } else {
+                        mappedBtech[d.short ? d.short.toLowerCase() : d.name] = deptObj;
+                    }
+                });
+                
+                if (Object.keys(mappedBtech).length > 0) setSanityBtechDepts(mappedBtech);
+                if (mappedMca) setSanityMcaData(mappedMca);
+            }
+        }).catch(err => console.error("Sanity fetch error:", err));
+    }, []);
+
+    const btechDepts = sanityBtechDepts || teachersData.btech.departments;
+    const mcaData = sanityMcaData || teachersData.mca;
     const btechDeptKeys = Object.keys(btechDepts);
 
     return (

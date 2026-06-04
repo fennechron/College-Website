@@ -9,10 +9,10 @@ import Updates from './Updates.jsx';
 
 const navItems = [
     { name: 'HOME', path: '/', hasDropdown: false, isHome: true },
-    { 
-        name: 'ABOUT', path: '#', hasDropdown: true, 
+    {
+        name: 'ABOUT', path: '#', hasDropdown: true,
         dropdownItems: [
-            { 
+            {
                 label: 'Administrations', path: '#', hasSubDropdown: true,
                 subItems: [
                     { label: 'Board of Governors', path: '/page/board-of-governors' },
@@ -21,17 +21,17 @@ const navItems = [
                     { label: 'Library Staff', path: '/page/library-staff' }
                 ]
             },
-            { 
+            {
                 label: 'Facilities', path: '#', hasSubDropdown: true,
                 subItems: [
                     { label: 'FAB Lab', path: '/page/fab-lab' },
                     { label: 'Library', path: '/page/library' },
-                    { label: 'Transportation Facility', path: '/page/college-bus' }, 
+                    { label: 'Transportation Facility', path: '/page/college-bus' },
                     { label: 'Hostel & Mess', path: '/page/hostel' }
                 ]
             },
             { label: 'Our Teachers', path: '/page/teachers' },
-            { 
+            {
                 label: 'Committees', path: '#', hasSubDropdown: true,
                 subItems: [
                     { label: 'Parents Teachers Organization', path: '/page/parents-teachers' },
@@ -50,10 +50,10 @@ const navItems = [
             }
         ]
     },
-    { 
+    {
         name: 'ACADEMICS', path: '#', hasDropdown: true,
         dropdownItems: [
-            { 
+            {
                 label: 'Department', path: '#', hasSubDropdown: true,
                 subItems: [
                     { label: 'Department of Computer Engineering', path: '/page/dept-computer-engineering' },
@@ -110,9 +110,9 @@ const NavItem = ({ item, closeMobileMenu }) => {
     if (!item.hasDropdown) {
         return (
             <li>
-                <Link 
-                    to={item.path} 
-                    onClick={closeMobileMenu} 
+                <Link
+                    to={item.path}
+                    onClick={closeMobileMenu}
                     className="flex items-center gap-1 block whitespace-nowrap px-4 py-3 transition hover:bg-secondary hover:text-white md:py-[14px]"
                 >
                     {item.isHome && <Home size={18} />} {item.name}
@@ -124,7 +124,7 @@ const NavItem = ({ item, closeMobileMenu }) => {
     return (
         <li className="relative group">
             {/* Desktop link rendering */}
-            <Link 
+            <Link
                 to={item.path}
                 className="hidden md:flex items-center gap-1 whitespace-nowrap px-4 py-[14px] transition hover:bg-secondary hover:text-white cursor-pointer"
             >
@@ -134,15 +134,15 @@ const NavItem = ({ item, closeMobileMenu }) => {
 
             {/* Mobile rendering */}
             <div className="md:hidden flex items-center justify-between px-4 py-3 transition hover:bg-secondary hover:text-white">
-                <Link 
-                    to={item.path} 
-                    onClick={closeMobileMenu} 
+                <Link
+                    to={item.path}
+                    onClick={closeMobileMenu}
                     className="flex-grow whitespace-nowrap font-semibold tracking-[0.03em]"
                 >
                     {item.name}
                 </Link>
-                <button 
-                    onClick={(e) => { e.preventDefault(); setIsMobileExpanded(!isMobileExpanded); }} 
+                <button
+                    onClick={(e) => { e.preventDefault(); setIsMobileExpanded(!isMobileExpanded); }}
                     className="p-1 min-w-[32px] flex justify-end"
                 >
                     <ChevronDown size={18} className={`transition transform duration-300 ${isMobileExpanded ? 'rotate-180' : ''}`} />
@@ -164,9 +164,9 @@ const NavItem = ({ item, closeMobileMenu }) => {
                                         <ul className="flex flex-col py-2">
                                             {subItem.subItems.map((sItem, sIdx) => (
                                                 <li key={sIdx}>
-                                                    <Link 
-                                                        to={sItem.path} 
-                                                        onClick={closeMobileMenu} 
+                                                    <Link
+                                                        to={sItem.path}
+                                                        onClick={closeMobileMenu}
                                                         className="block px-6 py-3 hover:bg-secondary hover:text-white transition text-[0.95rem] font-medium tracking-wide text-white/95"
                                                     >
                                                         {sItem.label}
@@ -177,9 +177,9 @@ const NavItem = ({ item, closeMobileMenu }) => {
                                     </div>
                                 </>
                             ) : (
-                                <Link 
-                                    to={subItem.path} 
-                                    onClick={closeMobileMenu} 
+                                <Link
+                                    to={subItem.path}
+                                    onClick={closeMobileMenu}
                                     className="block px-6 py-3.5 hover:bg-secondary hover:text-white transition text-[0.95rem] font-medium tracking-wide text-white/95"
                                 >
                                     {subItem.label}
@@ -209,9 +209,9 @@ const NavItem = ({ item, closeMobileMenu }) => {
                                         <ul className="bg-primary/80 flex flex-col">
                                             {subItem.subItems.map((sItem, sIdx) => (
                                                 <li key={sIdx} className="border-b border-secondary/30 last:border-0">
-                                                    <Link 
-                                                        to={sItem.path} 
-                                                        onClick={closeMobileMenu} 
+                                                    <Link
+                                                        to={sItem.path}
+                                                        onClick={closeMobileMenu}
                                                         className="block px-12 py-2.5 hover:text-white text-slate-300 transition text-[0.85rem] font-medium"
                                                     >
                                                         - {sItem.label}
@@ -222,9 +222,9 @@ const NavItem = ({ item, closeMobileMenu }) => {
                                     </div>
                                 </>
                             ) : (
-                                <Link 
-                                    to={subItem.path} 
-                                    onClick={closeMobileMenu} 
+                                <Link
+                                    to={subItem.path}
+                                    onClick={closeMobileMenu}
                                     className="block px-8 py-3 hover:text-white text-slate-300 transition text-[0.9rem] font-medium tracking-wide"
                                 >
                                     • {subItem.label}
@@ -252,11 +252,11 @@ const Navbar = () => {
                     <div className="flex items-center gap-[20px]">
                         <img src={collegeLogo} alt="CEC Logo" className="h-[70px] w-[70px] lg:h-[100px] lg:w-[100px] shrink-0 object-contain rounded-sm shadow-sm" />
                         <div className="flex flex-col justify-center text-left">
-                            <h1 className="font-display text-[1.2rem] sm:text-[1.5rem] lg:text-[2.2rem] font-extrabold leading-tight text-primary uppercase mb-1 tracking-wide">
+                            <h1 className="font-display text-[1rem] sm:text-[1rem] lg:text-[2.2rem] font-extrabold leading-tight text-primary uppercase mb-1 tracking-wide">
                                 College Of Engineering Chengannur
                             </h1>
                             <p className="text-[0.7rem] sm:text-[0.85rem] lg:text-[1.1rem] font-bold tracking-[0.02em] text-secondary">
-                                ESTD : 1993 Institute of Human Resource Development(IHRD), Government OF Kerala
+                                ESTD : 1993 Institute of Human Resource Development(IHRD), Government of Kerala
                             </p>
                             <p className="text-[0.65rem] sm:text-[0.8rem] lg:text-[1.05rem] font-semibold tracking-[0.02em] text-primary/80 mt-[2px]">
                                 Affiliated to A P J Abdul Kalam Technological University, Kerala
@@ -276,13 +276,12 @@ const Navbar = () => {
                         <div className="flex flex-col items-center gap-1 group/logo">
                             <img src={ihrdlogo} alt="IHRD Logo" className="h-[60px] w-[60px] lg:h-[90px] lg:w-[90px] shrink-0 object-contain rounded-sm shadow-sm" />
                         </div>
-                        
+
                     </div>
                 </div>
             </div>
 
-            {/* Middle Tier: Updates Flash */}
-            <Updates />
+
 
             {/* Bottom Tier: Navigation Links */}
             <div className="bg-primary transition-colors duration-300">
@@ -294,7 +293,7 @@ const Navbar = () => {
                             <NavItem key={index} item={item} closeMobileMenu={closeMobileMenu} />
                         ))}
                     </ul>
-                    
+
                     {/* Hamburger Menu Toggle (Mobile) */}
                     <button
                         onClick={() => setIsOpen(!isOpen)}

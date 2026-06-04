@@ -4,6 +4,7 @@ import Lenis from 'lenis';
 import { GraduationCap } from 'lucide-react';
 import Navbar from './components/layout/Navbar.jsx';
 import Footer from './components/layout/Footer.jsx';
+import Preloader from './components/layout/Preloader.jsx';
 import Home from './pages/Home.jsx';
 import ContentPage from './pages/ContentPage.jsx';
 import TeachersPage from './pages/TeachersPage.jsx';
@@ -16,7 +17,6 @@ import PrincipalPage from './pages/PrincipalPage.jsx';
 import BoardOfGovernors from './pages/BoardOfGovernors.jsx';
 import AdministrativeStaff from './pages/AdministrativeStaff.jsx';
 import LibraryStaff from './pages/LibraryStaff.jsx';
-import Preloader from './components/layout/Preloader.jsx';
 
 function App() {
     useEffect(() => {
@@ -34,7 +34,7 @@ function App() {
 
     return (
         <Router>
-            <Preloader/>
+            <Preloader />
             <Navbar />
             <main>
                 <Routes>

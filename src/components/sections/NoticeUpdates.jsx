@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { ChevronDown, GraduationCap, Building2, Key, Info, FileText, Newspaper, BookOpen } from 'lucide-react';
+import { client } from '../../lib/sanity';
 
 const quickLinks = [
     { name: 'FACILITIES', icon: Building2, color: 'bg-white text-primary border border-primary/20 hover:border-accent hover:bg-accent/5', hasDropdown: true },
@@ -53,15 +54,33 @@ const ScrollList = ({ items }) => (
         <div className="w-full anim-scroll pb-4">
             <ul className="flex flex-col gap-6 pb-6 pt-4 pr-4">
                 {items.map((item, idx) => (
-                    <li key={`first-${idx}`} className="text-[1.05rem] leading-[1.7] text-secondary/90 border-b border-primary/10 pb-5 last:border-0 cursor-pointer hover:text-accent hover:font-semibold transition-all">
-                        {item}
+                    <li key={`first-${idx}`} className="text-[1.15rem] font-semibold leading-[1.6] text-secondary border-b border-primary/10 pb-5 last:border-0 cursor-pointer hover:text-accent hover:translate-x-1 transition-all duration-200">
+                        {idx === 0 && (
+                            <span className="inline-flex items-center gap-1.5 rounded-md bg-accent px-2 py-0.5 text-[0.7rem] font-extrabold uppercase tracking-wider text-white mr-2.5 align-middle select-none shadow-[0_2px_8px_rgba(29,84,108,0.25)] shrink-0">
+                                <span className="relative flex h-1.5 w-1.5">
+                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                                    <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-white"></span>
+                                </span>
+                                LATEST
+                            </span>
+                        )}
+                        <span className="align-middle">{item}</span>
                     </li>
                 ))}
             </ul>
             <ul className="flex flex-col gap-6 pb-6 pr-4" aria-hidden="true">
                 {items.map((item, idx) => (
-                    <li key={`second-${idx}`} className="text-[1.05rem] leading-[1.7] text-secondary/90 border-b border-primary/10 pb-5 last:border-0 cursor-pointer hover:text-accent hover:font-semibold transition-all">
-                        {item}
+                    <li key={`second-${idx}`} className="text-[1.15rem] font-semibold leading-[1.6] text-secondary border-b border-primary/10 pb-5 last:border-0 cursor-pointer hover:text-accent hover:translate-x-1 transition-all duration-200">
+                        {idx === 0 && (
+                            <span className="inline-flex items-center gap-1.5 rounded-md bg-accent px-2 py-0.5 text-[0.7rem] font-extrabold uppercase tracking-wider text-white mr-2.5 align-middle select-none shadow-[0_2px_8px_rgba(29,84,108,0.25)] shrink-0">
+                                <span className="relative flex h-1.5 w-1.5">
+                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                                    <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-white"></span>
+                                </span>
+                                LATEST
+                            </span>
+                        )}
+                        <span className="align-middle">{item}</span>
                     </li>
                 ))}
             </ul>
@@ -70,6 +89,26 @@ const ScrollList = ({ items }) => (
 );
 
 const NoticeUpdates = () => {
+    const [sanityAnnouncements, setSanityAnnouncements] = useState([]);
+    const [sanityNotifications, setSanityNotifications] = useState([]);
+    const [sanityNotices, setSanityNotices] = useState([]);
+
+    useEffect(() => {
+        client.fetch('*[_type == "announcement"] | order(date desc)')
+            .then(data => {
+                if (data && data.length > 0) {
+                    setSanityAnnouncements(data.filter(d => d.category === 'Announcements').map(d => d.text));
+                    setSanityNotifications(data.filter(d => d.category === 'Notifications').map(d => d.text));
+                    setSanityNotices(data.filter(d => d.category === 'Notice Board').map(d => d.text));
+                }
+            })
+            .catch(err => console.error("Sanity fetch error:", err));
+    }, []);
+
+    const displayAnnouncements = sanityAnnouncements.length > 0 ? sanityAnnouncements : announcements;
+    const displayNotifications = sanityNotifications.length > 0 ? sanityNotifications : upcomingEvents;
+    const displayNotices = sanityNotices.length > 0 ? sanityNotices : events;
+
     return (
         <section className="relative w-full bg-background py-12 overflow-hidden">
             {/* 3 Columns Board */}
@@ -80,7 +119,7 @@ const NoticeUpdates = () => {
                         <div className="bg-gradient-to-r from-primary to-secondary py-5 px-6 text-center border-b-[3px] border-accent">
                             <h3 className="font-display text-[1.3rem] font-extrabold text-white uppercase tracking-[0.1em]">Announcements</h3>
                         </div>
-                        <ScrollList items={announcements} />
+                        <ScrollList items={displayAnnouncements} />
                     </div>
 
                     {/* Upcoming Events */}
@@ -88,7 +127,7 @@ const NoticeUpdates = () => {
                         <div className="bg-gradient-to-r from-primary to-secondary py-5 px-6 text-center border-b-[3px] border-accent">
                             <h3 className="font-display text-[1.3rem] font-extrabold text-white uppercase tracking-[0.1em]">Notifications</h3>
                         </div>
-                        <ScrollList items={upcomingEvents} />
+                        <ScrollList items={displayNotifications} />
                     </div>
 
                     {/* Events */}
@@ -96,7 +135,7 @@ const NoticeUpdates = () => {
                         <div className="bg-gradient-to-r from-primary to-secondary py-5 px-6 text-center border-b-[3px] border-accent">
                             <h3 className="font-display text-[1.3rem] font-extrabold text-white uppercase tracking-[0.1em]">Notice Board</h3>
                         </div>
-                        <ScrollList items={events} />
+                        <ScrollList items={displayNotices} />
                     </div>
                 </div>
             </div>

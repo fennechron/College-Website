@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { client, urlFor } from '../../lib/sanity';
 
 const testimonials = [
   {
@@ -33,6 +34,20 @@ const testimonials = [
 ];
 
 const Testimonial = () => {
+  const [sanityData, setSanityData] = useState([]);
+
+  useEffect(() => {
+    client.fetch('*[_type == "testimonial"]')
+      .then(data => {
+        if (data && data.length > 0) {
+          setSanityData(data);
+        }
+      })
+      .catch(err => console.error("Sanity fetch error:", err));
+  }, []);
+
+  const displayData = sanityData.length > 0 ? sanityData : testimonials;
+
   return (
     <section id="testimonials" className="py-20 relative overflow-hidden bg-secondary">
       
@@ -58,7 +73,7 @@ const Testimonial = () => {
                  duration: 25
                }}
             >
-                {[...testimonials, ...testimonials, ...testimonials].map((t, idx) => (
+                {[...displayData, ...displayData, ...displayData].map((t, idx) => (
                     <div 
                         key={idx} 
                         className="w-[350px] sm:w-[400px] relative rounded-2xl bg-white/10 border border-white/20 shadow-sm hover:shadow-md transition-shadow duration-300 cursor-pointer"
@@ -72,7 +87,7 @@ const Testimonial = () => {
                             </div>
                             <div className="flex items-center gap-4 mt-auto">
                                 <img 
-                                    src={t.image} 
+                                    src={t.image && t.image.asset ? urlFor(t.image).url() : t.image} 
                                     alt={t.name} 
                                     className="w-12 h-12 rounded-full object-cover border border-white/20"
                                     loading="lazy"

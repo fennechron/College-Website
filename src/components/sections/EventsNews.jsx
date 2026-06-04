@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Calendar, ArrowRight } from 'lucide-react';
+import { client } from '../../lib/sanity';
 
 const eventsNews = [
     { 
@@ -33,6 +34,20 @@ const eventsNews = [
 ];
 
 const EventsNews = () => {
+    const [sanityData, setSanityData] = useState([]);
+
+    useEffect(() => {
+        client.fetch('*[_type == "eventNews"]')
+            .then(data => {
+                if (data && data.length > 0) {
+                    setSanityData(data);
+                }
+            })
+            .catch(err => console.error("Sanity fetch error:", err));
+    }, []);
+
+    const displayData = sanityData.length > 0 ? sanityData : eventsNews;
+
     return (
         <section id="events-news" className="py-20 bg-background border-t border-primary/5">
             <div className="max-w-[95%] mx-auto px-4 lg:px-8">
@@ -71,8 +86,8 @@ const EventsNews = () => {
 
                 <div className="overflow-hidden relative py-10 mask-gradient-horizontal">
                     <div className="flex gap-8 events-track items-stretch min-w-max">
-                        {[...eventsNews, ...eventsNews].map((item, idx) => (
-                            <div key={`${item.id}-${idx}`} className="w-[370px] group bg-white rounded-3xl border border-primary/10 overflow-hidden hover:shadow-[0_20px_50px_rgba(12,43,78,0.12)] transition-all duration-500 hover:-translate-y-2 flex flex-col h-full">
+                        {[...displayData, ...displayData].map((item, idx) => (
+                            <div key={`${item._id || item.id}-${idx}`} className="w-[370px] group bg-white rounded-3xl border border-primary/10 overflow-hidden hover:shadow-[0_20px_50px_rgba(12,43,78,0.12)] transition-all duration-500 hover:-translate-y-2 flex flex-col h-full">
                                 {/* Card Header with Date Banner */}
                                 <div className="h-40 relative bg-primary/5 flex items-center justify-center overflow-hidden">
                                     <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-accent/5"></div>
@@ -91,7 +106,7 @@ const EventsNews = () => {
                                         {item.title}
                                     </h3>
                                     <p className="text-secondary/70 text-base leading-relaxed mb-6 flex-grow ">
-                                        {item.desc}
+                                        {item.desc || item.description}
                                     </p>
                                     <a href="#read-more" className="inline-flex items-center text-primary font-bold text-sm tracking-wide group/link">
                                         READ MORE

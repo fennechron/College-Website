@@ -158,7 +158,7 @@ const PlacementPage = () => {
                                         : 'bg-white text-slate-400 hover:text-primary border border-slate-100'
                                     }`}
                                 >
-                                    Class of {year}
+                                    Year of {year}
                                 </button>
                             ))}
                         </div>
@@ -267,23 +267,7 @@ const PlacementPage = () => {
                 </div>
             </div>
             
-            {/* ─── Contact/Footer CTA ─── */}
-            <div className="py-20 bg-white">
-                <div className="max-w-4xl mx-auto px-6 text-center">
-                    <div className="bg-primary/5 p-12 rounded-3xl border border-primary/10">
-                        <h2 className="text-3xl font-display font-black text-primary uppercase mb-4">Want to recruit from us?</h2>
-                        <p className="text-slate-500 font-medium mb-8">Download our placement brochure or get in touch with our training & placement officer.</p>
-                        <div className="flex flex-wrap justify-center gap-4">
-                            <button className="inline-flex items-center gap-2 px-8 py-4 bg-primary text-white font-black uppercase tracking-widest rounded-2xl hover:bg-secondary transition-all">
-                                <Download size={18} /> Brochure
-                            </button>
-                            <button className="inline-flex items-center gap-2 px-8 py-4 bg-white text-primary border border-primary/20 font-black uppercase tracking-widest rounded-2xl hover:bg-primary/5 transition-all">
-                                <Mail size={18} /> Contact TPO
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+             
             
             <style dangerouslySetInnerHTML={{ __html: `
                 @keyframes scroll {

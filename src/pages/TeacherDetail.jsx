@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { 
     Mail, Phone, MapPin, GraduationCap, 
@@ -7,13 +7,16 @@ import {
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { teachersData } from '../data/teachersData';
+import { client, urlFor } from '../lib/sanity';
 
 const TeacherDetail = () => {
     const { id } = useParams();
     const navigate = useNavigate();
+    const [sanityTeacher, setSanityTeacher] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     // Helper to find teacher in nested structure
-    const findTeacher = () => {
+    const findStaticTeacher = () => {
         // Check B.Tech
         for (const deptKey in teachersData.btech.departments) {
             const dept = teachersData.btech.departments[deptKey];
@@ -30,11 +33,44 @@ const TeacherDetail = () => {
         return null;
     };
 
-    const teacher = findTeacher();
+    const staticTeacher = findStaticTeacher();
 
     useEffect(() => {
         window.scrollTo(0, 0);
-    }, [id]);
+        
+        if (!staticTeacher) {
+            setLoading(true);
+            const query = `*[_type == "teacher" && _id == $id][0]{
+                ...,
+                "deptLabel": department->name,
+                "color": department->color
+            }`;
+            client.fetch(query, { id })
+                .then(data => {
+                    if (data) {
+                        setSanityTeacher(data);
+                    }
+                    setLoading(false);
+                })
+                .catch(err => {
+                    console.error("Sanity fetch error:", err);
+                    setLoading(false);
+                });
+        } else {
+            setLoading(false);
+        }
+    }, [id, staticTeacher]);
+
+    const teacher = sanityTeacher || staticTeacher;
+
+    if (loading) {
+        return (
+            <div className="min-h-screen flex flex-col items-center justify-center p-4">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+                <p className="text-slate-500 mt-4 font-semibold">Loading Profile...</p>
+            </div>
+        );
+    }
 
     if (!teacher) {
         return (
@@ -57,7 +93,7 @@ const TeacherDetail = () => {
                     initial={{ scale: 1.1, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
                     transition={{ duration: 0.8 }}
-                    src={teacher.photo} 
+                    src={teacher.photo ? (teacher.photo.asset ? urlFor(teacher.photo).width(800).height(1000).fit('crop').url() : teacher.photo) : `https://ui-avatars.com/api/?name=${encodeURIComponent(teacher.name)}&size=800&background=0C2B4E&color=ffffff&bold=true`} 
                     alt={teacher.name}
                     className="w-full h-full object-cover"
                 />
@@ -125,7 +161,7 @@ const TeacherDetail = () => {
                                 <h2 className="text-3xl font-display font-black text-primary uppercase tracking-tight">About</h2>
                             </div>
                             <div className="space-y-4 text-lg text-slate-600 leading-relaxed font-medium">
-                                {teacher.about.map((p, i) => <p key={i}>{p}</p>)}
+                                {(teacher.about || []).map((p, i) => <p key={i}>{p}</p>)}
                             </div>
                         </motion.section>
 
@@ -141,7 +177,7 @@ const TeacherDetail = () => {
                                 <h2 className="text-3xl font-display font-black text-primary uppercase tracking-tight">Specialization</h2>
                             </div>
                             <div className="flex flex-wrap gap-3">
-                                {teacher.specialization.split(',').map((s, i) => (
+                                {(teacher.specialization || '').split(',').map((s, i) => (
                                     <span 
                                         key={i}
                                         className="px-5 py-2.5 rounded-xl border border-slate-200 text-primary font-bold text-sm bg-white shadow-sm hover:border-accent hover:text-accent transition-all duration-300"
@@ -151,6 +187,36 @@ const TeacherDetail = () => {
                                 ))}
                             </div>
                         </motion.section>
+
+                        {/* Publications Section */}
+                        {teacher.publications && teacher.publications.length > 0 && (
+                            <motion.section 
+                                initial={{ y: 20, opacity: 0 }}
+                                whileInView={{ y: 0, opacity: 1 }}
+                                viewport={{ once: true }}
+                                className="space-y-6"
+                            >
+                                <div className="flex items-center gap-4">
+                                    <div className="w-12 h-1.5 rounded-full" style={{ background: accent }} />
+                                    <h2 className="text-3xl font-display font-black text-primary uppercase tracking-tight">Publications</h2>
+                                </div>
+                                <ul className="space-y-4">
+                                    {teacher.publications.map((pub, i) => (
+                                        <li 
+                                            key={i} 
+                                            className="flex items-start gap-4 p-5 rounded-2xl border border-slate-100 bg-white shadow-sm hover:border-accent/30 hover:shadow-md transition-all duration-300"
+                                        >
+                                            <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 font-display" style={{ background: `${accent}10`, color: accent }}>
+                                                <span className="text-sm font-black">{i + 1}</span>
+                                            </div>
+                                            <p className="text-[1.05rem] text-slate-700 font-medium leading-relaxed mt-0.5">
+                                                {pub}
+                                            </p>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </motion.section>
+                        )}
 
                         {/* A Word from Teacher (As per wireframe) */}
                         <motion.section 

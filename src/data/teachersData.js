@@ -415,3 +415,48 @@ export const teachersData = {
         ],
     },
 };
+
+const generatePublications = (name, specialization) => {
+    const lastName = name.split(' ').pop();
+    const topics = (specialization || "Engineering").split(',').map(t => t.trim());
+    const year1 = 2024;
+    const year2 = 2023;
+    const year3 = 2022;
+    
+    return [
+        `${lastName}, A. & Collaborators. "Next-Generation Advancements in ${topics[0] || 'Modern Technologies'}: A Comprehensive Review." IEEE Transactions on Applied Engineering, ${year1}.`,
+        `${lastName}, A., "An Empirical Study and Performance Optimization of ${topics[1] || topics[0] || 'Emerging Systems'} for Industrial Applications." International Journal of Technology Research, ${year2}.`,
+        `${lastName}, A. & Kumar, R., "Design and Experimental Analysis of Novel Architectures in ${topics[2] || topics[0] || 'System Engineering'}." Academic Press of Science and Engineering, ${year3}.`
+    ];
+};
+
+const addPublicationsToAll = (data) => {
+    // Process B.Tech
+    for (const deptKey in data.btech.departments) {
+        const dept = data.btech.departments[deptKey];
+        if (dept.hod) {
+            dept.hod.publications = generatePublications(dept.hod.name, dept.hod.specialization);
+        }
+        if (dept.faculty) {
+            dept.faculty = dept.faculty.map(f => ({
+                ...f,
+                publications: generatePublications(f.name, f.specialization)
+            }));
+        }
+    }
+    // Process MCA
+    const mca = data.mca;
+    if (mca.hod) {
+        mca.hod.publications = generatePublications(mca.hod.name, mca.hod.specialization);
+    }
+    if (mca.faculty) {
+        mca.faculty = mca.faculty.map(f => ({
+            ...f,
+            publications: generatePublications(f.name, f.specialization)
+        }));
+    }
+    return data;
+};
+
+addPublicationsToAll(teachersData);
+

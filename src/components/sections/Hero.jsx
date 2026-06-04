@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { client } from '../../lib/sanity';
 
 import bg1 from '../../assets/cec11.jpeg';
 import bg2 from '../../assets/cec12.jpg';
 import bg3 from '../../assets/cec14.jpeg';
 import bg4 from '../../assets/cec15.webp';
 
-const images = [
+const localImages = [
     { src: bg1 },
     { src: bg2, title: "College of Engineering Chengannur", subtitle: "Vision & Mission" },
     { src: bg3 },
@@ -14,15 +15,35 @@ const images = [
 ];
 
 const Hero = () => {
+    const [images, setImages] = useState(localImages);
     const [currentIndex, setCurrentIndex] = useState(0);
+
+    // Fetch carousel images from Sanity
+    useEffect(() => {
+        const query = `*[_type == "carouselImage"] | order(order asc){
+            title,
+            subtitle,
+            "src": image.asset->url
+        }`;
+        client.fetch(query)
+            .then(data => {
+                if (data && data.length > 0) {
+                    setImages(data);
+                }
+            })
+            .catch(err => {
+                console.error("Error fetching carousel images from Sanity:", err);
+            });
+    }, []);
 
     // Automatic sliding effect (change slide every 5 seconds)
     useEffect(() => {
+        if (images.length === 0) return;
         const interval = setInterval(() => {
             setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
         }, 5000);
         return () => clearInterval(interval);
-    }, []);
+    }, [images.length]);
 
     const prevSlide = () => {
         setCurrentIndex((prevIndex) => (prevIndex === 0 ? images.length - 1 : prevIndex - 1));
