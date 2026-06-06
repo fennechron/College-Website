@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import bg2 from '../../assets/cec12.jpg';
-import bg3 from '../../assets/cec14.jpeg';
+import bg3 from '../../assets/cec14.png';
 
 const slides = [
     {

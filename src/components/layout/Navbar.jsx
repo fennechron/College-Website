@@ -247,11 +247,11 @@ const Navbar = () => {
         <nav className="sticky top-0 z-[999] shadow-[0_2px_20px_rgba(10,22,40,0.08)]">
             {/* Top Tier: Logo and College Info */}
             <div className="bg-background py-1.5 border-b border-slate-200">
-                <div className="flex w-full items-center justify-between gap-[20px] px-4 lg:px-8">
+                <div className="flex w-full flex-col lg:flex-row items-center justify-between gap-[10px] lg:gap-[20px] px-4 lg:px-8">
                     {/* Left Side: College Logo and Title */}
-                    <div className="flex items-center gap-[20px]">
-                        <img src={collegeLogo} alt="CEC Logo" className="h-[70px] w-[70px] lg:h-[100px] lg:w-[100px] shrink-0 object-contain rounded-sm shadow-sm" />
-                        <div className="flex flex-col justify-center text-left">
+                    <div className="flex flex-col sm:flex-row items-center gap-[10px] sm:gap-[20px] text-center sm:text-left">
+                        <img src={collegeLogo} alt="CEC Logo" className="h-[60px] w-[60px] sm:h-[70px] sm:w-[70px] lg:h-[100px] lg:w-[100px] shrink-0 object-contain rounded-sm shadow-sm" />
+                        <div className="flex flex-col justify-center">
                             <h1 className="font-display text-[1rem] sm:text-[1rem] lg:text-[2.2rem] font-extrabold leading-tight text-primary uppercase mb-1 tracking-wide">
                                 College Of Engineering Chengannur
                             </h1>
@@ -265,16 +265,16 @@ const Navbar = () => {
                     </div>
 
                     {/* Right Side: Organizational Logos Provision (KTU, AICTE, IHRD etc.) */}
-                    <div className="hidden lg:flex items-center gap-6 pr-4">
+                    <div className="flex items-center justify-center gap-4 lg:gap-6 mt-2 lg:mt-0 lg:pr-4">
                         {/* Provision for 3 Logos: Replace with actual components or images as needed */}
                         <div className="flex flex-col items-center gap-1 group/logo">
-                            <img src={excell} alt="IHRD Logo" className="h-[70px] w-[70px] lg:h-[110px] lg:w-[110px] shrink-0 object-contain rounded-sm shadow-sm" />
+                            <img src={excell} alt="IHRD Logo" className="h-[45px] w-[45px] sm:h-[50px] sm:w-[50px] lg:h-[110px] lg:w-[110px] shrink-0 object-contain rounded-sm shadow-sm" />
                         </div>
                         <div className="flex flex-col items-center gap-1 group/logo">
-                            <img src={ktulogo} alt="KTU Logo" className="h-[60px] w-[60px] lg:h-[90px] lg:w-[90px] shrink-0 object-contain rounded-sm shadow-sm" />
+                            <img src={ktulogo} alt="KTU Logo" className="h-[40px] w-[40px] sm:h-[45px] sm:w-[45px] lg:h-[90px] lg:w-[90px] shrink-0 object-contain rounded-sm shadow-sm" />
                         </div>
                         <div className="flex flex-col items-center gap-1 group/logo">
-                            <img src={ihrdlogo} alt="IHRD Logo" className="h-[60px] w-[60px] lg:h-[90px] lg:w-[90px] shrink-0 object-contain rounded-sm shadow-sm" />
+                            <img src={ihrdlogo} alt="IHRD Logo" className="h-[40px] w-[40px] sm:h-[45px] sm:w-[45px] lg:h-[90px] lg:w-[90px] shrink-0 object-contain rounded-sm shadow-sm" />
                         </div>
 
                     </div>

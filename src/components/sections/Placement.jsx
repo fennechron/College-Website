@@ -29,7 +29,7 @@ const Placement = () => {
         <section id="placement" className="py-20 bg-background">
             <div className="max-w-[95%] mx-auto px-4 lg:px-6">
                 <div className="mb-14 text-center">
-                    <h2 className="text-[2.5rem] font-display font-black text-primary mb-4 uppercase tracking-tighter">
+                    <h2 className="text-[1.8rem] md:text-[2.5rem] font-display font-black text-primary mb-4 uppercase tracking-tighter">
                         Training & Placement <span className="text-accent block sm:inline">Portal</span>
                     </h2>
                     <div className="w-32 h-1.5 bg-accent mx-auto rounded-full"></div>
@@ -82,33 +82,33 @@ const Placement = () => {
                         </div>
                     </div>
                     
-                    <div className="mt-16 grid grid-cols-2 lg:grid-cols-4 gap-8 text-center bg-primary rounded-3xl p-10 backdrop-blur-sm border border-accent/20">
+                    <div className="mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-center bg-primary rounded-3xl p-6 md:p-10 backdrop-blur-sm border border-accent/20">
                         <div className="group flex flex-col items-center">
                             <div className="w-12 h-12 bg-accent/20 rounded-xl flex items-center justify-center mb-4 group-hover:bg-accent/40 transition-colors duration-300">
                                 <Briefcase className="text-accent" size={24} />
                             </div>
-                            <div className="text-[2.5rem] font-display font-black text-white mb-1 transition-transform group-hover:scale-110 duration-300">450+</div>
+                            <div className="text-[2rem] md:text-[2.5rem] font-display font-black text-white mb-1 transition-transform group-hover:scale-110 duration-300">450+</div>
                             <div className="text-[0.85rem] font-bold text-teal-light uppercase tracking-[0.15em]">Placement Offers</div>
                         </div>
                         <div className="group flex flex-col items-center">
                             <div className="w-12 h-12 bg-accent/20 rounded-xl flex items-center justify-center mb-4 group-hover:bg-accent/40 transition-colors duration-300">
                                 <Building2 className="text-accent" size={24} />
                             </div>
-                            <div className="text-[2.5rem] font-display font-black text-white mb-1 transition-transform group-hover:scale-110 duration-300">60+</div>
+                            <div className="text-[2rem] md:text-[2.5rem] font-display font-black text-white mb-1 transition-transform group-hover:scale-110 duration-300">60+</div>
                             <div className="text-[0.85rem] font-bold text-teal-light uppercase tracking-[0.15em]">Visiting Companies</div>
                         </div>
                         <div className="group flex flex-col items-center">
                             <div className="w-12 h-12 bg-accent/20 rounded-xl flex items-center justify-center mb-4 group-hover:bg-accent/40 transition-colors duration-300">
                                 <TrendingUp className="text-accent" size={24} />
                             </div>
-                            <div className="text-[2.5rem] font-display font-black text-white mb-1 transition-transform group-hover:scale-110 duration-300">14 LPA</div>
+                            <div className="text-[2rem] md:text-[2.5rem] font-display font-black text-white mb-1 transition-transform group-hover:scale-110 duration-300">14 LPA</div>
                             <div className="text-[0.85rem] font-bold text-teal-light uppercase tracking-[0.15em]">Highest CTC</div>
                         </div>
                         <div className="group flex flex-col items-center">
                             <div className="w-12 h-12 bg-accent/20 rounded-xl flex items-center justify-center mb-4 group-hover:bg-accent/40 transition-colors duration-300">
                                 <Award className="text-accent" size={24} />
                             </div>
-                            <div className="text-[2.5rem] font-display font-black text-white mb-1 transition-transform group-hover:scale-110 duration-300">90%</div>
+                            <div className="text-[2rem] md:text-[2.5rem] font-display font-black text-white mb-1 transition-transform group-hover:scale-110 duration-300">90%</div>
                             <div className="text-[0.85rem] font-bold text-teal-light uppercase tracking-[0.15em]">Success Ratio</div>
                         </div>
                     </div>

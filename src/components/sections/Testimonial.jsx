@@ -53,7 +53,7 @@ const Testimonial = () => {
       
       <div className="max-w-[95%] mx-auto px-4 lg:px-6 relative z-10">
         <div className="mb-14 text-center">
-            <h2 className="text-[2.25rem] font-display font-bold text-white mb-4 tracking-wide uppercase">
+            <h2 className="text-[1.8rem] md:text-[2.25rem] font-display font-bold text-white mb-4 tracking-wide uppercase">
                 VOICE OF ALUMNI
             </h2>
             <div className="w-24 h-1 bg-accent mx-auto rounded-full"></div>

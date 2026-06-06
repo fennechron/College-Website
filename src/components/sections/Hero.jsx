@@ -4,18 +4,12 @@ import { client } from '../../lib/sanity';
 
 import bg1 from '../../assets/cec11.jpeg';
 import bg2 from '../../assets/cec12.jpg';
-import bg3 from '../../assets/cec14.jpeg';
+import bg3 from '../../assets/cec14.png';
 import bg4 from '../../assets/cec15.webp';
 
-const localImages = [
-    { src: bg1 },
-    { src: bg2, title: "College of Engineering Chengannur", subtitle: "Vision & Mission" },
-    { src: bg3 },
-    { src: bg4 }
-];
 
 const Hero = () => {
-    const [images, setImages] = useState(localImages);
+    const [images, setImages] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
 
     // Fetch carousel images from Sanity
@@ -69,11 +63,11 @@ const Hero = () => {
                         {imgObj.title && (
                             <>
                                 <div className="absolute inset-0 bg-black/40"></div>
-                                <div className="relative z-10 p-6 md:p-12">
-                                    <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold text-white mb-4 drop-shadow-xl tracking-tight">
+                                <div className="relative z-10 p-4 sm:p-6 md:p-12">
+                                    <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-bold text-white mb-2 sm:mb-4 drop-shadow-xl tracking-tight">
                                         {imgObj.title}
                                     </h1>
-                                    <p className="text-xl md:text-2xl font-body text-white/90 drop-shadow-md font-light">
+                                    <p className="text-lg sm:text-xl md:text-2xl font-body text-white/90 drop-shadow-md font-light">
                                         {imgObj.subtitle}
                                     </p>
                                 </div>

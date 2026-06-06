@@ -1,7 +1,7 @@
 import React from 'react';
 import img1 from '../../assets/cec11.jpeg';
 import img2 from '../../assets/cec12.jpg';
-import img3 from '../../assets/cec14.jpeg';
+import img3 from '../../assets/cec14.png';
 import img4 from '../../assets/cec15.webp';
 
 const photos = [
@@ -16,9 +16,9 @@ const PhotoGallery = () => {
         <section id="gallery" className="py-10 bg-background border-t border-primary/5">
             <div className="max-w-[95%] mx-auto px-4 lg:px-6">
                 <div className="mb-10 text-center">
-                    <h2 className="text-[2.25rem] font-display font-bold text-primary mb-4 uppercase tracking-wide">Photo Gallery</h2>
+                    <h2 className="text-[1.8rem] md:text-[2.25rem] font-display font-bold text-primary mb-4 uppercase tracking-wide">Photo Gallery</h2>
                     <div className="w-16 h-1 bg-accent mx-auto mb-6"></div>
-                    <p className="text-lg text-secondary/80 max-w-2xl mx-auto">
+                    <p className="text-base md:text-lg text-secondary/80 max-w-2xl mx-auto">
                         Glimpses of life at College of Engineering Chengannur. Explore our beautiful campus and vibrant student community.
                     </p>
                 </div>

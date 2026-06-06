@@ -52,11 +52,11 @@ const EventsNews = () => {
         <section id="events-news" className="py-20 bg-background border-t border-primary/5">
             <div className="max-w-[95%] mx-auto px-4 lg:px-8">
                 <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
-                    <div className="text-left">
-                        <h2 className="text-[2.5rem] font-display font-black text-primary uppercase tracking-tight leading-tight">
+                    <div className="text-left text-center md:text-left">
+                        <h2 className="text-[2rem] md:text-[2.5rem] font-display font-black text-primary uppercase tracking-tight leading-tight">
                             Events & <span className="text-accent underline decoration-primary decoration-4 underline-offset-8">News</span>
                         </h2>
-                        <p className="mt-4 text-secondary/70 text-lg font-medium max-w-xl">
+                        <p className="mt-4 text-secondary/70 text-base md:text-lg font-medium max-w-xl mx-auto md:mx-0">
                             Stay updated with the latest happenings, research breakthroughs, and upcoming cultural activities at CEC.
                         </p>
                     </div>

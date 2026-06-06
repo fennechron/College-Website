@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import bg1 from '../../assets/cec11.jpeg';
 import bg2 from '../../assets/cec12.jpg';
-import bg3 from '../../assets/cec14.jpeg';
+import bg3 from '../../assets/cec14.png';
 
 const slides = [
     {
@@ -39,7 +39,7 @@ const Achievements = () => {
         <section id="achievements" className="py-10 bg-transparent border-t border-primary/10">
             <div className="max-w-[95%] mx-auto px-4 lg:px-6">
                 <div className="mb-10 text-center">
-                    <h2 className="text-[2.25rem] font-display font-bold text-primary mb-4 uppercase tracking-wide">Our Achievements</h2>
+                    <h2 className="text-[1.8rem] md:text-[2.25rem] font-display font-bold text-primary mb-4 uppercase tracking-wide">Our Achievements</h2>
                     <div className="w-16 h-1 bg-accent mx-auto"></div>
                 </div>
 
@@ -61,10 +61,10 @@ const Achievements = () => {
                                 {/* Text Content */}
                                 <div className="absolute inset-0 flex flex-col items-center justify-end text-center p-8 md:p-12 mb-10">
                                     <div className={`transition-all duration-1000 transform ${currentIndex === index ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
-                                        <h3 className="text-4xl md:text-6xl font-display font-bold text-white mb-6 drop-shadow-md">
+                                        <h3 className="text-3xl sm:text-4xl md:text-6xl font-display font-bold text-white mb-4 md:mb-6 drop-shadow-md">
                                             {slide.title}
                                         </h3>
-                                        <p className="text-xl md:text-2xl text-slate-200 max-w-4xl mx-auto drop-shadow-sm leading-relaxed">
+                                        <p className="text-lg md:text-2xl text-slate-200 max-w-4xl mx-auto drop-shadow-sm leading-relaxed">
                                             {slide.subtitle}
                                         </p>
                                     </div>
