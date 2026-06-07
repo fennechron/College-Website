@@ -244,7 +244,7 @@ const Navbar = () => {
     const closeMobileMenu = () => setIsOpen(false);
 
     return (
-        <nav className="sticky top-0 z-[999] shadow-[0_2px_20px_rgba(10,22,40,0.08)]">
+        <nav className="relative z-[999] shadow-[0_2px_20px_rgba(10,22,40,0.08)]">
             {/* Top Tier: Logo and College Info */}
             <div className="bg-background py-1.5 border-b border-slate-200">
                 <div className="flex w-full flex-col lg:flex-row items-center justify-between gap-[10px] lg:gap-[20px] px-4 lg:px-8">
