@@ -126,7 +126,7 @@ const PlacementPage = () => {
             {/* ─── Top Recruiters Section ─── */}
             <div className="py-24 overflow-hidden bg-white">
                 <div className="max-w-6xl mx-auto px-6 text-center mb-16">
-                    <h2 className="text-4xl font-display font-black text-primary uppercase tracking-tight">Our Top Recruiters</h2>
+                    <h2 className="text-4xl font-display font-black text-primary uppercase tracking-tight">Job Providers</h2>
                     <div className="w-20 h-1.5 bg-accent mx-auto mt-4 rounded-full" />
                 </div>
                 
