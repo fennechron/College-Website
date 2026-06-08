@@ -25,7 +25,7 @@ const PlacementPage = () => {
                         transition={{ duration: 0.6 }}
                     >
                         <h1 className="text-5xl sm:text-7xl font-display font-black leading-tight uppercase tracking-tighter mb-6">
-                            Career & <br/> Placement Cell
+                            Training & <br/> Placement Cell
                         </h1>
                         <p className="text-xl text-white/70 max-w-2xl mx-auto font-medium leading-relaxed mb-10">
                             Empowering students to transition from academia to excellence in the global corporate landscape.
