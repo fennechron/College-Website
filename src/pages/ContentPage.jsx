@@ -59,14 +59,17 @@ const parseContent = (text) => {
     return segments;
 };
 
+// Helper to generate id from name
+const generateId = (name) => name.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+
 const departmentDetails = {
     "dept-computer-engineering": {
         name: "Computer Engineering",
-        fullName: "Department of Computer Science & Engineering",
+        fullName: "Department of Computer Engineering",
         heroImage: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&q=80&w=1200",
         founded: "1993",
         stats: [
-            { value: "120+", label: "B.Tech Intake" },
+            { value: "180+", label: "B.Tech Intake" },
             { value: "30", label: "MCA Intake" },
             { value: "38", label: "Faculty Members" }
         ],
@@ -83,11 +86,11 @@ const departmentDetails = {
             "Data Science & Analytics Wing",
             "Hardware & Microprocessor Lab"
         ],
-        programs: ["B.Tech Computer Science & Eng.", "B.Tech AI & ML", "Master of Computer Applications (M.C.A)"],
+        programs: ["B.Tech Computer Engineering", "B.Tech AI & ML", "Master of Computer Applications (MCA)"],
         programmesTable: [
-            { name: "B.Tech in Computer Science & Engineering", duration: "4 years" },
+            { name: "B.Tech in Computer Engineering", duration: "4 years" },
             { name: "B.Tech in Artificial Intelligence & Machine Learning", duration: "4 years" },
-            { name: "Master of Computer Applications (M.C.A)", duration: "2 years" }
+            { name: "Master of Computer Applications (MCA)", duration: "2 years" }
         ],
         hod: "Dr. Renu George",
         hodDesignation: "Professor & Head Of the Department",
@@ -112,10 +115,16 @@ const departmentDetails = {
             "PEO3: Graduates shall have leadership and teamwork qualities competent of being good entrepreneurs.",
             "PEO4: Graduates shall exhibit social commitment with ethical values in designing computing  solutions."
         ],
-        psos: [
-            "PSO1: Able to analyze real world situations to develop software solutions incorporating new ideas and modern technology.",
-            "PSO2: Competent to Design and develop digital hardware based programming solutions"
-        ],
+        psos: {
+            "B.Tech Computer Engineering": [
+                "PSO1: Able to analyze real world situations to develop software solutions incorporating new ideas and modern technology.",
+                "PSO2: Competent to Design and develop digital hardware based programming solutions"
+            ],
+            "Master of Computer Applications (MCA)": [
+                "PSO1: To work productively as IT professional both at supportive and leadership roles.",
+                "PSO2: To advance successfully in their profession by drawing upon their firm analytical, computational and programming skills."
+            ]
+        },
         labsExtended: [
             "High-Performance Computing Lab: Equipped with advanced server systems and GPUs for deep learning and heavy computation.",
             "Embedded Systems & IoT Laboratory: Providing microcontrollers, sensors, and development boards for hardware interfacing projects.",
@@ -295,9 +304,9 @@ const departmentDetails = {
 
 const btechCourses = [
     {
-        name: "B.Tech Computer Science & Engineering",
+        name: "B.Tech Computer Engineering",
         duration: "8 Semesters",
-        intake: "180 seats",
+        intake: "180+ seats",
         eligibility: {
             academic: "Passed Higher Secondary Examination, Kerala, or Examinations recognized as equivalent thereto, with Physics and Mathematics as compulsory subjects and Chemistry/Computer Science/Biotechnology/Biology as one of the optional subjects.",
             marks: "Minimum of 45% marks in the above subjects put together (relaxation applicable for SC/ST/OBC categories as per government norms).",
@@ -474,7 +483,7 @@ const ContentPage = () => {
                                     </h2>
                                     <div className="space-y-6">
                                         {dept.description.map((para, i) => (
-                                            <p key={i} className="text-xl text-slate-600 leading-[1.8] font-medium">
+                                            <p key={i} className="text-xl text-slate-600 leading-[1.8] font-medium text-justify">
                                                 {para}
                                             </p>
                                         ))}
@@ -537,10 +546,25 @@ const ContentPage = () => {
                                             />
                                         )}
                                         {dept.psos && (
-                                            <DepartmentAccordion 
-                                                title="Program Specific Outcomes (PSOs)" 
-                                                items={dept.psos} 
-                                            />
+                                            Array.isArray(dept.psos) ? (
+                                                <DepartmentAccordion 
+                                                    title="Program Specific Outcomes (PSOs)" 
+                                                    items={dept.psos} 
+                                                />
+                                            ) : (
+                                                <div className="space-y-4 mt-6">
+                                                    <h4 className="text-xl font-display font-black text-primary uppercase">Program Specific Outcomes (PSOs)</h4>
+                                                    <div className="space-y-4">
+                                                        {Object.entries(dept.psos).map(([prog, psos]) => (
+                                                            <DepartmentAccordion 
+                                                                key={prog}
+                                                                title={`PSOs - ${prog}`} 
+                                                                items={psos} 
+                                                            />
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            )
                                         )}
                                     </section>
                                 )}
@@ -604,7 +628,11 @@ const ContentPage = () => {
                                                     {dept.facultyList.map((fac, idx) => (
                                                         <tr key={idx} className="hover:bg-slate-50/50 transition-colors">
                                                             <td className="px-6 py-4 text-base font-black text-slate-400">{idx + 1}</td>
-                                                            <td className="px-6 py-4 text-base font-black text-primary">{fac.name}</td>
+                                                            <td className="px-6 py-4 text-base font-black text-primary">
+                                                                <Link to={`/teacher/${generateId(fac.name)}`} className="hover:text-accent hover:underline transition-colors">
+                                                                    {fac.name}
+                                                                </Link>
+                                                            </td>
                                                             <td className="px-6 py-4 text-base font-semibold text-slate-600">
                                                                 <span className={`inline-block px-2.5 py-1 rounded-md text-[0.7rem] font-black uppercase tracking-wider ${
                                                                     fac.designation.toLowerCase().includes('head')
@@ -876,7 +904,7 @@ const ContentPage = () => {
                                         
                                         if (isBullet) {
                                             return (
-                                                <p key={i} className="text-lg text-slate-600 leading-relaxed font-medium pl-6 relative">
+                                                <p key={i} className="text-lg text-slate-600 leading-relaxed font-medium pl-6 relative text-justify">
                                                     <span className="absolute left-0 text-accent font-extrabold">•</span>
                                                     {trimmed.substring(1).trim()}
                                                 </p>
@@ -892,7 +920,7 @@ const ContentPage = () => {
                                                     <span className="inline-flex items-center justify-center shrink-0 w-8 h-8 rounded-full bg-accent/10 text-accent font-black text-sm">
                                                         {num}
                                                     </span>
-                                                    <p className="text-lg text-slate-600 leading-relaxed font-medium pt-0.5">
+                                                    <p className="text-lg text-slate-600 leading-relaxed font-medium pt-0.5 text-justify">
                                                         {text}
                                                     </p>
                                                 </div>
@@ -919,7 +947,7 @@ const ContentPage = () => {
                                         }
 
                                         return (
-                                            <p key={i} className="text-lg text-slate-600 leading-relaxed font-medium">
+                                            <p key={i} className="text-lg text-slate-600 leading-relaxed font-medium text-justify">
                                                 {trimmed}
                                             </p>
                                         );
@@ -1297,100 +1325,34 @@ const ContentPage = () => {
                                         </div>
                                     </div>
                                 </div>
-                             ) : slug === 'apjaktu' ? (
+                             ) : slug === 'apjaktu' || slug === 'aicte' ? (
                                 <div className="space-y-12 text-left">
                                     {/* University Affiliation Header */}
                                     <div className="border-b border-slate-100 pb-6 mb-8">
                                         <span className="text-xs font-black uppercase tracking-widest text-accent bg-accent/10 px-4 py-1.5 rounded-full">
-                                            University Affiliation
+                                            {slug === 'apjaktu' ? 'University Affiliation' : 'National Council'}
                                         </span>
                                         <h2 className="text-3xl font-display font-black text-primary uppercase mt-3">
-                                            APJ Abdul Kalam Technological University
+                                            {slug === 'apjaktu' ? 'APJ Abdul Kalam Technological University' : 'All India Council for Technical Education'}
                                         </h2>
                                     </div>
 
-                                    {/* Centered Premium Logo Branding Card */}
-                                    <div className="flex justify-center py-6">
-                                        <div className="bg-white p-6 md:p-8 rounded-[2rem] border border-slate-100 shadow-[0_15px_40px_rgba(12,43,78,0.04)] flex items-center justify-center max-w-lg w-full transition-transform duration-500 hover:scale-[1.02]">
-                                            <img 
-                                                src="/images/apjaktu_logo.png" 
-                                                alt="APJAKTU Logo" 
-                                                className="h-16 md:h-20 w-auto object-contain"
-                                            />
+                                    <div className="grid lg:grid-cols-[1fr_300px] gap-12 items-start">
+                                        {/* Description Card */}
+                                        <div className="bg-slate-50/50 rounded-[2rem] p-8 md:p-10 border border-slate-100 shadow-sm text-justify">
+                                            <p className="text-xl leading-[1.8] text-slate-700 font-medium font-sans">
+                                                {content.content}
+                                            </p>
                                         </div>
-                                    </div>
 
-                                    {/* Description Card */}
-                                    <div className="bg-slate-50/50 rounded-[2rem] p-8 md:p-10 border border-slate-100 space-y-8 shadow-sm">
-                                        <p className="text-xl leading-[1.8] text-slate-700 font-medium font-sans">
-                                            {content.content}
-                                        </p>
-                                        
-                                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 pt-6 border-t border-slate-100">
-                                            <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm">
-                                                <div className="text-[0.65rem] text-slate-400 font-black uppercase tracking-wider mb-1">Established</div>
-                                                <div className="text-lg font-black text-primary">2014</div>
-                                            </div>
-                                            <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm">
-                                                <div className="text-[0.65rem] text-slate-400 font-black uppercase tracking-wider mb-1">Type</div>
-                                                <div className="text-lg font-black text-primary">State University</div>
-                                            </div>
-                                            <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm">
-                                                <div className="text-[0.65rem] text-slate-400 font-black uppercase tracking-wider mb-1">Affiliation Status</div>
-                                                <div className="text-lg font-black text-primary">Official Member</div>
-                                            </div>
-                                            <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm">
-                                                <div className="text-[0.65rem] text-slate-400 font-black uppercase tracking-wider mb-1">Affiliated Colleges</div>
-                                                <div className="text-lg font-black text-primary">150+ Institutions</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            ) : slug === 'aicte' ? (
-                                <div className="space-y-12 text-left">
-                                    {/* AICTE Header */}
-                                    <div className="border-b border-slate-100 pb-6 mb-8">
-                                        <span className="text-xs font-black uppercase tracking-widest text-accent bg-accent/10 px-4 py-1.5 rounded-full">
-                                            National Council
-                                        </span>
-                                        <h2 className="text-3xl font-display font-black text-primary uppercase mt-3">
-                                            All India Council for Technical Education
-                                        </h2>
-                                    </div>
-
-                                    {/* Centered Premium Logo Branding Card */}
-                                    <div className="flex justify-center py-6">
-                                        <div className="bg-white p-6 md:p-8 rounded-[2rem] border border-slate-100 shadow-[0_15px_40px_rgba(12,43,78,0.04)] flex items-center justify-center max-w-lg w-full transition-transform duration-500 hover:scale-[1.02]">
-                                            <img 
-                                                src="/images/aicte_logo.jpg" 
-                                                alt="AICTE Logo" 
-                                                className="h-24 md:h-28 w-auto object-contain"
-                                            />
-                                        </div>
-                                    </div>
-
-                                    {/* Description Card */}
-                                    <div className="bg-slate-50/50 rounded-[2rem] p-8 md:p-10 border border-slate-100 space-y-8 shadow-sm">
-                                        <p className="text-xl leading-[1.8] text-slate-700 font-medium font-sans">
-                                            {content.content}
-                                        </p>
-                                        
-                                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 pt-6 border-t border-slate-100">
-                                            <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm">
-                                                <div className="text-[0.65rem] text-slate-400 font-black uppercase tracking-wider mb-1">Established</div>
-                                                <div className="text-lg font-black text-primary">1945</div>
-                                            </div>
-                                            <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm">
-                                                <div className="text-[0.65rem] text-slate-400 font-black uppercase tracking-wider mb-1">Type</div>
-                                                <div className="text-lg font-black text-primary">Statutory Body</div>
-                                            </div>
-                                            <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm">
-                                                <div className="text-[0.65rem] text-slate-400 font-black uppercase tracking-wider mb-1">Jurisdiction</div>
-                                                <div className="text-lg font-black text-primary">Government of India</div>
-                                            </div>
-                                            <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm">
-                                                <div className="text-[0.65rem] text-slate-400 font-black uppercase tracking-wider mb-1">Status at CEC</div>
-                                                <div className="text-lg font-black text-primary">Approved Institution</div>
+                                        {/* Logo Branding Card */}
+                                        <div className="flex justify-center">
+                                            <div className="bg-white p-6 md:p-8 rounded-[2rem] border border-slate-100 shadow-[0_15px_40px_rgba(12,43,78,0.04)] flex items-center justify-center w-full transition-transform duration-500 hover:scale-[1.02]">
+                                                <img 
+                                                    src={slug === 'apjaktu' ? "/images/apjaktu_logo.png" : "/images/aicte_logo.png"} 
+                                                    alt={`${content.title} Logo`} 
+                                                    className="w-full max-w-[200px] object-contain"
+                                                />
                                             </div>
                                         </div>
                                     </div>

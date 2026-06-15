@@ -208,16 +208,16 @@ The college bus routes are as follows:
 
 The Men’s Hostel is located right next to the campus and has a capacity of 70 students.
 
-One of the Ladies’ Hostels is situated half a kilometer away, near the Railway Station and two near the college. The college bus provides for the transit to and from college every day.
+One of the Ladies’ Hostels is situated half a kilometer away, near the Railway Station and two near the college. To and from hostel everyday.
 
 All the hostels have a warden who is usually a faculty member, to supervise and to address any grievances.`
     },
 
     // COMMITTEES
     "parents-teachers": {
-        title: "Parents Teachers Association (PTWA)",
+        title: "Parents Teachers Association (PTA)",
         category: "Committees",
-        content: `The Parents Teachers Association (PTWA) of College of Engineering Chengannur fosters a collaborative environment between educators and families to support the academic, professional, and personal growth of our students.
+        content: `The Parents Teachers Association (PTA) of College of Engineering Chengannur fosters a collaborative environment between educators and families to support the academic, professional, and personal growth of our students.
 
 Name of Executive members (Parents):
 
@@ -245,17 +245,17 @@ Name of Executive Committee Members (Teachers):
         category: "Committees",
         content: `In compliance with the Right to Information (RTI) Act, College of Engineering Chengannur maintains absolute transparency in all its academic, administrative, and financial activities. The designated officers under the RTI Act are listed below:
 
-Appellate Authority:
-• Dr. Hari V S (Principal, College of Engineering Chengannur)
-• Email: principal@ceconline.edu | Mobile: 8547005032
-
 Public Information Officer:
 • Smt. Asha K Pillai (Senior Superintendent)
 • Email: ashakpillai2016@gmail.com | Mobile: 94473731
 
 Assistant Public Information Officer:
 • Sri. Anoop Raj T V (Junior Superintendent)
-• Email: anoopraj@ceconline.edu | Mobile: 7561866090`
+• Email: anoopraj@ceconline.edu | Mobile: 7561866090
+
+Appellate Authority:
+• Dr. Hari V S (Principal, College of Engineering Chengannur)
+• Email: principal@ceconline.edu | Mobile: 8547005032`
     },
     "women-cell": {
         title: "Women Cell",
@@ -268,9 +268,9 @@ Assistant Public Information Officer:
         content: "A dedicated mechanism for addressing and resolving the concerns of students and staff in a timely and fair manner. Lorem ipsum dolor sit amet."
     },
     "anti-ragging": {
-        title: "Anti-Ragging Committee",
+        title: "Anti-Ragging Cell",
         category: "Committees",
-        content: "CEC maintains a zero-tolerance policy towards ragging. The committee ensures a safe, welcoming, and inclusive campus for all newcomers. Lorem ipsum dolor sit amet."
+        content: "CEC maintains a zero-tolerance policy towards ragging. The cell ensures a safe, welcoming, and inclusive campus for all newcomers. Lorem ipsum dolor sit amet."
     },
     "internal-complaints": {
         title: "Internal Complaints Committee (ICC)",
@@ -307,12 +307,33 @@ Assistant Public Information Officer:
         category: "Committees",
         content: "IQAC focuses on continuous quality improvement in all academic and administrative tasks of the institution. Lorem ipsum dolor sit amet."
     },
+    "campus-life": {
+        title: "Campus Life",
+        category: "Campus",
+        content: "College of Engineering Chengannur offers a vibrant and enriching campus life that goes beyond academics. Our sprawling campus is home to diverse student communities, technical clubs, cultural events, and state-of-the-art recreational facilities. Students are encouraged to participate in various extracurricular activities, fostering leadership, teamwork, and personal growth."
+    },
 
     // ACADEMICS
+    "admission-2026": {
+        title: "Admissions 2026",
+        category: "Academics",
+        content: `Admissions to the B.Tech programs for the academic year 2026-27 are currently open.
+
+Admission through KEAM:
+• Candidates who have qualified in KEAM can apply through the Centralized Allotment Process (CAP) conducted by CEE Kerala.
+
+NRI Admission:
+• Registration for the NRI quota is available. Prospective students can register for NRI seats directly.
+
+Spot Admission:
+• Spot admission details will be updated here after the KEAM allotment process is completed. 
+
+[Register Now](https://docs.google.com/forms/d/e/1FAIpQLSfJUpcMKTLCnW3rsszP-okVQuDPmKRA4O_FYoH93SlBmMXT6w/viewform)`
+    },
     "department": {
         title: "Departments",
         category: "Academics",
-        content: "The college hosts five major departments: Computer Science, Electronics & Communication, Electrical & Electronics, Mechanical Engineering, and Applied Science & Humanities. Lorem ipsum dolor sit amet."
+        content: "The college hosts five major departments: Computer Engineering, Electronics & Communication, Electrical & Electronics, Mechanical Engineering, and Applied Science & Humanities. Lorem ipsum dolor sit amet."
     },
     "apjaktu": {
         title: "APJAKTU",

@@ -25,20 +25,19 @@ const navItems = [
                 label: 'Facilities', path: '#', hasSubDropdown: true,
                 subItems: [
                     { label: 'FAB Lab', path: '/page/fab-lab' },
+                    { label: 'Photo Gallery', path: '/page/photo-gallery' },
                     { label: 'Library', path: '/page/library' },
                     { label: 'Transportation Facility', path: '/page/college-bus' },
-                    { label: 'Hostel & Mess', path: '/page/hostel' }
+                    { label: 'Hostel', path: '/page/hostel' }
                 ]
             },
-            { label: 'Our Teachers', path: '/page/teachers' },
             {
                 label: 'Committees', path: '#', hasSubDropdown: true,
                 subItems: [
-                    { label: 'Parents Teachers Organization', path: '/page/parents-teachers' },
-                    { label: 'Right to Information', path: '/page/right-to-info' },
+                    { label: 'Parents Teachers Association (PTA)', path: '/page/parents-teachers' },
                     { label: 'Women Cell', path: '/page/women-cell' },
                     { label: 'Grievance Redressal', path: '/page/grievance' },
-                    { label: 'Anti Ragging Committee', path: '/page/anti-ragging' },
+                    { label: 'Anti Ragging Cell', path: '/page/anti-ragging' },
                     { label: 'Internal Complaints Committee', path: '/page/internal-complaints' },
                     { label: 'Intellectual Property Rights Cells', path: '/page/iprc' },
                     { label: 'Research & Development Cell', path: '/page/research' },
@@ -92,6 +91,12 @@ const navItems = [
     },
     {
         name: 'DOWNLOADS', path: '/page/downloads', hasDropdown: false
+    },
+    {
+        name: 'RTI', path: '/page/right-to-info', hasDropdown: false
+    },
+    {
+        name: 'CAMPUS LIFE', path: '/page/campus-life', hasDropdown: false
     },
     {
         name: 'CONTACT US', path: '/page/contact', hasDropdown: false
@@ -167,9 +172,9 @@ const NavItem = ({ item, closeMobileMenu }) => {
                                                     <Link
                                                         to={sItem.path}
                                                         onClick={closeMobileMenu}
-                                                        className="block px-6 py-3 hover:bg-secondary hover:text-white transition text-[0.95rem] font-medium tracking-wide text-white/95"
+                                                        className={`block px-6 py-3 hover:bg-secondary hover:text-white transition text-[0.95rem] tracking-wide ${sItem.label === 'Anti Ragging Cell' ? 'bg-red-500/20 text-red-100 font-extrabold' : 'font-medium text-white/95'}`}
                                                     >
-                                                        {sItem.label}
+                                                        {sItem.label} {sItem.label === 'Anti Ragging Cell' && '🚨'}
                                                     </Link>
                                                 </li>
                                             ))}
@@ -212,7 +217,7 @@ const NavItem = ({ item, closeMobileMenu }) => {
                                                     <Link
                                                         to={sItem.path}
                                                         onClick={closeMobileMenu}
-                                                        className="block px-12 py-2.5 hover:text-white text-slate-300 transition text-[0.85rem] font-medium"
+                                                        className={`block px-12 py-2.5 hover:text-white transition text-[0.85rem] font-medium ${sItem.label === 'Anti Ragging Cell' ? 'text-red-400 font-bold' : 'text-slate-300'}`}
                                                     >
                                                         - {sItem.label}
                                                     </Link>
@@ -259,7 +264,7 @@ const Navbar = () => {
                                 ESTD : 1993 Institute of Human Resource Development(IHRD), Government of Kerala
                             </p>
                             <p className="text-[0.65rem] sm:text-[0.8rem] lg:text-[1.05rem] font-semibold tracking-[0.02em] text-primary/80 mt-[2px]">
-                                Affiliated to A P J Abdul Kalam Technological University, Kerala
+                                Affiliated to APJ Abdul Kalam Technological University, Kerala
                             </p>
                         </div>
                     </div>

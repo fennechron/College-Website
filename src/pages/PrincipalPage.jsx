@@ -78,7 +78,7 @@ const PrincipalPage = () => {
                             <h1 className="text-5xl sm:text-7xl font-display font-black text-white leading-none tracking-tighter">
                                 Prof. (Dr.) <br />
                                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-slate-500">
-                                    Hari. V S
+                                    Hari V S
                                 </span>
                             </h1>
                             <p className="text-lg text-slate-400 font-display font-black uppercase tracking-widest flex items-center gap-4">

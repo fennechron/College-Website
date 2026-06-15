@@ -1,9 +1,11 @@
 {
   "files": {
-    "main.css": "/static/css/main.ffdab0fa.css",
-    "main.js": "/static/js/main.2fd60451.js",
+    "main.css": "/static/css/main.3ebe74fc.css",
+    "main.js": "/static/js/main.686428c6.js",
+    "static/js/796.5eba23e9.chunk.js": "/static/js/796.5eba23e9.chunk.js",
+    "static/js/165.ee492ee0.chunk.js": "/static/js/165.ee492ee0.chunk.js",
+    "static/media/cec14.png": "/static/media/cec14.93a20518b32ec46c73dc.png",
     "static/media/cec12.jpg": "/static/media/cec12.30b84c286c8f599ecb05.jpg",
-    "static/media/cec14.png": "/static/media/cec14.226600fe8dcf90e9b010.png",
     "static/media/cec11.jpeg": "/static/media/cec11.4fad8538016175c3daca.jpeg",
     "static/media/ibm.png": "/static/media/ibm.80baa0b0db9e8abad602.png",
     "static/media/ihrd.png": "/static/media/ihrd.0d788a09b5ed21cb703d.png",
@@ -19,11 +21,13 @@
     "static/media/ktu.png": "/static/media/ktu.666f091c14bb07eb2cfb.png",
     "static/media/cec15.webp": "/static/media/cec15.4aaf75d55259b2db11f6.webp",
     "index.html": "/index.html",
-    "main.ffdab0fa.css.map": "/static/css/main.ffdab0fa.css.map",
-    "main.2fd60451.js.map": "/static/js/main.2fd60451.js.map"
+    "main.3ebe74fc.css.map": "/static/css/main.3ebe74fc.css.map",
+    "main.686428c6.js.map": "/static/js/main.686428c6.js.map",
+    "796.5eba23e9.chunk.js.map": "/static/js/796.5eba23e9.chunk.js.map",
+    "165.ee492ee0.chunk.js.map": "/static/js/165.ee492ee0.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.ffdab0fa.css",
-    "static/js/main.2fd60451.js"
+    "static/css/main.3ebe74fc.css",
+    "static/js/main.686428c6.js"
   ]
 }

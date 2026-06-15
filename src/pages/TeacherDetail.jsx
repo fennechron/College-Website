@@ -15,19 +15,22 @@ const TeacherDetail = () => {
     const [sanityTeacher, setSanityTeacher] = useState(null);
     const [loading, setLoading] = useState(true);
 
+    // Helper to generate id from name
+    const generateId = (name) => name.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+
     // Helper to find teacher in nested structure
     const findStaticTeacher = () => {
         // Check B.Tech
         for (const deptKey in teachersData.btech.departments) {
             const dept = teachersData.btech.departments[deptKey];
-            if (dept.hod.id === id) return { ...dept.hod, deptLabel: dept.label, color: dept.color };
-            const faculty = dept.faculty.find(f => f.id === id);
+            if (dept.hod.id === id || generateId(dept.hod.name) === id) return { ...dept.hod, deptLabel: dept.label, color: dept.color };
+            const faculty = dept.faculty.find(f => f.id === id || generateId(f.name) === id);
             if (faculty) return { ...faculty, deptLabel: dept.label, color: dept.color };
         }
         // Check MCA
         const mca = teachersData.mca;
-        if (mca.hod.id === id) return { ...mca.hod, deptLabel: 'MCA', color: '#4A235A' };
-        const faculty = mca.faculty.find(f => f.id === id);
+        if (mca.hod.id === id || generateId(mca.hod.name) === id) return { ...mca.hod, deptLabel: 'MCA', color: '#4A235A' };
+        const faculty = mca.faculty.find(f => f.id === id || generateId(f.name) === id);
         if (faculty) return { ...faculty, deptLabel: 'MCA', color: '#4A235A' };
         
         return null;
@@ -76,7 +79,7 @@ const TeacherDetail = () => {
         return (
             <div className="min-h-screen flex flex-col items-center justify-center p-4">
                 <h2 className="text-2xl font-display font-black text-primary mb-4">Teacher Not Found</h2>
-                <Link to="/page/teachers" className="px-6 py-2 bg-primary text-white rounded-full font-bold">Back to Directory</Link>
+                <button onClick={() => navigate(-1)} className="px-6 py-2 bg-primary text-white rounded-full font-bold">Go Back</button>
             </div>
         );
     }

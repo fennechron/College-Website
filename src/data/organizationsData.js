@@ -17,6 +17,7 @@ export const organizationsData = {
             { label: "Active Societies", value: "6" },
             { label: "Affinity Groups", value: "1" }
         ],
+        facultyInCharge: "Dr. XYZ (Computer Society), Dr. ABC (PES)",
         gallery: [
             "https://images.unsplash.com/photo-1540575861501-7cf05a4b125a?auto=format&fit=crop&q=80&w=800",
             "https://images.unsplash.com/photo-1515187029135-18ee286d815b?auto=format&fit=crop&q=80&w=800",
@@ -36,9 +37,10 @@ export const organizationsData = {
             "It organizes talks by eminent personalities in the industry on evolving technologies in computing, workshops on latest developing platforms, languages and software packages in the IT industry and helps coordinate and implement software projects for the students in the Computer Science & Engineering Dept."
         ],
         stats: [
-            { label: "Department", value: "CSE" },
+            { label: "Department", value: "CE" },
             { label: "Focus", value: "IT & Computing" }
         ],
+        facultyInCharge: "Prof. DEF",
         gallery: [
             "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&q=80&w=800",
             "https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&fit=crop&q=80&w=800",
@@ -67,6 +69,7 @@ export const organizationsData = {
             { label: "Strength", value: "50 Cadets" },
             { label: "Unit", value: "3(K) Navy" }
         ],
+        facultyInCharge: "Lt. GHI",
         gallery: [
             "https://images.unsplash.com/photo-1516738901171-8eb4fc13bd20?auto=format&fit=crop&q=80&w=800",
             "https://images.unsplash.com/photo-1508614589041-895b88991e3e?auto=format&fit=crop&q=80&w=800",
@@ -86,6 +89,7 @@ export const organizationsData = {
             { label: "Focus", value: "Social Service" },
             { label: "Vision", value: "Social Engineers" }
         ],
+        facultyInCharge: "Prof. JKL",
         gallery: [
             "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&q=80&w=800",
             "https://images.unsplash.com/photo-1593113598332-cd288d649433?auto=format&fit=crop&q=80&w=800",
@@ -113,6 +117,7 @@ export const organizationsData = {
             { label: "Founded", value: "1995" },
             { label: "Scope", value: "Product Design" }
         ],
+        facultyInCharge: "Prof. MNO",
         gallery: [
             "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=800",
             "https://images.unsplash.com/photo-1581092583537-20d51b4b4f1b?auto=format&fit=crop&q=80&w=800",
@@ -132,6 +137,7 @@ export const organizationsData = {
             { label: "Department", value: "Electronics" },
             { label: "Type", value: "Technical Forum" }
         ],
+        facultyInCharge: "Prof. PQR",
         gallery: [
             "https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?auto=format&fit=crop&q=80&w=800",
             "https://images.unsplash.com/photo-1550009158-9ebf69173e03?auto=format&fit=crop&q=80&w=800",
@@ -152,6 +158,7 @@ export const organizationsData = {
             { label: "Department", value: "Electrical" },
             { label: "Focus", value: "Innovation" }
         ],
+        facultyInCharge: "Prof. STU",
         gallery: [
             "https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?auto=format&fit=crop&q=80&w=800",
             "https://images.unsplash.com/photo-1505751172876-fa1923c5c528?auto=format&fit=crop&q=80&w=800",

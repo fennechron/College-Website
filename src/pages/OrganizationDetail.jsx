@@ -142,6 +142,16 @@ const OrganizationDetail = () => {
                                 <p className="text-white/60 text-xs ml-7">{org.founded || "Academic Legacy"}</p>
                             </div>
 
+                            {org.facultyInCharge && (
+                                <div className="p-4 bg-white/5 rounded-xl border border-white/10">
+                                    <div className="flex items-center gap-3 mb-1">
+                                        <Users size={18} className="text-accent" />
+                                        <span className="font-bold text-sm">Faculty in Charge</span>
+                                    </div>
+                                    <p className="text-white/60 text-xs ml-7 leading-relaxed">{org.facultyInCharge}</p>
+                                </div>
+                            )}
+
                             <div className="p-4 bg-white/5 rounded-xl border border-white/10">
                                 <div className="flex items-center gap-3 mb-1">
                                     <Users size={18} className="text-accent" />
