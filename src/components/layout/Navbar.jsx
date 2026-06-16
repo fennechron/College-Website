@@ -80,13 +80,20 @@ const navItems = [
     {
         name: 'ORGANIZATIONS', path: '#', hasDropdown: true,
         dropdownItems: [
-            { label: 'IEEE', path: '/organization/ieee' },
-            { label: 'FOCES', path: '/organization/foces' },
+            {
+                label: 'Technical Forums', path: '#', hasSubDropdown: true,
+                subItems: [
+                    { label: 'IEEE', path: '/organization/ieee' },
+                    { label: 'FOCES', path: '/organization/foces' },
+                    { label: 'PRODECC', path: '/organization/prodecc' },
+                    { label: 'ExCESS', path: '/organization/excess' },
+                    { label: 'SURGE', path: '/organization/surge' }
+                ]
+            },
+            { label: 'Arts', path: '/organization/arts' },
+            { label: 'Sports', path: '/organization/sports' },
             { label: 'Naval NCC Unit', path: '/organization/ncc' },
-            { label: 'NSS', path: '/organization/nss' },
-            { label: 'PRODECC', path: '/organization/prodecc' },
-            { label: 'ExCESS', path: '/organization/excess' },
-            { label: 'SURGE', path: '/organization/surge' }
+            { label: 'NSS', path: '/organization/nss' }
         ]
     },
     {
@@ -99,7 +106,7 @@ const navItems = [
         name: 'CAMPUS LIFE', path: '/page/campus-life', hasDropdown: false
     },
     {
-        name: 'CONTACT US', path: '/page/contact', hasDropdown: false
+        name: 'CONTACT', path: '/page/contact', hasDropdown: false
     }
 ];
 
@@ -249,9 +256,9 @@ const Navbar = () => {
     const closeMobileMenu = () => setIsOpen(false);
 
     return (
-        <nav className="relative z-[999] shadow-[0_2px_20px_rgba(10,22,40,0.08)]">
+        <>
             {/* Top Tier: Logo and College Info */}
-            <div className="bg-background py-1.5 border-b border-slate-200">
+            <header className="relative z-[999] bg-background py-1.5 border-b border-slate-200">
                 <div className="flex w-full flex-col lg:flex-row items-center justify-between gap-[10px] lg:gap-[20px] px-4 lg:px-8">
                     {/* Left Side: College Logo and Title */}
                     <div className="flex flex-col sm:flex-row items-center gap-[10px] sm:gap-[20px] text-center sm:text-left">
@@ -284,12 +291,12 @@ const Navbar = () => {
 
                     </div>
                 </div>
-            </div>
+            </header>
 
 
 
             {/* Bottom Tier: Navigation Links */}
-            <div className="bg-primary transition-colors duration-300">
+            <nav className="sticky top-0 z-[1000] bg-primary transition-colors duration-300 shadow-[0_2px_20px_rgba(10,22,40,0.08)]">
                 <div className="relative flex w-full items-center px-4 lg:px-8">
                     <ul
                         className={`${isOpen ? 'flex' : 'hidden'} absolute left-0 top-[100%] w-full flex-col bg-primary py-2 text-[1rem] font-semibold tracking-[0.03em] text-white shadow-[0_15px_30px_rgba(0,0,0,0.3)] md:static md:flex md:w-auto md:flex-row md:py-0 md:shadow-none w-[100%] justify-between flex-wrap max-h-[calc(100vh-300px)] overflow-y-auto md:overflow-visible md:max-h-none custom-scrollbar`}
@@ -308,8 +315,8 @@ const Navbar = () => {
                         {isOpen ? <X size={24} /> : <Menu size={24} />}
                     </button>
                 </div>
-            </div>
-        </nav>
+            </nav>
+        </>
     );
 };
 

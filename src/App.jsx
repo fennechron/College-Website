@@ -18,6 +18,8 @@ import BoardOfGovernors from './pages/BoardOfGovernors.jsx';
 import AdministrativeStaff from './pages/AdministrativeStaff.jsx';
 import LibraryStaff from './pages/LibraryStaff.jsx';
 
+import CampusLifePage from './pages/CampusLifePage.jsx';
+
 function App() {
     useEffect(() => {
         const lenis = new Lenis();
@@ -49,6 +51,7 @@ function App() {
                     <Route path="/page/administrative-staff" element={<AdministrativeStaff />} />
                     <Route path="/page/library-staff" element={<LibraryStaff />} />
                     <Route path="/teacher/:id" element={<TeacherDetail />} />
+                    <Route path="/page/campus-life" element={<CampusLifePage />} />
                     <Route path="/page/:slug" element={<ContentPage />} />
                 </Routes>
             </main>

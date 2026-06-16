@@ -87,196 +87,141 @@ const TeacherDetail = () => {
     const accent = teacher.color || '#0C2B4E';
 
     return (
-        <div className="min-h-screen bg-white pb-20">
-             
-
-            {/* ─── Hero Section (As per wireframe: Large Image) ─── */}
-            <div className="relative w-full h-[60vh] sm:h-[70vh] bg-slate-100 overflow-hidden">
-                <motion.img 
-                    initial={{ scale: 1.1, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    transition={{ duration: 0.8 }}
-                    src={teacher.photo ? (teacher.photo.asset ? urlFor(teacher.photo).width(800).height(1000).fit('crop').url() : teacher.photo) : `https://ui-avatars.com/api/?name=${encodeURIComponent(teacher.name)}&size=800&background=0C2B4E&color=ffffff&bold=true`} 
-                    alt={teacher.name}
-                    className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+        <div className="min-h-screen bg-slate-50 pt-24 pb-20 px-6 sm:px-12">
+            <div className="max-w-6xl mx-auto space-y-20">
                 
-                {/* Name Overlay */}
-                <div className="absolute bottom-16 left-0 right-0 px-6 sm:px-12">
-                    <div className="max-w-6xl mx-auto">
-                        <motion.div
-                            initial={{ y: 30, opacity: 0 }}
-                            animate={{ y: 0, opacity: 1 }}
-                            transition={{ delay: 0.3 }}
-                        >
-                            <span className="inline-block px-4 py-1.5 rounded-lg bg-white/20 backdrop-blur-md border border-white/30 text-white text-[0.7rem] font-black tracking-widest uppercase mb-4">
-                                {teacher.designation}
-                            </span>
-                            <h1 className="text-4xl sm:text-7xl font-display font-black text-white leading-tight uppercase tracking-tighter">
+                {/* Top Section: Text and Blob Image */}
+                <div className="grid lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+                    
+                    {/* Left Column: Info & About */}
+                    <div className="lg:col-span-7 space-y-8">
+                        <div className="space-y-2">
+                            <h1 className="text-4xl sm:text-6xl font-display font-black text-primary leading-tight uppercase tracking-tighter">
                                 {teacher.name}
                             </h1>
-                        </motion.div>
+                            <p className="text-xl font-bold uppercase tracking-widest" style={{ color: accent }}>
+                                {teacher.designation}
+                            </p>
+                        </div>
+                        
+                        <div className="space-y-4 text-lg text-slate-600 leading-relaxed font-medium">
+                            {(teacher.about || []).map((p, i) => <p key={i}>{p}</p>)}
+                        </div>
+
+                        {/* Other Details - integrated gracefully as requested */}
+                        <div className="grid sm:grid-cols-2 gap-6 pt-8 border-t border-slate-200 mt-8">
+                            <DetailItem icon={<GraduationCap />} label="Qualification" value={teacher.qualification} color={accent} />
+                            <DetailItem icon={<Briefcase />} label="Experience" value={teacher.experience} color={accent} />
+                            <DetailItem icon={<MapPin />} label="Office Location" value={teacher.staffRoom} color={accent} />
+                            <DetailItem icon={<Globe />} label="Department" value={teacher.deptLabel} color={accent} />
+                            <DetailItem 
+                                icon={<Mail />} 
+                                label="Email Address" 
+                                value={teacher.email} 
+                                color={accent} 
+                                isLink={`mailto:${teacher.email}`}
+                            />
+                            <DetailItem 
+                                icon={<Phone />} 
+                                label="Phone Number" 
+                                value={teacher.phone} 
+                                color={accent} 
+                            />
+                        </div>
+                    </div>
+
+                    {/* Right Column: Blob Image */}
+                    <div className="lg:col-span-5 flex justify-center lg:justify-end">
+                        <div 
+                            className="w-[300px] h-[350px] sm:w-[400px] sm:h-[450px] overflow-hidden shadow-2xl relative"
+                            style={{ 
+                                borderRadius: '60% 40% 30% 70% / 60% 30% 70% 40%',
+                                border: `8px solid ${accent}20`
+                            }}
+                        >
+                            <motion.img 
+                                initial={{ scale: 1.1, opacity: 0 }}
+                                animate={{ scale: 1, opacity: 1 }}
+                                transition={{ duration: 0.8 }}
+                                src={teacher.photo ? (teacher.photo.asset ? urlFor(teacher.photo).width(800).height(1000).fit('crop').url() : teacher.photo) : `https://ui-avatars.com/api/?name=${encodeURIComponent(teacher.name)}&size=800&background=0C2B4E&color=ffffff&bold=true`} 
+                                alt={teacher.name}
+                                className="w-full h-full object-cover"
+                            />
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            {/* ─── Wavy Separator (As per wireframe) ─── */}
-            <div className="relative -mt-1 z-10">
-                <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto drop-shadow-[-2px_-5px_5px_rgba(0,0,0,0.1)]">
-                    <path 
-                        d="M0 48L60 42.7C120 37 240 27 360 37.3C480 48 600 75 720 80C840 85 960 75 1080 58.7C1200 43 1320 21 1380 10.7L1440 0V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0V48Z" 
-                        fill="white"
-                    />
-                    <path 
-                        d="M0 64L60 58.7C120 53 240 43 360 53.3C480 64 600 91 720 96C840 101 960 91 1080 74.7C1200 59 1320 37 1380 26.7L1440 16V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0V64Z" 
-                        fill="url(#gradient-bg)"
-                        opacity="0.05"
-                    />
-                    <defs>
-                        <linearGradient id="gradient-bg" x1="720" y1="0" x2="720" y2="120" gradientUnits="userSpaceOnUse">
-                            <stop stopColor={accent} />
-                            <stop offset="1" stopColor="white" />
-                        </linearGradient>
-                    </defs>
-                </svg>
-            </div>
+                {/* Specialization Section */}
+                {(teacher.specialization) && (
+                    <motion.div 
+                        initial={{ y: 20, opacity: 0 }}
+                        whileInView={{ y: 0, opacity: 1 }}
+                        viewport={{ once: true }}
+                        className="space-y-6 pt-4"
+                    >
+                        <h2 className="text-xl font-display font-black text-primary uppercase tracking-tight">Specialization</h2>
+                        <div className="flex flex-wrap gap-3">
+                            {teacher.specialization.split(',').map((s, i) => (
+                                <span 
+                                    key={i}
+                                    className="px-6 py-2.5 rounded-full bg-white border-2 border-slate-100 text-slate-700 font-bold text-sm shadow-sm hover:border-accent hover:text-accent transition-all cursor-default"
+                                >
+                                    {s.trim()}
+                                </span>
+                            ))}
+                        </div>
+                    </motion.div>
+                )}
 
-            {/* ─── Content Section (As per wireframe: Gradient applied below) ─── */}
-            <div 
-                className="pt-12 px-6"
-                style={{ background: `linear-gradient(180deg, rgba(255,255,255,1) 0%, ${accent}08 10%, rgba(255,255,255,1) 100%)` }}
-            >
-                <div className="max-w-6xl mx-auto grid lg:grid-cols-12 gap-16">
-                    
-                    {/* Left Column: About & Main Content */}
-                    <div className="lg:col-span-8 space-y-12">
-                        
-                        {/* About Section */}
-                        <motion.section 
-                            initial={{ y: 20, opacity: 0 }}
-                            whileInView={{ y: 0, opacity: 1 }}
-                            viewport={{ once: true }}
-                            className="space-y-6"
-                        >
-                            <div className="flex items-center gap-4">
-                                <div className="w-12 h-1.5 rounded-full" style={{ background: accent }} />
-                                <h2 className="text-3xl font-display font-black text-primary uppercase tracking-tight">About</h2>
-                            </div>
-                            <div className="space-y-4 text-lg text-slate-600 leading-relaxed font-medium">
-                                {(teacher.about || []).map((p, i) => <p key={i}>{p}</p>)}
-                            </div>
-                        </motion.section>
-
-                        {/* Specialization Section */}
-                        <motion.section 
-                            initial={{ y: 20, opacity: 0 }}
-                            whileInView={{ y: 0, opacity: 1 }}
-                            viewport={{ once: true }}
-                            className="space-y-6"
-                        >
-                            <div className="flex items-center gap-4">
-                                <div className="w-12 h-1.5 rounded-full" style={{ background: accent }} />
-                                <h2 className="text-3xl font-display font-black text-primary uppercase tracking-tight">Specialization</h2>
-                            </div>
-                            <div className="flex flex-wrap gap-3">
-                                {(teacher.specialization || '').split(',').map((s, i) => (
-                                    <span 
-                                        key={i}
-                                        className="px-5 py-2.5 rounded-xl border border-slate-200 text-primary font-bold text-sm bg-white shadow-sm hover:border-accent hover:text-accent transition-all duration-300"
-                                    >
-                                        {s.trim()}
-                                    </span>
-                                ))}
-                            </div>
-                        </motion.section>
-
-                        {/* Publications Section */}
-                        {teacher.publications && teacher.publications.length > 0 && (
-                            <motion.section 
-                                initial={{ y: 20, opacity: 0 }}
-                                whileInView={{ y: 0, opacity: 1 }}
-                                viewport={{ once: true }}
-                                className="space-y-6"
-                            >
-                                <div className="flex items-center gap-4">
-                                    <div className="w-12 h-1.5 rounded-full" style={{ background: accent }} />
-                                    <h2 className="text-3xl font-display font-black text-primary uppercase tracking-tight">Publications</h2>
+                {/* Publications Section */}
+                {teacher.publications && teacher.publications.length > 0 && (
+                    <motion.div 
+                        initial={{ y: 20, opacity: 0 }}
+                        whileInView={{ y: 0, opacity: 1 }}
+                        viewport={{ once: true }}
+                        className="space-y-6 pt-4"
+                    >
+                        <h2 className="text-xl font-display font-black text-primary uppercase tracking-tight">Publication</h2>
+                        <div className="space-y-4 max-w-4xl">
+                            {teacher.publications.map((pub, i) => (
+                                <div 
+                                    key={i} 
+                                    className="p-5 rounded-2xl bg-white border-2 border-slate-100 shadow-sm flex items-center justify-between group hover:border-accent/30 transition-colors cursor-pointer"
+                                >
+                                    <p className="text-lg text-slate-700 font-medium">
+                                        {pub}
+                                    </p>
+                                    <div className="w-10 h-10 rounded-full flex items-center justify-center bg-slate-50 text-slate-400 group-hover:bg-accent group-hover:text-white transition-colors shrink-0 ml-4">
+                                        <ChevronRight size={20} />
+                                    </div>
                                 </div>
-                                <ul className="space-y-4">
-                                    {teacher.publications.map((pub, i) => (
-                                        <li 
-                                            key={i} 
-                                            className="flex items-start gap-4 p-5 rounded-2xl border border-slate-100 bg-white shadow-sm hover:border-accent/30 hover:shadow-md transition-all duration-300"
-                                        >
-                                            <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 font-display" style={{ background: `${accent}10`, color: accent }}>
-                                                <span className="text-sm font-black">{i + 1}</span>
-                                            </div>
-                                            <p className="text-[1.05rem] text-slate-700 font-medium leading-relaxed mt-0.5">
-                                                {pub}
-                                            </p>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </motion.section>
-                        )}
+                            ))}
+                        </div>
+                    </motion.div>
+                )}
 
-                        {/* A Word from Teacher (As per wireframe) */}
-                        <motion.section 
-                            initial={{ y: 20, opacity: 0 }}
-                            whileInView={{ y: 0, opacity: 1 }}
-                            viewport={{ once: true }}
-                            className="relative p-10 rounded-[3rem] overflow-hidden"
-                        >
-                            <div className="absolute inset-0 opacity-10" style={{ background: accent }} />
-                            <div className="absolute top-8 left-8 text-primary opacity-20">
+                {/* Word from Teacher Section */}
+                {teacher.wordFromTeacher && (
+                    <motion.div 
+                        initial={{ y: 20, opacity: 0 }}
+                        whileInView={{ y: 0, opacity: 1 }}
+                        viewport={{ once: true }}
+                        className="space-y-6 pt-4"
+                    >
+                        <h2 className="text-xl font-display font-black text-primary uppercase tracking-tight">Word from teacher</h2>
+                        <div className="relative p-10 sm:p-14 rounded-[2rem] bg-white border-2 border-slate-100 shadow-sm overflow-hidden group hover:border-accent/20 transition-all duration-500 max-w-5xl">
+                            <div className="absolute top-8 left-8 text-slate-100 transition-colors duration-500 group-hover:text-accent/10">
                                 <Quote size={64} fill="currentColor" />
                             </div>
-                            <div className="relative z-10 text-center space-y-6">
-                                <h2 className="text-[0.7rem] font-black uppercase tracking-[0.3em] text-primary/40">A Word from Teacher</h2>
-                                <p className="text-2xl sm:text-3xl font-display font-black text-primary leading-tight italic">
+                            <div className="relative z-10">
+                                <p className="text-2xl sm:text-3xl font-display font-medium text-slate-800 leading-snug italic ml-8 sm:ml-12">
                                     "{teacher.wordFromTeacher}"
                                 </p>
-                                <div className="w-16 h-1 bg-accent mx-auto rounded-full" />
                             </div>
-                        </motion.section>
+                        </div>
+                    </motion.div>
+                )}
 
-                    </div>
-
-                    {/* Right Column: Other Details & Sidebar */}
-                    <div className="lg:col-span-4 space-y-10">
-                        
-                        {/* Detail Cards */}
-                        <motion.div 
-                            initial={{ x: 20, opacity: 0 }}
-                            whileInView={{ x: 0, opacity: 1 }}
-                            viewport={{ once: true }}
-                            className="bg-white rounded-[2rem] border border-slate-100 shadow-2xl p-8 space-y-8"
-                        >
-                            <h3 className="text-xl font-display font-black text-primary uppercase tracking-tight border-b border-slate-100 pb-4">Other Details</h3>
-                            
-                            <div className="space-y-6">
-                                <DetailItem icon={<GraduationCap />} label="Qualification" value={teacher.qualification} color={accent} />
-                                <DetailItem icon={<Briefcase />} label="Experience" value={teacher.experience} color={accent} />
-                                <DetailItem icon={<MapPin />} label="Office Location" value={teacher.staffRoom} color={accent} />
-                                <DetailItem icon={<Globe />} label="Department" value={teacher.deptLabel} color={accent} />
-                                <DetailItem 
-                                    icon={<Mail />} 
-                                    label="Email Address" 
-                                    value={teacher.email} 
-                                    color={accent} 
-                                    isLink={`mailto:${teacher.email}`}
-                                />
-                                <DetailItem 
-                                    icon={<Phone />} 
-                                    label="Phone Number" 
-                                    value={teacher.phone} 
-                                    color={accent} 
-                                />
-                            </div>
-                        </motion.div>
-                    </div>
-                </div>
             </div>
         </div>
     );

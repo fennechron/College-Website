@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
     Download, Search, FileText, BookOpen, 
-    Calendar, ClipboardCheck, ArrowRight, File
+    Calendar, ClipboardCheck, ArrowRight, File, Shield
 } from 'lucide-react';
 import { downloadCategories as localCategories } from '../data/downloadsData';
 import { client } from '../lib/sanity';
@@ -16,7 +16,8 @@ const DownloadsPage = () => {
         BookOpen: <BookOpen />,
         FileText: <FileText />,
         Calendar: <Calendar />,
-        ClipboardCheck: <ClipboardCheck />
+        ClipboardCheck: <ClipboardCheck />,
+        Shield: <Shield />
     };
 
     useEffect(() => {
@@ -32,11 +33,21 @@ const DownloadsPage = () => {
         
         client.fetch(query)
             .then(data => {
+                let combinedCategories = [...localCategories];
+                
                 if (data && data.length > 0) {
-                    setCategories(data);
-                } else {
-                    setCategories(localCategories);
+                    // Merge Sanity data with local data (Sanity takes precedence for matching IDs)
+                    data.forEach(sanityCat => {
+                        const existingIdx = combinedCategories.findIndex(c => c.id === sanityCat.id);
+                        if (existingIdx >= 0) {
+                            combinedCategories[existingIdx] = sanityCat;
+                        } else {
+                            combinedCategories.push(sanityCat);
+                        }
+                    });
                 }
+                
+                setCategories(combinedCategories);
             })
             .catch(err => {
                 console.error("Error fetching download categories:", err);

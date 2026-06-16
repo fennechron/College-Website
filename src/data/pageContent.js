@@ -4,7 +4,12 @@ export const pageContent = {
         title: "FAB Lab",
         category: "Facilities",
         image: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&q=80&w=1200",
-        content: "College of Engineering, Chengannur is one of the 18 engineering colleges equipped with Mini Fablab.CEC Mini Fablab is funded by a joint venture of Kerala Technical University and Startup Mission under the government of Kerala. The Fablab concepts originally conceived at  MIT by Neil Gershenfeld and partially financed by the NSF.Mini Fablab is a platform offering digital fabrication technology solutions as a bridge between idea and industry, creativity and production. Mini Fablab provides an opportunity for making rapid prototypes of digitally controlled hardware.Students of any discipline who wish to move more quickly from an idea or concept to a physical object or prototype can avail Fablab. Mini Fablab is a part of a worldwide network of 100, stretching from Costa Rica to the Netherlands.CEC Mini Fablab is equipped with numerically controlled modern operating by CAD/CAM tools.\n\nFor more visit: http://citcec.in"
+        content: "College of Engineering, Chengannur is one of the 18 engineering colleges equipped with Mini Fablab.CEC Mini Fablab is funded by a joint venture of Kerala Technical University and Startup Mission under the government of Kerala. The Fablab concepts originally conceived at  MIT by Neil Gershenfeld and partially financed by the NSF.Mini Fablab is a platform offering digital fabrication technology solutions as a bridge between idea and industry, creativity and production. Mini Fablab provides an opportunity for making rapid prototypes of digitally controlled hardware.Students of any discipline who wish to move more quickly from an idea or concept to a physical object or prototype can avail Fablab. Mini Fablab is a part of a worldwide network of 100, stretching from Costa Rica to the Netherlands.CEC Mini Fablab is equipped with numerically controlled modern operating by CAD/CAM tools.\n\nFor more visit: http://citcec.in",
+        gallery: [
+            "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&q=80&w=800",
+            "https://images.unsplash.com/photo-1581092334651-ddf26d9a09d0?auto=format&fit=crop&q=80&w=800",
+            "https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&q=80&w=800"
+        ]
     },
     "library": {
         title: "Central Library",
@@ -198,19 +203,47 @@ The college bus routes are as follows:
         title: "Hostel",
         category: "Facilities",
         image: "https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&q=80&w=1200",
-        content: `There are five hostels:
+        content: `There are 6 hostels associated with the college (2 for Boys and 4 for Girls).
 
-• Mens Hostel – I
-• Mens Hostel – II (Reserved for I Year Students)
-• Ladies Hostel – Vrindavan
-• Ladies Hostel – Gokulam
-• Ladies Hostel – Nandanam
+**BOYS HOSTEL DETAILS:**
 
-The Men’s Hostel is located right next to the campus and has a capacity of 70 students.
+**1. Crown Boys Hostel (First Years Only)**
+Location: Moolappadavu, Police station Road, Near Citizen Club
+Warden: Suresh M
+Contact: 9846218001
+Capacity: 100 students
 
-One of the Ladies’ Hostels is situated half a kilometer away, near the Railway Station and two near the college. To and from hostel everyday.
+**2. Mens Hostel (Melepandiyil, Althara jn.)**
+Warden: Suresh M
+Contact: 9846218001
 
-All the hostels have a warden who is usually a faculty member, to supervise and to address any grievances.`
+**LADIES HOSTEL DETAILS:**
+
+**Chief Warden:** Premakumari K.R (Contact: 9495113734)
+
+**1. Nandanam Ladies Hostel**
+Strength: 60
+Warden: Deepa G.R (Contact: 9447084806)
+Location: Near to the College (500 mtr)
+
+**2. Gokulam Ladies Hostel**
+Strength: 62
+Warden: Girija M.G (Contact: 9847889981)
+Location: Near to the College (500 mtr)
+
+**3. Vrindavanam Ladies Hostel**
+Strength: 60
+Warden: Sobhiraj N (Contact: 9497104756)
+Location: Distance from college 4km
+
+**4. Madhavam Ladies Hostel**
+Strength: 90
+Warden: Haseena P.Y (Contact: 9496292310)
+Location: Distance from college 4km
+
+**Note: College bus is available for Girls Hostel.**
+
+All the hostels have a warden to supervise and to address any grievances.`
     },
 
     // COMMITTEES

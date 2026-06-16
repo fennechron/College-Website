@@ -42,5 +42,15 @@ export const downloadCategories = [
             { title: 'Series Exam Timetable - June 2024', size: '150 KB', date: '2024-05-20' },
             { title: 'Lab Exam Schedule - S4 CS', size: '120 KB', date: '2024-05-25' },
         ]
+    },
+    {
+        id: 'mandatory-disclosure',
+        title: 'Mandatory Disclosure',
+        description: 'Mandatory AICTE and institutional disclosures.',
+        icon: 'Shield',
+        items: [
+            { title: 'Mandatory Disclosure 2024-25', size: '2.5 MB', date: '2024-03-01' },
+            { title: 'AICTE Approval Documents', size: '4.1 MB', date: '2023-08-15' },
+        ]
     }
 ];

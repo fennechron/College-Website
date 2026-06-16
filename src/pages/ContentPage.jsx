@@ -25,9 +25,9 @@ const AccordionItem = ({ title, items }) => {
             >
                 <div className="p-6 space-y-3">
                     {items.map((item, index) => (
-                        <p key={index} className="text-md text-slate-600 leading-relaxed font-semibold pl-6 relative">
+                        <p key={index} className="text-md text-slate-600 leading-relaxed font-semibold pl-6 relative whitespace-pre-wrap">
                             <span className="absolute left-0 text-accent font-extrabold">•</span>
-                            {item}
+                            {renderTextWithBold(item)}
                         </p>
                     ))}
                 </div>
@@ -57,6 +57,18 @@ const parseContent = (text) => {
         }
     }
     return segments;
+};
+
+// Helper to render bold text marked with **
+const renderTextWithBold = (text) => {
+    if (!text) return text;
+    const parts = text.split(/(\*\*.*?\*\*)/g);
+    return parts.map((part, index) => {
+        if (part.startsWith('**') && part.endsWith('**')) {
+            return <strong key={index} className="text-primary font-black">{part.slice(2, -2)}</strong>;
+        }
+        return part;
+    });
 };
 
 // Helper to generate id from name
@@ -904,9 +916,9 @@ const ContentPage = () => {
                                         
                                         if (isBullet) {
                                             return (
-                                                <p key={i} className="text-lg text-slate-600 leading-relaxed font-medium pl-6 relative text-justify">
+                                                <p key={i} className="text-lg text-slate-600 leading-relaxed font-medium pl-6 relative text-justify whitespace-pre-wrap">
                                                     <span className="absolute left-0 text-accent font-extrabold">•</span>
-                                                    {trimmed.substring(1).trim()}
+                                                    {renderTextWithBold(trimmed.substring(1).trim())}
                                                 </p>
                                             );
                                         }
@@ -920,8 +932,8 @@ const ContentPage = () => {
                                                     <span className="inline-flex items-center justify-center shrink-0 w-8 h-8 rounded-full bg-accent/10 text-accent font-black text-sm">
                                                         {num}
                                                     </span>
-                                                    <p className="text-lg text-slate-600 leading-relaxed font-medium pt-0.5 text-justify">
-                                                        {text}
+                                                    <p className="text-lg text-slate-600 leading-relaxed font-medium pt-0.5 text-justify whitespace-pre-wrap">
+                                                        {renderTextWithBold(text)}
                                                     </p>
                                                 </div>
                                             );
@@ -941,19 +953,36 @@ const ContentPage = () => {
                                             return (
                                                 <h3 key={i} className="text-xl font-display font-black text-primary uppercase pt-6 pb-2 border-b border-slate-100 flex items-center gap-3">
                                                     <span className="w-1.5 h-6 bg-accent rounded-full shrink-0" />
-                                                    {trimmed}
+                                                    {renderTextWithBold(trimmed)}
                                                 </h3>
                                             );
                                         }
 
                                         return (
                                             <p key={i} className="text-lg text-slate-600 leading-relaxed font-medium text-justify">
-                                                {trimmed}
+                                                {renderTextWithBold(trimmed)}
                                             </p>
                                         );
                                     })}
                                 </div>
                             </section>
+
+                            {content.gallery && content.gallery.length > 0 && (
+                                <div className="mt-12 pt-12 border-t border-slate-100">
+                                    <h3 className="text-2xl font-bold text-primary mb-6">Photo Gallery</h3>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                        {content.gallery.map((image, i) => (
+                                            <div key={i} className="rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 aspect-video bg-slate-100 group">
+                                                <img 
+                                                    src={image} 
+                                                    alt={`Gallery view ${i + 1}`} 
+                                                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
+                                                />
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
                         </div>
 
                         {/* Right: Sidebar Info */}
@@ -1373,9 +1402,9 @@ const ContentPage = () => {
                                         
                                         if (isBullet) {
                                             return (
-                                                <p key={i} className="text-lg text-slate-600 leading-relaxed font-medium pl-6 relative">
+                                                <p key={i} className="text-lg text-slate-600 leading-relaxed font-medium pl-6 relative whitespace-pre-wrap">
                                                     <span className="absolute left-0 text-accent font-extrabold">•</span>
-                                                    {trimmed.substring(1).trim()}
+                                                    {renderTextWithBold(trimmed.substring(1).trim())}
                                                 </p>
                                             );
                                         }
@@ -1389,8 +1418,8 @@ const ContentPage = () => {
                                                     <span className="inline-flex items-center justify-center shrink-0 w-8 h-8 rounded-full bg-accent/10 text-accent font-black text-sm">
                                                         {num}
                                                     </span>
-                                                    <p className="text-lg text-slate-600 leading-relaxed font-medium pt-0.5">
-                                                        {text}
+                                                    <p className="text-lg text-slate-600 leading-relaxed font-medium pt-0.5 whitespace-pre-wrap">
+                                                        {renderTextWithBold(text)}
                                                     </p>
                                                 </div>
                                             );
@@ -1410,8 +1439,8 @@ const ContentPage = () => {
                                         }
 
                                         return (
-                                            <p key={i} className="text-[1.15rem] leading-[1.8] text-secondary/80 font-medium">
-                                                {trimmed}
+                                            <p key={i} className="text-[1.15rem] leading-[1.8] text-secondary/80 font-medium whitespace-pre-wrap">
+                                                {renderTextWithBold(trimmed)}
                                             </p>
                                         );
                                     })}
@@ -1484,6 +1513,23 @@ const ContentPage = () => {
                                                 All submissions, grievances, and discussions are handled with strict privacy protocols to protect student and staff identities.
                                             </p>
                                         </div>
+                                    </div>
+                                </div>
+                            )}
+
+                            {content.gallery && content.gallery.length > 0 && (
+                                <div className="mt-12 pt-12 border-t border-slate-100">
+                                    <h3 className="text-2xl font-bold text-primary mb-6">Photo Gallery</h3>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                                        {content.gallery.map((image, i) => (
+                                            <div key={i} className="rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 aspect-video bg-slate-100 group">
+                                                <img 
+                                                    src={image} 
+                                                    alt={`Gallery view ${i + 1}`} 
+                                                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
+                                                />
+                                            </div>
+                                        ))}
                                     </div>
                                 </div>
                             )}
