@@ -1,39 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import bg1 from '../../assets/cec11.jpeg';
-import bg2 from '../../assets/cec12.jpg';
-import bg3 from '../../assets/cec14.png';
-
-const slides = [
-    {
-        id: 1,
-        image: bg1,
-        title: "Top Ranking Institution",
-        subtitle: "Consistently ranked among the top engineering colleges in the state."
-    },
-    {
-        id: 2,
-        image: bg2,
-        title: "Distinguished Alumni",
-        subtitle: "Our alumni hold key positions in global tech giants and leading research organizations."
-    },
-    {
-        id: 3,
-        image: bg3,
-        title: "Innovation Hub",
-        subtitle: "Fostering a culture of research, startups, and technological advancements."
-    }
-];
+import { client, urlFor } from '../../lib/sanity';
 
 const Achievements = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
+    const [slides, setSlides] = useState([]);
+
+    useEffect(() => {
+        client.fetch(`*[_type == "homePage"][0]{ achievements }`).then(res => {
+            if (res?.achievements) setSlides(res.achievements);
+        }).catch(console.error);
+    }, []);
 
     // Automatic sliding effect
     useEffect(() => {
+        if (slides.length <= 1) return;
         const interval = setInterval(() => {
             setCurrentIndex((prevIndex) => (prevIndex + 1) % slides.length);
         }, 4000);
         return () => clearInterval(interval);
-    }, []);
+    }, [slides.length]);
+
+    if (!slides || slides.length === 0) return null;
 
     return (
         <section id="achievements" className="py-10 bg-transparent border-t border-primary/10">
@@ -51,9 +38,9 @@ const Achievements = () => {
                     >
                         {slides.map((slide, index) => (
                             <div
-                                key={slide.id}
+                                key={index}
                                 className="relative h-full min-w-full bg-cover bg-center"
-                                style={{ backgroundImage: `url(${slide.image})` }}
+                                style={{ backgroundImage: `url(${urlFor(slide.image).url()})` }}
                             >
                                 {/* Overlay */}
                                 <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-800/50 to-transparent"></div>
@@ -74,18 +61,20 @@ const Achievements = () => {
                     </div>
 
                     {/* Indicator Dots */}
-                    <div className="absolute bottom-6 left-1/2 flex -translate-x-1/2 gap-3 z-10">
-                        {slides.map((_, index) => (
-                            <button
-                                key={index}
-                                onClick={() => setCurrentIndex(index)}
-                                aria-label={`Go to slide ${index + 1}`}
-                                className={`transition-all duration-500 ease-in-out rounded-full ${
-                                    currentIndex === index ? 'bg-accent w-8 h-2.5 shadow-[0_0_8px_rgba(29,84,108,0.8)]' : 'bg-white/60 hover:bg-white w-2.5 h-2.5'
-                                }`}
-                            ></button>
-                        ))}
-                    </div>
+                    {slides.length > 1 && (
+                        <div className="absolute bottom-6 left-1/2 flex -translate-x-1/2 gap-3 z-10">
+                            {slides.map((_, index) => (
+                                <button
+                                    key={index}
+                                    onClick={() => setCurrentIndex(index)}
+                                    aria-label={`Go to slide ${index + 1}`}
+                                    className={`transition-all duration-500 ease-in-out rounded-full ${
+                                        currentIndex === index ? 'bg-accent w-8 h-2.5 shadow-[0_0_8px_rgba(29,84,108,0.8)]' : 'bg-white/60 hover:bg-white w-2.5 h-2.5'
+                                    }`}
+                                ></button>
+                            ))}
+                        </div>
+                    )}
                 </div>
             </div>
         </section>

@@ -71,6 +71,7 @@ const Footer = () => {
                 </div>
                 <div className="flex flex-wrap items-center justify-between gap-2 py-[18px] text-[0.85rem] text-slate-500">
                     <span>© 2025 College of Engineering Chengannur · Government of Kerala · All Rights Reserved</span>
+                    <span>Developed by <a href="https://fennechron.com" target="_blank" rel="noopener noreferrer" className="text-accent font-bold hover:text-white transition">Fennechron Labs</a></span>
                 </div>
             </div>
         </footer>

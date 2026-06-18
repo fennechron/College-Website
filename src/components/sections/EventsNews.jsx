@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Calendar, ArrowRight } from 'lucide-react';
-import { client } from '../../lib/sanity';
-
+import { client, urlFor } from '../../lib/sanity';
+import { Link } from 'react-router-dom';
 const eventsNews = [
     { 
         id: 1, 
@@ -89,13 +89,24 @@ const EventsNews = () => {
                         {[...displayData, ...displayData].map((item, idx) => (
                             <div key={`${item._id || item.id}-${idx}`} className="w-[370px] group bg-white rounded-3xl border border-primary/10 overflow-hidden hover:shadow-[0_20px_50px_rgba(12,43,78,0.12)] transition-all duration-500 hover:-translate-y-2 flex flex-col h-full">
                                 {/* Card Header with Date Banner */}
-                                <div className="h-40 relative bg-primary/5 flex items-center justify-center overflow-hidden">
-                                    <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-accent/5"></div>
-                                    <div className="relative z-10 flex flex-col items-center">
-                                        <Calendar className="text-accent mb-2" size={32} />
+                                <div className="h-48 relative bg-primary/5 flex items-center justify-center overflow-hidden">
+                                    {item.image ? (
+                                        <img 
+                                            src={urlFor(item.image).url()} 
+                                            alt={item.title} 
+                                            className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                                        />
+                                    ) : (
+                                        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-accent/5"></div>
+                                    )}
+                                    <div className="absolute inset-0 bg-slate-900/40 group-hover:bg-slate-900/20 transition-colors duration-500"></div>
+                                    
+                                    <div className="relative z-10 flex flex-col items-center bg-white/90 backdrop-blur-sm px-6 py-3 rounded-2xl shadow-lg border border-white/50 transform group-hover:-translate-y-1 transition-transform duration-300">
+                                        <Calendar className="text-accent mb-1" size={24} />
                                         <span className="text-primary font-black tracking-widest text-sm">{item.date}</span>
                                     </div>
-                                    <div className="absolute top-4 right-4 bg-accent text-white text-[0.65rem] font-black px-3 py-1 rounded-full tracking-widest">
+                                    
+                                    <div className="absolute top-4 right-4 bg-accent text-white text-[0.65rem] font-black px-3 py-1 rounded-full tracking-widest z-10 shadow-md">
                                         {item.type}
                                     </div>
                                 </div>
@@ -108,10 +119,18 @@ const EventsNews = () => {
                                     <p className="text-secondary/70 text-base leading-relaxed mb-6 flex-grow ">
                                         {item.desc || item.description}
                                     </p>
-                                    <a href="#read-more" className="inline-flex items-center text-primary font-bold text-sm tracking-wide group/link">
-                                        READ MORE
-                                        <div className="ml-2 w-0 h-[2px] bg-accent group-hover/link:w-6 transition-all duration-300"></div>
-                                    </a>
+                                    
+                                    {item.actionType === 'content' ? (
+                                        <Link to={`/event/${item._id}`} className="inline-flex items-center text-primary font-bold text-sm tracking-wide group/link">
+                                            READ MORE
+                                            <div className="ml-2 w-0 h-[2px] bg-accent group-hover/link:w-6 transition-all duration-300"></div>
+                                        </Link>
+                                    ) : (
+                                        <a href={item.linkUrl || "#"} target="_blank" rel="noopener noreferrer" className="inline-flex items-center text-primary font-bold text-sm tracking-wide group/link">
+                                            READ MORE
+                                            <div className="ml-2 w-0 h-[2px] bg-accent group-hover/link:w-6 transition-all duration-300"></div>
+                                        </a>
+                                    )}
                                 </div>
                             </div>
                         ))}

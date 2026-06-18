@@ -1,15 +1,77 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
     TrendingUp, Award, Users, Briefcase, 
     CheckCircle, ArrowRight, Download, BarChart3, Mail,
     PieChart as PieIcon
 } from 'lucide-react';
-import { placementStats, topRecruiters, placementTraining, companyPlacementData } from '../data/placementData';
+import Papa from 'papaparse';
+import { client } from '../lib/sanity';
+import { topRecruiters, placementTraining } from '../data/placementData';
+
+const CHART_COLORS = [
+    '#0C2B4E', '#1D546C', '#2A789A', '#3B82F6', 
+    '#6366F1', '#8B5CF6', '#EC4899', '#F43F5E', 
+    '#F97316', '#F59E0B', '#10B981', '#14B8A6', 
+    '#06B6D4', '#0EA5E9', '#8B5CF6', '#94A3B8'
+];
 
 const PlacementPage = () => {
-    const [selectedYear, setSelectedYear] = useState('2025');
-    const currentYearData = companyPlacementData[selectedYear] || [];
+    const [sanityPlacements, setSanityPlacements] = useState([]);
+    const [selectedYear, setSelectedYear] = useState(null);
+    const [currentYearData, setCurrentYearData] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const query = `*[_type == "placement"] | order(year asc) {
+            year,
+            totalOffers,
+            highestPackage,
+            "csvUrl": csvFile.asset->url
+        }`;
+        
+        client.fetch(query).then(data => {
+            if (data && data.length > 0) {
+                setSanityPlacements(data);
+                setSelectedYear(data[data.length - 1].year);
+            }
+            setLoading(false);
+        }).catch(err => {
+            console.error("Error fetching placements from Sanity:", err);
+            setLoading(false);
+        });
+    }, []);
+
+    useEffect(() => {
+        if (!selectedYear) return;
+        const yearData = sanityPlacements.find(p => p.year === selectedYear);
+        if (yearData && yearData.csvUrl) {
+            Papa.parse(yearData.csvUrl, {
+                download: true,
+                header: true,
+                skipEmptyLines: true,
+                complete: (results) => {
+                    const parsedData = results.data.map((row, index) => ({
+                        name: row.Company,
+                        offers: parseInt(row.Offers) || 0,
+                        color: row.Color || CHART_COLORS[index % CHART_COLORS.length]
+                    }));
+                    setCurrentYearData(parsedData);
+                },
+                error: (error) => {
+                    console.error("Error parsing CSV:", error);
+                }
+            });
+        }
+    }, [selectedYear, sanityPlacements]);
+
+    if (loading) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-white">
+                <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-accent"></div>
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-screen bg-white">
@@ -91,16 +153,16 @@ const PlacementPage = () => {
                         {/* Animated Bar Chart */}
                         <div className="lg:w-1/2 w-full bg-white p-8 sm:p-12 rounded-3xl shadow-[0_20px_80px_rgba(0,0,0,0.05)] border border-slate-100">
                             <div className="flex items-end justify-between h-[300px] gap-2 sm:gap-4">
-                                {placementStats.map((stat, i) => {
+                                {sanityPlacements.map((stat, i) => {
                                     const maxHeight = 280;
-                                    const maxOffers = Math.max(...placementStats.map(s => s.offers));
-                                    const barHeight = (stat.offers / maxOffers) * maxHeight;
+                                    const maxOffers = Math.max(...sanityPlacements.map(s => s.totalOffers));
+                                    const barHeight = (stat.totalOffers / maxOffers) * maxHeight;
 
                                     return (
                                         <div key={i} className="flex-1 flex flex-col items-center group relative">
                                             {/* Tooltip on hover */}
                                             <div className="absolute -top-16 opacity-0 group-hover:opacity-100 transition-opacity bg-primary text-white text-[0.65rem] font-black px-3 py-1.5 rounded-lg whitespace-nowrap z-10 pointer-events-none">
-                                                {stat.offers} Offers <br/> {stat.highest} Highest
+                                                {stat.totalOffers} Offers <br/> {stat.highestPackage} Highest
                                             </div>
 
                                             <motion.div
@@ -148,17 +210,17 @@ const PlacementPage = () => {
                         </div>
                         <h2 className="text-4xl sm:text-5xl font-display font-black text-primary uppercase tracking-tight">Company-wise Analysis</h2>
                         <div className="flex justify-center gap-3 mt-8 flex-wrap">
-                            {['2025', '2024', '2023', '2022'].map(year => (
+                            {[...sanityPlacements].reverse().map(p => (
                                 <button
-                                    key={year}
-                                    onClick={() => setSelectedYear(year)}
+                                    key={p.year}
+                                    onClick={() => setSelectedYear(p.year)}
                                     className={`px-6 py-2.5 rounded-xl font-black text-[0.7rem] tracking-widest uppercase transition-all duration-300 ${
-                                        selectedYear === year 
+                                        selectedYear === p.year 
                                         ? 'bg-primary text-white shadow-lg' 
                                         : 'bg-white text-slate-400 hover:text-primary border border-slate-100'
                                     }`}
                                 >
-                                    Year of {year}
+                                    Year of {p.year}
                                 </button>
                             ))}
                         </div>

@@ -56,5 +56,12 @@ export default {
         },
       ],
     },
+    {
+      name: 'gallery',
+      title: 'Gallery Images',
+      type: 'array',
+      of: [{type: 'string'}],
+      description: 'List of image URLs for the gallery (e.g. for FAB Lab)',
+    },
   ],
 }

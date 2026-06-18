@@ -25,9 +25,42 @@ export default {
       type: 'string',
     },
     {
+      name: 'image',
+      title: 'Event/News Image',
+      type: 'image',
+      options: { hotspot: true },
+    },
+    {
       name: 'description',
-      title: 'Description',
+      title: 'Short Description',
       type: 'text',
+      description: 'Brief summary for the card',
+    },
+    {
+      name: 'actionType',
+      title: 'Action Type',
+      type: 'string',
+      options: {
+        list: [
+          { title: 'Open Link', value: 'link' },
+          { title: 'Show Content Details', value: 'content' },
+        ],
+      },
+      initialValue: 'link',
+      description: 'What happens when "Read More" is clicked?',
+    },
+    {
+      name: 'linkUrl',
+      title: 'Link URL',
+      type: 'url',
+      hidden: ({ document }) => document?.actionType !== 'link',
+    },
+    {
+      name: 'content',
+      title: 'Event/News Details',
+      type: 'text',
+      description: 'Full details to show on the separate page',
+      hidden: ({ document }) => document?.actionType !== 'content',
     },
   ],
 }

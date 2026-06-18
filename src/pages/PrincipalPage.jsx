@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     GraduationCap, Award, BookOpen, Briefcase,
@@ -6,9 +6,26 @@ import {
     MessageSquare, Quote, FileText, Book,
     Linkedin, Twitter, ChevronRight, Phone
 } from 'lucide-react';
+import { client, urlFor } from '../lib/sanity';
 
 const PrincipalPage = () => {
     const [activeTab, setActiveTab] = useState('expertise');
+    const [principal, setPrincipal] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchPrincipal = async () => {
+            try {
+                const data = await client.fetch(`*[_type == "principal"][0]`);
+                setPrincipal(data);
+            } catch (error) {
+                console.error("Error fetching principal data:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchPrincipal();
+    }, []);
 
     const tabs = [
         { id: 'expertise', label: 'Expertise', icon: <Lightbulb size={18} /> },
@@ -19,43 +36,23 @@ const PrincipalPage = () => {
         { id: 'books', label: 'Books', icon: <Book size={18} /> }
     ];
 
-    const academicData = {
-        expertise: [
-            { title: "Mathematical Tools", desc: "LATEX, PsTricks, dia, xcircuit, LATEXDraw" },
-            { title: "Programming & Web", desc: "Python, C, HTML, Linux" },
-            { title: "Simulation & Data", desc: "MATLAB, LabVIEW, Scipy, Numpy, Keras, Tensorflow, Dash, QUCS" }
-        ],
-        positions: [
-            { title: "Associate Professor", desc: "Dept. of Electronics Engg, CE, Chengannur" },
-            { title: "Head of Department", desc: "Department of EC, CE, Karunagappally" },
-            { title: "Principal in Charge", desc: "College of Engineering, Karunagappally" },
-            { title: "Lecturer (Selection Grade)", desc: "Department of EC, CE Kottarakkara" },
-            { title: "Lecturer (Senior Grade)", desc: "Department of EC, CE Karunagappally" },
-            { title: "Lecturer", desc: "Department of EC, CE, Chengannur" }
-        ],
-        publications: [
-            { title: "Journal: Letter Image Classification", desc: "Classification of Letter Image from Scanned Receipts using CNN, Oct 2023." },
-            { title: "Journal: Modulation Schemes", desc: "Automatic Detection using Convolutional Neural Networks, June 2023." },
-            { title: "Journal: Intelligent Receivers", desc: "Intelligent Deep Learning based Receivers, August 2023." },
-            { title: "Journal: Traffic Prediction", desc: "LSTM Network Integrated with Particle Filter for Predicting Passenger Traffic, 2023." },
-            { title: "Conference: Stock Price", desc: "Recurrent Neural Network estimator for Stock Price, IEEE 2021." },
-            { title: "Conference: Gold Prediction", desc: "Gold Price Prediction using Deep Learning, IEEE 2020." }
-        ],
-        research: [
-            { title: "Rand Walk Research", desc: "Founder of Rand Walk Research and Solutions Pvt. Ltd. (Started June 20, 2020) under Faculty startup scheme." },
-            { title: "Startup Status", desc: "Awarded startup status by Govt. of India for projects in Data Analysis, ML and Computer Vision." }
-        ],
-        industry: [
-            { title: "NMR & Image Analysis", desc: "Identification of peaks in NMR data and entity extraction from images of receipts." },
-            { title: "Industrial Modeling", desc: "Modeling plasticity in friction stir welding and vibration signal normalization." },
-            { title: "Optimization Projects", desc: "Pune Mahanagar Parivahan Mahamandal Ltd. (PMPML) Bus Route Optimization." },
-            { title: "Automation", desc: "Development of Recommender Systems for Automated Purchase." }
-        ],
-        books: [
-            { title: "Electronics Lab Handbook", desc: "Simulations using Quite Universal Circuit Simulator (Qucs), Authors Press, ISBN-978-93-5529-048-9" },
-            { title: "Logic Circuit Design", desc: "Laboratory practice with Qucs, ICs, Verilog and Mini FPGA, ISBN-978-93-5529-175-2" }
-        ]
-    };
+    if (loading) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-white">
+                <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-accent"></div>
+            </div>
+        );
+    }
+
+    if (!principal) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-white text-primary text-xl font-bold">
+                Failed to load principal profile.
+            </div>
+        );
+    }
+
+    const defaultImage = "https://ceconline.edu/wp-content/uploads/2019/05/hari-1024x667.jpg";
 
     return (
         <div className="min-h-screen bg-white">
@@ -76,36 +73,32 @@ const PrincipalPage = () => {
                     >
                         <div className="space-y-4">
                             <h1 className="text-5xl sm:text-7xl font-display font-black text-white leading-none tracking-tighter">
-                                Prof. (Dr.) <br />
-                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-slate-500">
-                                    Hari V S
-                                </span>
+                                {principal.name || "Prof. (Dr.) Hari V S"}
                             </h1>
                             <p className="text-lg text-slate-400 font-display font-black uppercase tracking-widest flex items-center gap-4">
                                 <span className="w-12 h-1 bg-accent rounded-full" />
-                                Principal
+                                {principal.designation || "Principal"}
                             </p>
                         </div>
 
                         <p className="text-base text-slate-400 max-w-lg font-medium leading-relaxed">
-                            Principal of College of Engineering Chengannur. Researcher and professor with expertise in nonlinear signal processing and communication systems.
+                            {principal.description || "Principal of College of Engineering Chengannur. Researcher and professor with expertise in nonlinear signal processing and communication systems."}
                         </p>
 
                         <div className="space-y-4">
                             <div className="flex items-start gap-4 text-slate-400">
                                 <MapPin size={20} className="text-accent shrink-0 mt-1" />
-                                <p className="text-sm font-medium">Principal, College of Engineering, Chengannur, Alappuzha (Dist.) – 689121</p>
+                                <p className="text-sm font-medium">{principal.address || "Principal, College of Engineering, Chengannur, Alappuzha (Dist.) – 689121"}</p>
                             </div>
                             <div className="flex items-center gap-4 text-slate-400">
                                 <Phone size={20} className="text-accent shrink-0" />
-                                <p className="text-sm font-medium">0479-2450435</p>
+                                <p className="text-sm font-medium">{principal.phone || "0479-2450435"}</p>
                             </div>
                             <div className="flex items-center gap-4 text-slate-400">
                                 <Mail size={20} className="text-accent shrink-0" />
-                                <p className="text-sm font-medium">principal@ceconline.edu</p>
+                                <p className="text-sm font-medium">{principal.email || "principal@ceconline.edu"}</p>
                             </div>
                         </div>
-
 
                     </motion.div>
 
@@ -117,7 +110,7 @@ const PrincipalPage = () => {
                     >
                         <div className="relative z-10 w-full aspect-[4/3] rounded-[3rem] overflow-hidden border-[16px] border-white/5 shadow-2xl">
                             <img
-                                src="https://ceconline.edu/wp-content/uploads/2019/05/hari-1024x667.jpg"
+                                src={principal.image ? urlFor(principal.image).url() : defaultImage}
                                 alt="Principal"
                                 className="w-full h-full object-cover"
                             />
@@ -136,10 +129,10 @@ const PrincipalPage = () => {
                                 <h2 className="text-4xl font-display font-black text-primary uppercase">Principal's <br /> Message</h2>
                                 <div className="space-y-6">
                                     <p className="text-2xl text-primary font-medium leading-relaxed italic">
-                                        "CEC is not just an institution; it's a movement towards engineering excellence that empowers students to lead with integrity and innovation."
+                                        "{principal.quote || "CEC is not just an institution; it's a movement towards engineering excellence that empowers students to lead with integrity and innovation."}"
                                     </p>
                                     <p className="text-lg text-slate-500 leading-relaxed font-medium">
-                                        Our commitment is to provide an environment where curiosity meets structure. We focus on bridging the gap between theoretical research and industrial application, ensuring our graduates are ready for the challenges of tomorrow.
+                                        {principal.message || "Our commitment is to provide an environment where curiosity meets structure. We focus on bridging the gap between theoretical research and industrial application, ensuring our graduates are ready for the challenges of tomorrow."}
                                     </p>
                                 </div>
                                 <div className="flex items-center gap-6 pt-6">
@@ -155,23 +148,23 @@ const PrincipalPage = () => {
                             <div className="space-y-10 relative">
                                 <div className="absolute left-[23px] top-4 bottom-4 w-1 bg-slate-100" />
 
-                                {[
-                                    { year: '2013', deg: 'PhD - CUSAT', color: 'bg-accent', text: 'Doctoral thesis on Nonlinear Volterra Signal Processing.' },
-                                    { year: '2006', deg: 'M.Tech - IIT Madras', color: 'bg-primary', text: 'Communication Systems specialization from India\'s top institute.' },
-                                    { year: '1994', deg: 'B.Tech - TKM Kollam', color: 'bg-slate-800', text: 'Foundational degree in Electronics and Communication Engineering.' }
-                                ].map((item, i) => (
+                                {(principal.qualifications || [
+                                    { year: '2013', degree: 'PhD - CUSAT', color: 'bg-accent', description: 'Doctoral thesis on Nonlinear Volterra Signal Processing.' },
+                                    { year: '2006', degree: 'M.Tech - IIT Madras', color: 'bg-primary', description: 'Communication Systems specialization from India\'s top institute.' },
+                                    { year: '1994', degree: 'B.Tech - TKM Kollam', color: 'bg-slate-800', description: 'Foundational degree in Electronics and Communication Engineering.' }
+                                ]).map((item, i) => (
                                     <motion.div
                                         key={i}
                                         whileHover={{ x: 10 }}
                                         className="relative pl-16 group"
                                     >
-                                        <div className={`absolute left-0 top-1 w-12 h-12 rounded-2xl ${item.color} border-4 border-white shadow-xl z-10 flex items-center justify-center text-white`}>
+                                        <div className={`absolute left-0 top-1 w-12 h-12 rounded-2xl ${item.color || 'bg-accent'} border-4 border-white shadow-xl z-10 flex items-center justify-center text-white`}>
                                             <GraduationCap size={20} />
                                         </div>
                                         <div>
                                             <p className="text-sm font-black text-slate-400 uppercase tracking-widest mb-1">{item.year}</p>
-                                            <h4 className="text-xl font-display font-black text-primary group-hover:text-accent transition-colors">{item.deg}</h4>
-                                            <p className="text-slate-500 font-medium text-sm mt-1">{item.text}</p>
+                                            <h4 className="text-xl font-display font-black text-primary group-hover:text-accent transition-colors">{item.degree}</h4>
+                                            <p className="text-slate-500 font-medium text-sm mt-1">{item.description}</p>
                                         </div>
                                     </motion.div>
                                 ))}
@@ -233,7 +226,7 @@ const PrincipalPage = () => {
                                         </div>
 
                                         <div className="grid gap-10">
-                                            {academicData[activeTab].map((item, i) => (
+                                            {principal?.professionalDetails?.[activeTab]?.map((item, i) => (
                                                 <div key={i} className="group relative pl-12 border-l-2 border-slate-500 hover:border-accent transition-colors">
 
                                                     <h4 className="text-xl font-display font-black text-primary group-hover:text-accent transition-colors mb-2">
@@ -244,6 +237,11 @@ const PrincipalPage = () => {
                                                     </p>
                                                 </div>
                                             ))}
+                                            {!principal?.professionalDetails?.[activeTab] && (
+                                                 <p className="text-slate-500 font-medium text-lg leading-relaxed">
+                                                 No details available.
+                                                </p>
+                                            )}
                                         </div>
                                     </motion.div>
                                 </AnimatePresence>
@@ -252,7 +250,6 @@ const PrincipalPage = () => {
                     </div>
                 </div>
             </div>
-
 
         </div>
     );

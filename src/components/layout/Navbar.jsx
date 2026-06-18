@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Menu, X, Home, ChevronDown, ChevronRight } from 'lucide-react';
 import collegeLogo from '../../assets/cec122.png';
@@ -6,6 +6,7 @@ import ktulogo from '../../assets/ktu.png';
 import ihrdlogo from '../../assets/ihrd.png';
 import excell from '../../assets/excell.png'
 import Updates from './Updates.jsx';
+import { client } from '../../lib/sanity';
 
 const navItems = [
     { name: 'HOME', path: '/', hasDropdown: false, isHome: true },
@@ -252,6 +253,32 @@ const NavItem = ({ item, closeMobileMenu }) => {
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const [orgGroups, setOrgGroups] = useState([]);
+
+    useEffect(() => {
+        client.fetch(`*[_type == "organization"]{ name, slug, "category": category->title }`).then(data => {
+            const groups = {};
+            data.forEach(org => {
+                const cat = org.category || 'Other';
+                if (!groups[cat]) groups[cat] = [];
+                groups[cat].push({ label: org.name, path: `/organization/${org.slug.current}` });
+            });
+            const formattedGroups = Object.keys(groups).map(cat => ({
+                label: cat, path: '#', hasSubDropdown: true, subItems: groups[cat]
+            }));
+            setOrgGroups(formattedGroups);
+        }).catch(console.error);
+    }, []);
+
+    const dynamicNavItems = navItems.map(item => {
+        if (item.name === 'ORGANIZATIONS') {
+            return {
+                ...item,
+                dropdownItems: orgGroups.length > 0 ? orgGroups : item.dropdownItems
+            };
+        }
+        return item;
+    });
 
     const closeMobileMenu = () => setIsOpen(false);
 
@@ -301,7 +328,7 @@ const Navbar = () => {
                     <ul
                         className={`${isOpen ? 'flex' : 'hidden'} absolute left-0 top-[100%] w-full flex-col bg-primary py-2 text-[1rem] font-semibold tracking-[0.03em] text-white shadow-[0_15px_30px_rgba(0,0,0,0.3)] md:static md:flex md:w-auto md:flex-row md:py-0 md:shadow-none w-[100%] justify-between flex-wrap max-h-[calc(100vh-300px)] overflow-y-auto md:overflow-visible md:max-h-none custom-scrollbar`}
                     >
-                        {navItems.map((item, index) => (
+                        {dynamicNavItems.map((item, index) => (
                             <NavItem key={index} item={item} closeMobileMenu={closeMobileMenu} />
                         ))}
                     </ul>

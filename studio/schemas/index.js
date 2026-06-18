@@ -1,26 +1,36 @@
 import department from './department'
 import teacher from './teacher'
 import pageContent from './pageContent'
-import organization from './organization'
-import placement from './placement'
-import recruiter from './recruiter'
 import downloadCategory from './downloadCategory'
+import placement from './placement'
 import announcement from './announcement'
 import eventNews from './eventNews'
 import testimonial from './testimonial'
 import carouselImage from './carouselImage'
+import principal from './principal'
+import committee from './committee'
+import campusLife from './campusLife'
+import organization from './organization'
+import orgCategory from './orgCategory'
+import homePage from './homePage'
+import siteSettings from './siteSettings'
 
 export const schemaTypes = [
+  siteSettings,
   department,
   teacher,
   pageContent,
-  organization,
-  placement,
-  recruiter,
+  homePage,
   downloadCategory,
+  placement,
+  campusLife,
+  orgCategory,
+  organization,
   announcement,
   eventNews,
   testimonial,
   carouselImage,
+  principal,
+  committee,
 ]
 

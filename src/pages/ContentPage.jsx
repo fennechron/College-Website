@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link, useLocation } from 'react-router-dom';
 import { pageContent } from '../data/pageContent';
+import { client } from '../lib/sanity';
 import { ChevronRight, Home, ArrowLeft, Calendar, Users, BookOpen, Clock } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -398,15 +399,39 @@ const DepartmentAccordion = ({ title, items }) => {
 const ContentPage = () => {
     const { slug } = useParams();
     const { pathname } = useLocation();
-    const content = pageContent[slug];
+
+    const [sanityContent, setSanityContent] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     const [activeTab, setActiveTab] = useState('');
     const [activeEligibility, setActiveEligibility] = useState(null);
 
+    useEffect(() => {
+        const fetchContent = async () => {
+            setLoading(true);
+            try {
+                const data = await client.fetch(`*[( _type == "pageContent" || _type == "committee" ) && slug.current == $slug][0]`, { slug });
+                setSanityContent(data);
+            } catch (error) {
+                console.error("Error fetching content from Sanity:", error);
+                setSanityContent(null);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchContent();
+    }, [slug]);
+
+    const content = sanityContent || pageContent[slug];
+
     // Reset active tab on slug/content change
     useEffect(() => {
         if (content && content.tabs) {
-            setActiveTab(Object.keys(content.tabs)[0]);
+            if (Array.isArray(content.tabs)) {
+                setActiveTab(content.tabs[0].tabName);
+            } else {
+                setActiveTab(Object.keys(content.tabs)[0]);
+            }
         } else {
             setActiveTab('');
         }
@@ -416,6 +441,14 @@ const ContentPage = () => {
     useEffect(() => {
         window.scrollTo(0, 0);
     }, [pathname]);
+
+    if (loading) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-white">
+                <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-accent"></div>
+            </div>
+        );
+    }
 
     if (!content) {
         return (
@@ -882,7 +915,7 @@ const ContentPage = () => {
                                 {/* Dynamic Tabs Navigation */}
                                 {content.tabs && (
                                     <div className="flex flex-wrap gap-2.5 border-b border-slate-100 pb-6 mb-8">
-                                        {Object.keys(content.tabs).map((tabName) => {
+                                        {(Array.isArray(content.tabs) ? content.tabs.map(t => t.tabName) : Object.keys(content.tabs)).map((tabName) => {
                                             const isActive = activeTab === tabName;
                                             return (
                                                 <button
@@ -902,7 +935,7 @@ const ContentPage = () => {
                                 )}
 
                                 <div className="space-y-6">
-                                    {parseContent(content.tabs ? content.tabs[activeTab] || '' : content.content).map((segment, i) => {
+                                    {parseContent(content.tabs ? (Array.isArray(content.tabs) ? content.tabs.find(t => t.tabName === activeTab)?.tabContent : content.tabs[activeTab]) || '' : content.content).map((segment, i) => {
                                         if (segment.type === 'accordion') {
                                             return <AccordionItem key={i} title={segment.title} items={segment.items} />;
                                         }
@@ -1470,52 +1503,7 @@ const ContentPage = () => {
                                     </p>
                                 </>
                             )}
-                            {content.category === 'Committees' && (
-                                <div className="mt-12 pt-12 border-t border-slate-100">
-                                    <h3 className="text-xl font-display font-black text-primary uppercase pb-6 flex items-center gap-3">
-                                        <span className="w-1.5 h-6 bg-accent rounded-full shrink-0" />
-                                        Compliance & Standards
-                                    </h3>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                        <div className="p-6 rounded-2xl bg-slate-50 border border-slate-100/80 hover:border-accent/20 transition-all duration-300 group">
-                                            <div className="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center text-accent text-lg font-black mb-4 group-hover:scale-110 transition-transform">
-                                                ⚖️
-                                            </div>
-                                            <h4 className="font-bold text-base text-primary mb-2 uppercase tracking-wider">Regulatory Compliance</h4>
-                                            <p className="text-xs text-slate-500 font-medium leading-relaxed">
-                                                Fully aligned with administrative guidelines issued by AICTE, UGC, APJ Abdul Kalam Technological University, and the Government of Kerala.
-                                            </p>
-                                        </div>
-                                        <div className="p-6 rounded-2xl bg-slate-50 border border-slate-100/80 hover:border-accent/20 transition-all duration-300 group">
-                                            <div className="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center text-accent text-lg font-black mb-4 group-hover:scale-110 transition-transform">
-                                                🛡️
-                                            </div>
-                                            <h4 className="font-bold text-base text-primary mb-2 uppercase tracking-wider">Institutional Integrity</h4>
-                                            <p className="text-xs text-slate-500 font-medium leading-relaxed">
-                                                Dedicated to preserving transparency, ethical standards, safety, and an inclusive campus culture for all members.
-                                            </p>
-                                        </div>
-                                        <div className="p-6 rounded-2xl bg-slate-50 border border-slate-100/80 hover:border-accent/20 transition-all duration-300 group">
-                                            <div className="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center text-accent text-lg font-black mb-4 group-hover:scale-110 transition-transform">
-                                                📅
-                                            </div>
-                                            <h4 className="font-bold text-base text-primary mb-2 uppercase tracking-wider">Meeting Frequency</h4>
-                                            <p className="text-xs text-slate-500 font-medium leading-relaxed">
-                                                Conducted periodically during every academic term, with resolutions documented and reviewed by the central advisory board.
-                                            </p>
-                                        </div>
-                                        <div className="p-6 rounded-2xl bg-slate-50 border border-slate-100/80 hover:border-accent/20 transition-all duration-300 group">
-                                            <div className="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center text-accent text-lg font-black mb-4 group-hover:scale-110 transition-transform">
-                                                🔒
-                                            </div>
-                                            <h4 className="font-bold text-base text-primary mb-2 uppercase tracking-wider">Confidentiality & Access</h4>
-                                            <p className="text-xs text-slate-500 font-medium leading-relaxed">
-                                                All submissions, grievances, and discussions are handled with strict privacy protocols to protect student and staff identities.
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
+
 
                             {content.gallery && content.gallery.length > 0 && (
                                 <div className="mt-12 pt-12 border-t border-slate-100">

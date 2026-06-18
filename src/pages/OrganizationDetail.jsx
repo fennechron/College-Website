@@ -6,14 +6,27 @@ import {
     CheckCircle, ArrowRight, ExternalLink, Shield,
     Image as ImageIcon, X, ChevronRight
 } from 'lucide-react';
-import { organizationsData } from '../data/organizationsData';
+import { client, urlFor } from '../lib/sanity';
 
 const OrganizationDetail = () => {
     const { id } = useParams();
-    const org = organizationsData[id];
-    
-    // State for the pop-up modal
+    const [org, setOrg] = useState(null);
+    const [loading, setLoading] = useState(true);
     const [selectedItem, setSelectedItem] = useState(null);
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+        setLoading(true);
+        client.fetch(`*[_type == "organization" && slug.current == $id][0]`, { id })
+            .then(res => {
+                setOrg(res);
+                setLoading(false);
+            })
+            .catch(err => {
+                console.error("Failed to fetch organization:", err);
+                setLoading(false);
+            });
+    }, [id]);
 
     // Close modal on escape key
     useEffect(() => {
@@ -33,6 +46,14 @@ const OrganizationDetail = () => {
         }
     }, [selectedItem]);
 
+    if (loading) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-white">
+                <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-accent"></div>
+            </div>
+        );
+    }
+
     if (!org) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-slate-50">
@@ -49,11 +70,13 @@ const OrganizationDetail = () => {
             {/* ─── Hero Section ─── */}
             <div className="h-[60vh] relative overflow-hidden flex items-center justify-center">
                 <div className="absolute inset-0 z-0">
-                    <img 
-                        src={org.mainImage} 
-                        alt={org.name} 
-                        className="w-full h-full object-cover"
-                    />
+                    {org.mainImage && (
+                        <img 
+                            src={urlFor(org.mainImage).url()} 
+                            alt={org.name} 
+                            className="w-full h-full object-cover"
+                        />
+                    )}
                     <div className="absolute inset-0 bg-gradient-to-b from-primary/80 via-primary/60 to-primary" />
                 </div>
                 
@@ -80,7 +103,7 @@ const OrganizationDetail = () => {
             {/* ─── Stats Bar ─── */}
             <div className="max-w-6xl mx-auto px-6 -mt-12 relative z-20">
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                    {org.stats.map((stat, i) => (
+                    {org.stats && org.stats.map((stat, i) => (
                         <motion.div
                             key={i}
                             initial={{ opacity: 0, y: 20 }}
@@ -106,7 +129,7 @@ const OrganizationDetail = () => {
                                 About {org.name}
                             </h2>
                             <div className="space-y-6">
-                                {org.description.map((para, i) => (
+                                {org.description && org.description.map((para, i) => (
                                     <p key={i} className="text-lg text-slate-600 leading-relaxed font-medium whitespace-pre-wrap">
                                         {para}
                                     </p>
@@ -165,11 +188,13 @@ const OrganizationDetail = () => {
                                             className="group cursor-pointer bg-white border border-slate-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300"
                                         >
                                             <div className="h-48 overflow-hidden relative">
-                                                <img 
-                                                    src={achieve.image} 
-                                                    alt={achieve.title}
-                                                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
-                                                />
+                                                {achieve.image && (
+                                                    <img 
+                                                        src={urlFor(achieve.image).url()} 
+                                                        alt={achieve.title}
+                                                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
+                                                    />
+                                                )}
                                                 <div className="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent opacity-80" />
                                                 <div className="absolute bottom-4 left-4 right-4">
                                                     <span className="text-[0.65rem] font-black uppercase tracking-widest text-accent bg-accent/20 px-2 py-1 rounded backdrop-blur-sm">
@@ -273,11 +298,13 @@ const OrganizationDetail = () => {
                                     onClick={() => setSelectedItem({ type: 'Gallery', ...item })}
                                     className="relative h-72 rounded-2xl overflow-hidden shadow-md group cursor-pointer"
                                 >
-                                    <img 
-                                        src={item.image} 
-                                        alt={item.title} 
-                                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                                    />
+                                    {item.image && (
+                                        <img 
+                                            src={urlFor(item.image).url()} 
+                                            alt={item.title} 
+                                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                        />
+                                    )}
                                     {/* Hover Overlay */}
                                     <div className="absolute inset-0 bg-gradient-to-t from-primary/95 via-primary/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
                                         <div className="translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
@@ -321,11 +348,13 @@ const OrganizationDetail = () => {
 
                             {/* Modal Image */}
                             <div className="w-full h-64 sm:h-96 relative bg-slate-100 shrink-0">
-                                <img 
-                                    src={selectedItem.image} 
-                                    alt={selectedItem.title} 
-                                    className="w-full h-full object-cover"
-                                />
+                                {selectedItem.image && (
+                                    <img 
+                                        src={urlFor(selectedItem.image).url()} 
+                                        alt={selectedItem.title} 
+                                        className="w-full h-full object-cover"
+                                    />
+                                )}
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                                 <div className="absolute bottom-6 left-6 sm:left-10 text-white">
                                     <span className="inline-block px-3 py-1 bg-accent text-primary text-[0.65rem] font-black uppercase tracking-widest rounded-full mb-3 shadow-md">
