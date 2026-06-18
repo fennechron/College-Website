@@ -1401,17 +1401,28 @@ const ContentPage = () => {
 
                                     <div className="grid lg:grid-cols-[1fr_300px] gap-12 items-start">
                                         {/* Description Card */}
-                                        <div className="bg-slate-50/50 rounded-[2rem] p-8 md:p-10 border border-slate-100 shadow-sm text-justify">
-                                            <p className="text-xl leading-[1.8] text-slate-700 font-medium font-sans">
+                                        <div className="bg-slate-50/50 rounded-[2rem] p-8 md:p-10 border border-slate-100 shadow-sm text-justify flex flex-col justify-between h-full">
+                                            <p className="text-xl leading-[1.8] text-slate-700 font-medium font-sans mb-8">
                                                 {content.content}
                                             </p>
+
+                                            {slug === 'apjaktu' && (
+                                                <div className="flex flex-wrap gap-4 mt-auto pt-6 border-t border-slate-200/60">
+                                                    <a href="https://ktu.edu.in/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-primary text-white font-bold rounded-xl hover:bg-accent transition-colors text-sm uppercase tracking-wider">
+                                                        Official KTU Website
+                                                    </a>
+                                                    <a href="https://app.ktu.edu.in/login.htm/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white text-primary border-2 border-primary font-bold rounded-xl hover:bg-slate-50 transition-colors text-sm uppercase tracking-wider">
+                                                       KTU Login Portal
+                                                    </a>
+                                                </div>
+                                            )}
                                         </div>
 
                                         {/* Logo Branding Card */}
                                         <div className="flex justify-center">
                                             <div className="bg-white p-6 md:p-8 rounded-[2rem] border border-slate-100 shadow-[0_15px_40px_rgba(12,43,78,0.04)] flex items-center justify-center w-full transition-transform duration-500 hover:scale-[1.02]">
                                                 <img 
-                                                    src={slug === 'apjaktu' ? "/images/apjaktu_logo.png" : "/images/aicte_logo.png"} 
+                                                    src={slug === 'apjaktu' ? "/images/apjaktu_logo.png" : "/images/aicte_logo.jpg"} 
                                                     alt={`${content.title} Logo`} 
                                                     className="w-full max-w-[200px] object-contain"
                                                 />
