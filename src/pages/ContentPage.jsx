@@ -396,6 +396,17 @@ const DepartmentAccordion = ({ title, items }) => {
     );
 };
 
+/**
+ * Dynamic Content Page Component.
+ * 
+ * Renders pages dynamically based on the 'slug' parameter from the URL.
+ * Fetches content from Sanity CMS and falls back to local data if needed.
+ * - For slugs starting with 'dept-', it renders custom department layouts.
+ * - For other slugs, it falls back to a generic tabbed content renderer.
+ * 
+ * @component
+ * @returns {JSX.Element} The rendered dynamic content page.
+ */
 const ContentPage = () => {
     const { slug } = useParams();
     const { pathname } = useLocation();
