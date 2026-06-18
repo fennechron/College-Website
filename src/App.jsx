@@ -24,6 +24,16 @@ import NotFoundPage from './pages/NotFoundPage.jsx';
 import MaintenancePage from './pages/MaintenancePage.jsx';
 import { client } from './lib/sanity.js';
 
+/**
+ * Main Application Component.
+ * 
+ * Handles routing across the entire application using react-router-dom.
+ * Manages global states such as maintenance mode, footer visibility, and preloader.
+ * Integrates smooth scrolling via Lenis.
+ * 
+ * @component
+ * @returns {JSX.Element} The rendered application layout and routes.
+ */
 function App() {
     const [isMaintenance, setIsMaintenance] = useState(false);
     const [loading, setLoading] = useState(true);
