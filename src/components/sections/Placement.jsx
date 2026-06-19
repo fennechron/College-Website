@@ -18,7 +18,7 @@ const Placement = () => {
             <div className="max-w-[95%] mx-auto px-4 lg:px-6">
                 <div className="mb-14 text-center">
                     <h2 className="text-[1.8rem] md:text-[2.5rem] font-display font-black text-primary mb-4 uppercase tracking-tighter">
-                        Training & Placement <span className="text-accent block sm:inline">Portal</span>
+                        Training & Placement <span className="text-accent block sm:inline">Cell</span>
                     </h2>
                     <div className="w-32 h-1.5 bg-accent mx-auto rounded-full"></div>
                 </div>
@@ -29,7 +29,7 @@ const Placement = () => {
                     <div className="absolute bottom-0 left-0 w-24 h-24 bg-primary/5 rounded-tr-full"></div>
 
                     <h3 className="text-2xl font-display font-bold text-primary text-center mb-12 uppercase tracking-[0.2em] relative">
-                        Strategic Recruitment Partners
+                        Our Recruiters
                     </h3>
                     
                     <style>
