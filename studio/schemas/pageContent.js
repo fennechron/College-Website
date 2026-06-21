@@ -63,5 +63,20 @@ export default {
       of: [{type: 'string'}],
       description: 'List of image URLs for the gallery (e.g. for FAB Lab)',
     },
+    {
+      name: 'downloads',
+      title: 'Downloads / Files',
+      type: 'array',
+      description: 'List of downloadable files (e.g. for Admission or NRI section)',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            { name: 'title', title: 'Title', type: 'string' },
+            { name: 'pdf', title: 'PDF File', type: 'file', options: { accept: '.pdf' } }
+          ]
+        }
+      ]
+    }
   ],
 }

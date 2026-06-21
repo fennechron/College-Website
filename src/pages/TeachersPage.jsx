@@ -6,7 +6,7 @@ import {
     Briefcase, ChevronDown, Crown,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { teachersData } from '../data/teachersData';
+
 import { client, urlFor } from '../lib/sanity';
 
 // ─── HOD Card — Premium full-width university profile card ──────────────────────
@@ -341,6 +341,7 @@ const TeachersPage = () => {
     const [activeDept, setActiveDept] = useState(null);
     const [sanityBtechDepts, setSanityBtechDepts] = useState(null);
     const [sanityMcaData, setSanityMcaData] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const query = `*[_type == "department"]{
@@ -376,11 +377,24 @@ const TeachersPage = () => {
                 if (Object.keys(mappedBtech).length > 0) setSanityBtechDepts(mappedBtech);
                 if (mappedMca) setSanityMcaData(mappedMca);
             }
-        }).catch(err => console.error("Sanity fetch error:", err));
+            setLoading(false);
+        }).catch(err => {
+            console.error("Sanity fetch error:", err);
+            setLoading(false);
+        });
     }, []);
 
-    const btechDepts = sanityBtechDepts || teachersData.btech.departments;
-    const mcaData = sanityMcaData || teachersData.mca;
+    if (loading) {
+        return (
+            <div className="min-h-screen bg-background flex flex-col items-center justify-center">
+                <div className="w-10 h-10 border-4 border-primary/20 border-t-accent rounded-full animate-spin"></div>
+                <p className="mt-4 text-secondary/60 font-medium">Loading faculty members...</p>
+            </div>
+        );
+    }
+
+    const btechDepts = sanityBtechDepts || {};
+    const mcaData = sanityMcaData || { faculty: [] };
     const btechDeptKeys = Object.keys(btechDepts);
 
     return (

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link, useLocation } from 'react-router-dom';
 import { pageContent } from '../data/pageContent';
 import { client } from '../lib/sanity';
-import { ChevronRight, Home, ArrowLeft, Calendar, Users, BookOpen, Clock } from 'lucide-react';
+import { ChevronRight, Home, ArrowLeft, Calendar, Users, BookOpen, Clock, FileText } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const AccordionItem = ({ title, items }) => {
@@ -73,7 +73,11 @@ const renderTextWithBold = (text) => {
 };
 
 // Helper to generate id from name
-const generateId = (name) => name.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+const generateId = (name) => {
+    if (!name) return '';
+    const cleanName = name.replace(/^(?:(?:Dr|Prof|Sri|Smt|Mr|Mrs|Ms)\.?\s*)+/i, '');
+    return cleanName.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+};
 
 const departmentDetails = {
     "dept-computer-engineering": {
@@ -421,7 +425,13 @@ const ContentPage = () => {
         const fetchContent = async () => {
             setLoading(true);
             try {
-                const data = await client.fetch(`*[( _type == "pageContent" || _type == "committee" ) && slug.current == $slug][0]`, { slug });
+                const data = await client.fetch(`*[( _type == "pageContent" || _type == "committee" ) && slug.current == $slug][0] {
+                    ...,
+                    downloads[]{
+                        title,
+                        "pdfUrl": pdf.asset->url
+                    }
+                }`, { slug });
                 setSanityContent(data);
             } catch (error) {
                 console.error("Error fetching content from Sanity:", error);
@@ -1109,7 +1119,7 @@ const ContentPage = () => {
                         className={`${(slug === 'parents-teachers' || slug === 'right-to-info' || slug === 'btech' || slug === 'mca' || slug === 'doctoral' || slug === 'apjaktu' || slug === 'aicte') ? 'lg:col-span-12' : 'lg:col-span-8'} bg-white p-8 md:p-14 rounded-[2.5rem] shadow-[0_10px_50px_rgba(12,43,78,0.06)] border border-primary/5`}
                     >
                         <div className="prose prose-lg max-w-none prose-headings:text-primary prose-p:text-secondary/80 prose-p:leading-relaxed prose-li:text-secondary/80">
-                            {slug !== 'parents-teachers' && slug !== 'right-to-info' && slug !== 'btech' && slug !== 'mca' && slug !== 'doctoral' && slug !== 'apjaktu' && slug !== 'aicte' && (
+                            {slug !== 'parents-teachers' && slug !== 'right-to-info' && slug !== 'btech' && slug !== 'mca' && slug !== 'doctoral' && slug !== 'apjaktu' && slug !== 'aicte' && slug !== 'admission-2026' && (
                                 <h2 className="text-3xl font-bold text-primary mb-8 flex items-center gap-4">
                                     Section Overview
                                     <div className="flex-1 h-px bg-primary/10"></div>
@@ -1502,7 +1512,7 @@ const ContentPage = () => {
                                 </div>
                             )}
 
-                            {content.category !== 'Committees' && slug !== 'btech' && slug !== 'mca' && slug !== 'doctoral' && slug !== 'apjaktu' && slug !== 'aicte' && (
+                            {content.category !== 'Committees' && slug !== 'btech' && slug !== 'mca' && slug !== 'doctoral' && slug !== 'apjaktu' && slug !== 'aicte' && slug !== 'admission-2026' && (
                                 <>
                                     <h3 className="text-2xl font-bold text-primary mb-6">Key Details & Context</h3>
                                     <p className="text-[1.15rem] mb-10">
@@ -1539,6 +1549,28 @@ const ContentPage = () => {
                                                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
                                                 />
                                             </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            {content.downloads && content.downloads.length > 0 && (
+                                <div className="mt-12 pt-12 border-t border-slate-100">
+                                    <h3 className="text-2xl font-display font-black text-primary mb-6 uppercase tracking-wider">Downloads & Documents</h3>
+                                    <div className="grid grid-cols-1 gap-4">
+                                        {content.downloads.map((doc, i) => (
+                                            <a 
+                                                key={i} 
+                                                href={doc.pdfUrl} 
+                                                target="_blank" 
+                                                rel="noreferrer"
+                                                className="flex items-center gap-4 p-5 bg-white border border-slate-200 shadow-sm rounded-xl hover:border-accent hover:shadow-md transition-all group"
+                                            >
+                                                <div className="p-3 bg-slate-50 border border-slate-100 rounded-lg text-accent group-hover:bg-accent group-hover:text-white transition-colors">
+                                                    <FileText size={24} />
+                                                </div>
+                                                <span className="font-semibold text-primary text-[1.1rem] group-hover:text-accent transition-colors">{doc.title}</span>
+                                            </a>
                                         ))}
                                     </div>
                                 </div>

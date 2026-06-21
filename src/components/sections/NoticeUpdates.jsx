@@ -44,14 +44,14 @@ const ScrollList = ({ items }) => (
                 100% { transform: translateY(-50%); }
             }
             .anim-scroll {
-                animation: scrollVertical 20s linear infinite;
+                animation: scrollVertical var(--scroll-duration, 20s) linear infinite;
             }
             .anim-scroll:hover {
                 animation-play-state: paused;
             }
             `}
         </style>
-        <div className="w-full anim-scroll pb-4">
+        <div className="w-full anim-scroll pb-4" style={{ '--scroll-duration': `${Math.max(20, items.length * 6)}s` }}>
             <ul className="flex flex-col gap-6 pb-6 pt-4 pr-4">
                 {items.map((item, idx) => (
                     <li key={`first-${idx}`} className="text-[1.15rem] font-semibold leading-[1.6] text-secondary border-b border-primary/10 pb-5 last:border-0 cursor-pointer hover:text-accent hover:translate-x-1 transition-all duration-200">
@@ -64,7 +64,13 @@ const ScrollList = ({ items }) => (
                                 LATEST
                             </span>
                         )}
-                        <span className="align-middle">{item}</span>
+                        {typeof item === 'object' && item !== null && (item.externalLink || item.pdfUrl) ? (
+                            <a href={item.externalLink || item.pdfUrl} target="_blank" rel="noreferrer" className="align-middle hover:underline block">
+                                {item.text}
+                            </a>
+                        ) : (
+                            <span className="align-middle block">{typeof item === 'object' && item !== null ? item.text : item}</span>
+                        )}
                     </li>
                 ))}
             </ul>
@@ -80,7 +86,13 @@ const ScrollList = ({ items }) => (
                                 LATEST
                             </span>
                         )}
-                        <span className="align-middle">{item}</span>
+                        {typeof item === 'object' && item !== null && (item.externalLink || item.pdfUrl) ? (
+                            <a href={item.externalLink || item.pdfUrl} target="_blank" rel="noreferrer" className="align-middle hover:underline block">
+                                {item.text}
+                            </a>
+                        ) : (
+                            <span className="align-middle block">{typeof item === 'object' && item !== null ? item.text : item}</span>
+                        )}
                     </li>
                 ))}
             </ul>
@@ -94,12 +106,12 @@ const NoticeUpdates = () => {
     const [sanityNotices, setSanityNotices] = useState([]);
 
     useEffect(() => {
-        client.fetch('*[_type == "announcement"] | order(date desc)')
+        client.fetch('*[_type == "announcement"] | order(date desc) { text, category, externalLink, "pdfUrl": pdf.asset->url }')
             .then(data => {
                 if (data && data.length > 0) {
-                    setSanityAnnouncements(data.filter(d => d.category === 'Announcements').map(d => d.text));
-                    setSanityNotifications(data.filter(d => d.category === 'Notifications').map(d => d.text));
-                    setSanityNotices(data.filter(d => d.category === 'Notice Board').map(d => d.text));
+                    setSanityAnnouncements(data.filter(d => d.category === 'Announcements'));
+                    setSanityNotifications(data.filter(d => d.category === 'Notifications'));
+                    setSanityNotices(data.filter(d => d.category === 'Notice Board'));
                 }
             })
             .catch(err => console.error("Sanity fetch error:", err));

@@ -6,65 +6,49 @@ import {
     ChevronRight, Home, Globe
 } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { teachersData } from '../data/teachersData';
 import { client, urlFor } from '../lib/sanity';
 
 const TeacherDetail = () => {
     const { id } = useParams();
     const navigate = useNavigate();
-    const [sanityTeacher, setSanityTeacher] = useState(null);
+    const [teacher, setTeacher] = useState(null);
     const [loading, setLoading] = useState(true);
 
     // Helper to generate id from name
-    const generateId = (name) => name.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
-
-    // Helper to find teacher in nested structure
-    const findStaticTeacher = () => {
-        // Check B.Tech
-        for (const deptKey in teachersData.btech.departments) {
-            const dept = teachersData.btech.departments[deptKey];
-            if (dept.hod.id === id || generateId(dept.hod.name) === id) return { ...dept.hod, deptLabel: dept.label, color: dept.color };
-            const faculty = dept.faculty.find(f => f.id === id || generateId(f.name) === id);
-            if (faculty) return { ...faculty, deptLabel: dept.label, color: dept.color };
-        }
-        // Check MCA
-        const mca = teachersData.mca;
-        if (mca.hod.id === id || generateId(mca.hod.name) === id) return { ...mca.hod, deptLabel: 'MCA', color: '#4A235A' };
-        const faculty = mca.faculty.find(f => f.id === id || generateId(f.name) === id);
-        if (faculty) return { ...faculty, deptLabel: 'MCA', color: '#4A235A' };
-        
-        return null;
+    const generateId = (name) => {
+        if (!name) return '';
+        const cleanName = name.replace(/^(?:(?:Dr|Prof|Sri|Smt|Mr|Mrs|Ms)\.?\s*)+/i, '');
+        return cleanName.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
     };
-
-    const staticTeacher = findStaticTeacher();
 
     useEffect(() => {
         window.scrollTo(0, 0);
         
-        if (!staticTeacher) {
-            setLoading(true);
-            const query = `*[_type == "teacher" && _id == $id][0]{
-                ...,
-                "deptLabel": department->name,
-                "color": department->color
-            }`;
-            client.fetch(query, { id })
-                .then(data => {
-                    if (data) {
-                        setSanityTeacher(data);
-                    }
-                    setLoading(false);
-                })
-                .catch(err => {
-                    console.error("Sanity fetch error:", err);
-                    setLoading(false);
-                });
-        } else {
-            setLoading(false);
-        }
-    }, [id, staticTeacher]);
-
-    const teacher = sanityTeacher || staticTeacher;
+        setLoading(true);
+        // Fetch all teachers to handle both direct ID and name-based generated ID
+        const query = `*[_type == "teacher"]{
+            ...,
+            "deptLabel": department->name,
+            "color": department->color
+        }`;
+        
+        client.fetch(query)
+            .then(data => {
+                if (data && data.length > 0) {
+                    const found = data.find(t => 
+                        t._id === id || 
+                        t._id === 'teacher-' + id || 
+                        generateId(t.name) === id
+                    );
+                    setTeacher(found || null);
+                }
+                setLoading(false);
+            })
+            .catch(err => {
+                console.error("Sanity fetch error:", err);
+                setLoading(false);
+            });
+    }, [id]);
 
     if (loading) {
         return (
