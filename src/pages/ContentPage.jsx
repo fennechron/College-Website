@@ -466,7 +466,8 @@ const ContentPage = () => {
             description: fetchedDept.overview || hardcodedDept.description || [],
             programmesTable: fetchedDept.programmes || hardcodedDept.programmesTable,
             labsExtended: fetchedDept.labsExtended || hardcodedDept.labsExtended || fetchedDept.labs || hardcodedDept.labs,
-            technicalStaff: fetchedDept.technicalStaff || []
+            technicalStaff: fetchedDept.technicalStaff || [],
+            news: fetchedDept.news
         };
 
         if (dept && Object.keys(dept).length > 0 && dept.name) {

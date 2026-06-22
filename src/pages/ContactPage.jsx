@@ -161,7 +161,7 @@ const ContactPage = () => {
                     <div className="space-y-8">
                         <div className="rounded-[2.5rem] overflow-hidden shadow-2xl border-8 border-white h-[600px] bg-slate-100 relative shadow-[0_30px_100px_rgba(0,0,0,0.15)]">
                             <iframe 
-                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3936.782845610815!2d76.6186981!3d9.3256958!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b0622e703903117%3A0x63345719a9e3346d!2sCollege%20of%20Engineering%20Chengannur!5e0!3m2!1sen!2sin!4v1715510000000!5m2!1sen!2sin" 
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3937.179869160442!2d76.61491067421983!3d9.31732529075598!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b0622ea027eb08f%3A0x41105b207db821c6!2sCollege%20of%20Engineering%20Chengannur!5e0!3m2!1sen!2sin!4v1782157484424!5m2!1sen!2sin"
                                 width="100%" 
                                 height="100%" 
                                 style={{ border: 0 }} 
@@ -172,7 +172,6 @@ const ContactPage = () => {
                             ></iframe>
                             <div className="absolute bottom-8 left-8 right-8 bg-white/90 backdrop-blur-md p-6 rounded-2xl shadow-xl border border-white/50">
                                 <p className="text-[0.6rem] font-black uppercase tracking-[0.2em] text-accent mb-1">Interactive Map</p>
-                                <p className="text-primary font-bold">Use the map above to find the best route to our campus.</p>
                             </div>
                         </div>
                         

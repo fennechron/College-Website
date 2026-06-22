@@ -137,8 +137,8 @@ const OrganizationDetail = () => {
                             </div>
                         </section>
 
-                        {/* Major Activities: Strictly only for NSS and NCC */}
-                        {(id === 'nss' || id === 'ncc') && org.activities && (
+                        {/* Major Activities: Display if present in Sanity */}
+                        {org.activities && org.activities.length > 0 && (
                             <section className="bg-slate-50 p-10 rounded-3xl space-y-8 border border-slate-100">
                                 <h3 className="text-2xl font-display font-black text-primary uppercase flex items-center gap-3">
                                     <CheckCircle className="text-accent" />
@@ -154,6 +154,8 @@ const OrganizationDetail = () => {
                                 </div>
                             </section>
                         )}
+
+
 
                         {/* Professional Ethics (If present) */}
                         {org.ethics && (

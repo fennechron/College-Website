@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Calendar, Clock, ChevronLeft, ChevronRight, Home, ChevronRight as ArrowIcon, FileText, ArrowRight, UserCheck } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { client } from '../lib/sanity';
 
 const staffMembers = [
     { id: 1, name: "Smt. Asha K Pillai", designation: "Senior Superintendent" },
@@ -29,46 +30,9 @@ const staffMembers = [
     { id: 23, name: "Sri. Muraleedharan Pillai", designation: "Security Guard" }
 ];
 
-const calendarEvents = {
-    // Year-Month-Day formatted keys
-    "2026-05-12": { title: "Staff Development Program", desc: "Training session on E-Governance and office automation software in the Seminar Hall.", time: "10:00 AM", type: "Training" },
-    "2026-05-20": { title: "Monthly Administrative Review", desc: "All section heads to present progress on academic registration audits.", time: "02:00 PM", type: "Meeting" },
-    "2026-05-25": { title: "Fee Submission Deadline", desc: "Last date for submitting B.Tech S4 & S6 tuition fees without fine.", time: "04:00 PM", type: "Deadline" },
-    "2026-05-29": { title: "Internal Academic & Audit Committee", desc: "Audit and verification of stock registers and academic documents.", time: "09:30 AM", type: "Audit" },
-    "2026-06-03": { title: "Administrative Board Council", desc: "Annual strategic meeting chaired by the Principal and Governing Board representatives.", time: "11:00 AM", type: "Meeting" },
-    "2026-06-12": { title: "Tech-Fest Budget Planning", desc: "Financial planning meeting for the upcoming national level tech-fest.", time: "03:00 PM", type: "Planning" },
-    "2026-06-18": { title: "Public Holiday", desc: "State Festival - Administrative office closed.", time: "All Day", type: "Holiday" }
-};
+ 
 
-const recentPosts = [
-    {
-        id: "post-1",
-        date: "May 18, 2026",
-        category: "Announcements",
-        title: "Extension of Admission Registration for B.Tech & MCA 2026",
-        summary: "The last date for submitting online applications for management and NRI seat registrations has been extended to May 30, 2026 due to numerous requests.",
-        readTime: "2 min read",
-        link: "/page/downloads"
-    },
-    {
-        id: "post-2",
-        date: "May 15, 2026",
-        category: "Scholarships",
-        title: "MCM Scholarship Applications for EWS Students open",
-        summary: "Eligible B.Tech students are instructed to submit their Merit-cum-Means scholarship applications with income and community certificates to the administrative desk.",
-        readTime: "3 min read",
-        link: "/page/downloads"
-    },
-    {
-        id: "post-3",
-        date: "May 10, 2026",
-        category: "Logistics",
-        title: "Revised College Bus Route & Timings for Summer Term",
-        summary: "Bus route No. 3 (via Chengannur Railway Station) has been updated with a new early departure schedule. Click to view the revised boarding points and time charts.",
-        readTime: "1 min read",
-        link: "/page/downloads"
-    }
-];
+
 
 const getInitials = (name) => {
     const cleanName = name.replace(/^(Smt|Sri|Shri|Dr)\.?\s+/i, '');
@@ -80,13 +44,57 @@ const getInitials = (name) => {
 };
 
 const AdministrativeStaff = () => {
+    const today = new Date();
+    const todayStr = `${today.getFullYear()}-${(today.getMonth() + 1).toString().padStart(2, '0')}-${today.getDate().toString().padStart(2, '0')}`;
+
     const [searchTerm, setSearchTerm] = useState('');
-    const [currentDate, setCurrentDate] = useState(new Date(2026, 4, 20)); // Set to mid-May 2026 to fit system context
-    const [selectedDateKey, setSelectedDateKey] = useState("2026-05-20");
-    const [selectedEvent, setSelectedEvent] = useState(calendarEvents["2026-05-20"]);
+    const [currentDate, setCurrentDate] = useState(today); // Show current date
+    const [selectedDateKey, setSelectedDateKey] = useState(todayStr);
+    const [selectedEvent, setSelectedEvent] = useState(null);
+
+    const [fetchedData, setFetchedData] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    // Fetch data from Sanity
+    useEffect(() => {
+        window.scrollTo(0, 0);
+        client.fetch(`*[_type == "administration"][0]`)
+            .then(data => {
+                setFetchedData(data);
+                
+                // Initialize selected event once data is loaded
+                const eventMap = getEventMap(data?.calendarEvents || {});
+                if (eventMap[todayStr]) {
+                    setSelectedEvent(eventMap[todayStr]);
+                }
+                
+                setLoading(false);
+            })
+            .catch(err => {
+                console.error("Failed to fetch administration data:", err);
+                // Initialize selected event even if fetch fails
+                setSelectedEvent(null);
+                setLoading(false);
+            });
+    }, []);
+
+    // Merge Sanity Data or use local constants as fallback
+    const activeStaffMembers = fetchedData?.staffMembers || staffMembers;
+    const activePosts = fetchedData?.recentPosts || [];
+    
+    // Transform array of events back to an object map for the calendar
+    const getEventMap = (eventsArray) => {
+        if (!Array.isArray(eventsArray)) return eventsArray; // Fallback to local object if array is not passed
+        const map = {};
+        eventsArray.forEach(evt => {
+            if (evt.dateKey) map[evt.dateKey] = evt;
+        });
+        return map;
+    };
+    const activeCalendarEvents = getEventMap(fetchedData?.calendarEvents || {});
 
     // Filter staff members based on search term
-    const filteredStaff = staffMembers.filter(member => 
+    const filteredStaff = activeStaffMembers.filter(member => 
         member.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
         member.designation.toLowerCase().includes(searchTerm.toLowerCase())
     );
@@ -117,17 +125,14 @@ const AdministrativeStaff = () => {
     const handleDateSelect = (dayNum) => {
         const dateKey = getFormattedDateString(dayNum);
         setSelectedDateKey(dateKey);
-        if (calendarEvents[dateKey]) {
-            setSelectedEvent(calendarEvents[dateKey]);
+        if (activeCalendarEvents[dateKey]) {
+            setSelectedEvent(activeCalendarEvents[dateKey]);
         } else {
             setSelectedEvent(null);
         }
     };
 
-    // Auto scroll to top on mount
-    useEffect(() => {
-        window.scrollTo(0, 0);
-    }, []);
+
 
     // Month Names
     const monthNames = [
@@ -149,7 +154,7 @@ const AdministrativeStaff = () => {
         // Days of the month
         for (let d = 1; d <= totalDays; d++) {
             const dateKey = getFormattedDateString(d);
-            const hasEvent = !!calendarEvents[dateKey];
+            const hasEvent = !!activeCalendarEvents[dateKey];
             const isSelected = selectedDateKey === dateKey;
             
             days.push(
@@ -245,12 +250,7 @@ const AdministrativeStaff = () => {
                                 </button>
                             )}
                         </div>
-                        <div className="flex items-center gap-2.5 bg-primary/5 px-4.5 py-2.5 rounded-2xl border border-primary/10">
-                            <UserCheck className="h-4.5 w-4.5 text-accent" />
-                            <span className="text-xs font-black uppercase text-primary tracking-wider">
-                                {filteredStaff.length} Staff Members Found
-                            </span>
-                        </div>
+                        
                     </div>
 
                     {/* Staff Table Card */}
@@ -431,21 +431,14 @@ const AdministrativeStaff = () => {
                                 Stay informed with the latest directives, circulars, office notifications, and deadlines published by the administrative sector.
                             </p>
                         </div>
-                        {/* Premium Link to central Downloads/Notice page */}
-                        <Link 
-                            to="/page/downloads" 
-                            className="flex items-center gap-2 px-8 py-4 bg-primary text-white rounded-full font-bold hover:bg-secondary transition-all hover:shadow-xl group shrink-0"
-                        >
-                            View All Announcements
-                            <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
-                        </Link>
+                         
                     </div>
 
                     {/* Posts Cards Grid */}
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        {recentPosts.map((post, index) => (
+                        {activePosts.map((post, index) => (
                             <motion.div 
-                                key={post.id}
+                                key={post._key || post.id}
                                 initial={{ opacity: 0, y: 30 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.5, delay: index * 0.1 }}

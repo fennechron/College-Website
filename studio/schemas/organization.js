@@ -78,6 +78,12 @@ export default {
       of: [{ type: 'string' }]
     },
     {
+      name: 'events',
+      title: 'Major Events Conducted',
+      type: 'array',
+      of: [{ type: 'string' }]
+    },
+    {
       name: 'ethics',
       title: 'Professional Ethics',
       type: 'array',

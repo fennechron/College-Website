@@ -126,6 +126,19 @@ export default {
           { name: 'designation', title: 'Designation', type: 'string' }
         ]
       }]
+    },
+    {
+      name: 'news',
+      title: 'Department News & Updates',
+      type: 'array',
+      of: [{
+        type: 'object',
+        fields: [
+          { name: 'date', title: 'Date', type: 'string', description: 'e.g., May 15, 2026' },
+          { name: 'title', title: 'Title', type: 'string' },
+          { name: 'description', title: 'Description', type: 'text' }
+        ]
+      }]
     }
   ],
 }
