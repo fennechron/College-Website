@@ -38,8 +38,7 @@ export default {
       name: 'mainImage',
       title: 'Main Hero Image',
       type: 'image',
-      options: { hotspot: true },
-      validation: Rule => Rule.required()
+      options: { hotspot: true }
     },
     {
       name: 'website',
@@ -55,7 +54,7 @@ export default {
       name: 'description',
       title: 'Description Paragraphs',
       type: 'array',
-      of: [{ type: 'text' }],
+      of: [{ type: 'string' }],
       validation: Rule => Rule.required()
     },
     {

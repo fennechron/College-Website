@@ -34,6 +34,15 @@ export default {
       },
       validation: Rule => Rule.required(),
     },
+    {
+      name: 'groupPhoto',
+      title: 'Placed Students Group Photo',
+      type: 'image',
+      description: 'Upload the group photo of the placed students for this year.',
+      options: {
+        hotspot: true,
+      },
+    },
   ],
   preview: {
     select: {

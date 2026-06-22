@@ -4,9 +4,11 @@ import * as LucideIcons from 'lucide-react';
 
 const Placement = () => {
     const [data, setData] = useState(null);
+    const [placements, setPlacements] = useState([]);
 
     useEffect(() => {
         client.fetch(`*[_type == "homePage"][0]{ placementSection }`).then(res => setData(res?.placementSection)).catch(console.error);
+        client.fetch(`*[_type == "placement" && defined(groupPhoto)] | order(year desc) { year, groupPhoto }`).then(res => setPlacements(res)).catch(console.error);
     }, []);
 
     if (!data) return null;
@@ -84,6 +86,51 @@ const Placement = () => {
                             );
                         })}
                     </div>
+
+                    {/* Placement Gallery Section */}
+                    {placements.length > 0 && (
+                        <div className="mt-20 pt-10 border-t border-primary/10">
+                            <h3 className="text-2xl font-display font-bold text-primary text-center mb-12 uppercase tracking-[0.2em] relative">
+                                Placed Students Gallery
+                            </h3>
+                            
+                            <style>
+                            {`
+                            @keyframes slideGallery {
+                                0% { transform: translateX(0); }
+                                100% { transform: translateX(calc(-482px * ${placements.length})); }
+                            }
+                            .gallery-track {
+                                animation: slideGallery ${placements.length * 8}s linear infinite;
+                            }
+                            .gallery-track:hover {
+                                animation-play-state: paused;
+                            }
+                            `}
+                            </style>
+                            
+                            <div className="flex overflow-hidden relative py-4 mask-gradient">
+                                <div className="flex gap-8 gallery-track items-center min-w-max">
+                                    {[...placements, ...placements].map((placement, idx) => (
+                                        <div key={idx} className="group relative w-[450px] aspect-video bg-slate-100 rounded-3xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 flex-shrink-0">
+                                            <img 
+                                                src={urlFor(placement.groupPhoto).width(800).url()} 
+                                                alt={`Placed Students ${placement.year}`} 
+                                                className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+                                            />
+                                            <div className="absolute inset-0 bg-gradient-to-t from-primary/80 via-primary/20 to-transparent opacity-80 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                            <div className="absolute bottom-6 left-6 right-6">
+                                                <h4 className="text-white text-2xl font-display font-black tracking-wider uppercase transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+                                                    Class of {placement.year}
+                                                </h4>
+                                                <div className="w-12 h-1 bg-accent mt-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
         </section>

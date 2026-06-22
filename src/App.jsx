@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Lenis from 'lenis';
 import { GraduationCap, X } from 'lucide-react';
 import Navbar from './components/layout/Navbar.jsx';
@@ -23,6 +23,30 @@ import EventDetail from './pages/EventDetail.jsx';
 import NotFoundPage from './pages/NotFoundPage.jsx';
 import MaintenancePage from './pages/MaintenancePage.jsx';
 import { client } from './lib/sanity.js';
+
+/**
+ * Floating Admissions Button Component.
+ * Hides itself when the user is already on the admissions page.
+ */
+function FloatingAdmissionsButton({ isFooterVisible }) {
+    const location = useLocation();
+
+    if (location.pathname === '/page/admission-2026') {
+        return null;
+    }
+
+    return (
+        <button 
+            onClick={() => window.location.href = '/page/admission-2026'}
+            className={`fixed bottom-6 right-6 lg:bottom-10 lg:right-10 bg-accent hover:bg-primary text-white font-display font-bold px-8 py-4 rounded-full shadow-[0_15px_40px_rgba(29,84,108,0.4)] transition-all duration-500 z-[100] flex items-center gap-3 border-2 border-white/20 animate-pulse-soft ${isFooterVisible ? 'opacity-0 translate-y-10 pointer-events-none' : 'opacity-100 transform hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(29,84,108,0.5)]'}`}
+        >
+            <div className="bg-white/20 p-1.5 rounded-full">
+                <GraduationCap size={24} className="text-white" />
+            </div>
+            <span className="text-xl tracking-tighter uppercase font-black">Admissions 2026</span>
+        </button>
+    );
+}
 
 /**
  * Main Application Component.
@@ -117,15 +141,7 @@ function App() {
             <Footer />
             
             {/* Floating Admissions Button */}
-            <button 
-                onClick={() => window.location.href = '/page/admission-2026'}
-                className={`fixed bottom-6 right-6 lg:bottom-10 lg:right-10 bg-accent hover:bg-primary text-white font-display font-bold px-8 py-4 rounded-full shadow-[0_15px_40px_rgba(29,84,108,0.4)] transition-all duration-500 z-[100] flex items-center gap-3 border-2 border-white/20 animate-pulse-soft ${isFooterVisible ? 'opacity-0 translate-y-10 pointer-events-none' : 'opacity-100 transform hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(29,84,108,0.5)]'}`}
-            >
-                <div className="bg-white/20 p-1.5 rounded-full">
-                    <GraduationCap size={24} className="text-white" />
-                </div>
-                <span className="text-xl tracking-tighter uppercase font-black">Admissions 2026</span>
-            </button>
+            <FloatingAdmissionsButton isFooterVisible={isFooterVisible} />
         </Router>
     );
 }

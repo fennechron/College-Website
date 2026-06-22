@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link, useLocation } from 'react-router-dom';
 import { pageContent } from '../data/pageContent';
-import { client } from '../lib/sanity';
+import { client, urlFor } from '../lib/sanity';
 import { ChevronRight, Home, ArrowLeft, Calendar, Users, BookOpen, Clock, FileText } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -161,56 +161,6 @@ const departmentDetails = {
                 title: "National Workshop on Cloud Security",
                 description: "The department successfully conducted a 3-day national hands-on workshop in collaboration with AWS Academics on next-generation virtualization security."
             }
-        ],
-        facultyList: [
-            { name: "Dr. Renu George", designation: "Professor and Head of the Department" },
-            { name: "Dr. Manju S Nair", designation: "Associate Professor" },
-            { name: "Sri. Gopakumar G", designation: "Associate Professor" },
-            { name: "Smt. Manjusha S Nair", designation: "Associate Professor(dptn to Ph D)" },
-            { name: "Smt. Princy Sugathan S", designation: "Associate Professor(dptn to Ph D)" },
-            { name: "Sri. Muhammed Ilyas H", designation: "Associate Professor" },
-            { name: "Dr. Geetha S", designation: "Associate Professor" },
-            { name: "Dr. Sabeena K", designation: "Assistant Professor" },
-            { name: "Sri. Vishnu S Kumar", designation: "Assistant Professor" },
-            { name: "Smt. Sreelekshmi K R", designation: "Assistant Professor" },
-            { name: "Smt. Syeatha Merlin Thampy", designation: "Assistant Professor" },
-            { name: "Smt. Leya G", designation: "Assistant Professor" },
-            { name: "Smt. Alka Vijay", designation: "Assistant Professor" },
-            { name: "Smt. Chinchu M Pillai", designation: "Assistant Professor" },
-            { name: "Smt. Shabana Mol S", designation: "Assistant Professor" },
-            { name: "Smt. Sulaja Sanal", designation: "Assistant Professor" },
-            { name: "Smt. Reshma Raj K S", designation: "Assistant Professor" },
-            { name: "Smt. Reshma Ann Mathews", designation: "Assistant Professor" },
-            { name: "Smt. Premy P Jacob", designation: "Assistant Professor" },
-            { name: "Smt. Syama S", designation: "Assistant Professor" },
-            { name: "Smt. Josmi Jose", designation: "Assistant Professor" },
-            { name: "Smt. Sruthy R S", designation: "Assistant Professor" },
-            { name: "Smt. Jithy John", designation: "Assistant Professor" },
-            { name: "Smt. Surya S", designation: "Assistant Professor" },
-            { name: "Smt. Varsha C Mohan", designation: "Assistant Professor" },
-            { name: "Smt. Lintu Liz Thomas", designation: "Assistant Professor" },
-            { name: "Smt. Nayana Chandran", designation: "Assistant Professor" },
-            { name: "Smt. Santhy Viswam", designation: "Assistant Professor" },
-            { name: "Smt. Jyothi Chandran", designation: "Assistant Professor" },
-            { name: "Smt. Anaswara Dev S", designation: "Assistant Professor" },
-            { name: "Smt. Athira Prakash J S", designation: "Assistant Professor" },
-            { name: "Smt. Usha Gopalakrishnan", designation: "Assistant Professor" },
-            { name: "Smt. Anu Priya A", designation: "Assistant Professor" },
-            { name: "Smt. Suvarna Dev", designation: "Assistant Professor" },
-            { name: "Smt. Swapna Kumari E S", designation: "Assistant Professor" },
-            { name: "Smt. Christina Thankam Sajan", designation: "Assistant Professor" },
-            { name: "Sri. Vijayasankar V Nair", designation: "System Analyst" },
-            { name: "Smt. Aiswarya T K", designation: "System Analyst" }
-        ],
-        technicalStaffList: [
-            { name: "Smt. Jalaja Kumari R", designation: "Trade Instructor" },
-            { name: "Smt. Dhanya R", designation: "Computer Programmer" },
-            { name: "Smt. Rahana A", designation: "Computer Programmer" },
-            { name: "Smt. Vidya Viswanath", designation: "Computer Programmer" },
-            { name: "Smt. Raji C R", designation: "Demonstrator" },
-            { name: "Smt. Santhi krishna S", designation: "Tradesman" },
-            { name: "Smt. Priya Nair S", designation: "Tradesman" },
-            { name: "Smt. Renju R", designation: "Tradesman" }
         ]
     },
     "dept-electrical-engineering": {
@@ -220,21 +170,17 @@ const departmentDetails = {
         founded: "1993",
         stats: [
             { value: "60", label: "B.Tech Intake" },
-            { value: "12+", label: "Faculty Members" },
-            { value: "6+", label: "Core Laboratories" }
+            { value: "15+", label: "Faculty Members" },
+            { value: "6+", label: "Advanced Labs" }
         ],
         description: [
-            "The Department of Electrical Engineering prepares students to lead the energy transition with extensive competencies in power systems, industrial control, smart grids, and clean energy.",
-            "Through highly structured practical programs and core hands-on training, students develop professional capabilities to design next-generation power electronics and electrical drives.",
-            "The department has been actively collaborating on multiple government funding initiatives and renewable energy integration projects."
+            "The Department of Electrical and Electronics Engineering offers a comprehensive B.Tech program designed to provide students with a strong foundation in electrical systems, electronics, and control engineering."
         ],
         labs: [
-            "Electrical Machines & Drives Lab",
-            "Power Systems Simulation Laboratory",
-            "Advanced Control Systems Lab",
-            "Electrical Measurements Lab",
-            "Power Electronics Laboratory",
-            "Basic Electrical Engineering Workshop"
+            "Electrical Machines Lab",
+            "Power Electronics Lab",
+            "Control Systems Lab",
+            "Measurements & Instrumentation Lab"
         ],
         programs: ["B.Tech Electrical & Electronics Eng.", "Research Fellowships (Ph.D.)"],
         hod: "Smt. Sunitha Sajeev",
@@ -263,7 +209,7 @@ const departmentDetails = {
             "Microwave & RF Engineering Lab",
             "Integrated Circuits Laboratory"
         ],
-        programs: ["B.Tech Electronics & Comm. Eng.", "Ph.D. in Electronics Engineering"],
+                programs: ["B.Tech Electronics & Comm. Eng.", "Ph.D. in Electronics Engineering"],
         hod: "Dr. C V Anilkumar",
         hodEmail: "cvanilkumar@ceconline.edu"
     },
@@ -314,7 +260,7 @@ const departmentDetails = {
             "Digital Language & Rhetoric Centre",
             "Mathematics Research & Analytics Lab"
         ],
-        programs: ["Applied Mathematics, Sciences & Professional English"],
+                programs: ["Applied Mathematics, Sciences & Professional English"],
         hod: "Dr. Hari V S (Principal / Head)",
     }
 };
@@ -416,6 +362,8 @@ const ContentPage = () => {
     const { pathname } = useLocation();
 
     const [sanityContent, setSanityContent] = useState(null);
+    const [departmentFaculty, setDepartmentFaculty] = useState([]);
+    const [departmentHod, setDepartmentHod] = useState(null);
     const [loading, setLoading] = useState(true);
 
     const [activeTab, setActiveTab] = useState('');
@@ -432,6 +380,28 @@ const ContentPage = () => {
                         "pdfUrl": pdf.asset->url
                     }
                 }`, { slug });
+                
+                if (slug.startsWith('dept-')) {
+                    let deptShort = '';
+                    if (slug === 'dept-computer-engineering') deptShort = 'CS';
+                    else if (slug === 'dept-electronics-engineering') deptShort = 'EC';
+                    else if (slug === 'dept-electrical-engineering') deptShort = 'EEE';
+
+                    if (deptShort) {
+                        const facultyData = await client.fetch(`*[_type == "teacher" && references(*[_type == "department" && short == $short]._id) && !isHOD] | order(name asc)`, { short: deptShort });
+                        const hodData = await client.fetch(`*[_type == "teacher" && references(*[_type == "department" && short == $short]._id) && isHOD][0]`, { short: deptShort });
+                        
+                        setDepartmentFaculty(facultyData || []);
+                        setDepartmentHod(hodData || null);
+                    } else {
+                        setDepartmentFaculty([]);
+                        setDepartmentHod(null);
+                    }
+                } else {
+                    setDepartmentFaculty([]);
+                    setDepartmentHod(null);
+                }
+
                 setSanityContent(data);
             } catch (error) {
                 console.error("Error fetching content from Sanity:", error);
@@ -675,7 +645,7 @@ const ContentPage = () => {
                                 </section>
 
                                 {/* Faculty Section */}
-                                {dept.facultyList && (
+                                {departmentFaculty && departmentFaculty.length > 0 && (
                                     <section className="space-y-8">
                                         <h3 className="text-2xl font-display font-black text-primary uppercase flex items-center gap-4">
                                             <span className="w-8 h-1.5 bg-accent rounded-full" />
@@ -691,19 +661,19 @@ const ContentPage = () => {
                                                     </tr>
                                                 </thead>
                                                 <tbody className="divide-y divide-slate-100 text-left">
-                                                    {dept.facultyList.map((fac, idx) => (
+                                                    {departmentFaculty.map((fac, idx) => (
                                                         <tr key={idx} className="hover:bg-slate-50/50 transition-colors">
                                                             <td className="px-6 py-4 text-base font-black text-slate-400">{idx + 1}</td>
                                                             <td className="px-6 py-4 text-base font-black text-primary">
-                                                                <Link to={`/teacher/${generateId(fac.name)}`} className="hover:text-accent hover:underline transition-colors">
+                                                                <Link to={`/teacher/${fac._id || generateId(fac.name)}`} className="hover:text-accent hover:underline transition-colors">
                                                                     {fac.name}
                                                                 </Link>
                                                             </td>
                                                             <td className="px-6 py-4 text-base font-semibold text-slate-600">
                                                                 <span className={`inline-block px-2.5 py-1 rounded-md text-[0.7rem] font-black uppercase tracking-wider ${
-                                                                    fac.designation.toLowerCase().includes('head')
+                                                                    fac.designation && fac.designation.toLowerCase().includes('head')
                                                                         ? 'bg-accent/15 text-accent border border-accent/25'
-                                                                        : fac.designation.toLowerCase().includes('associate')
+                                                                        : fac.designation && fac.designation.toLowerCase().includes('associate')
                                                                         ? 'bg-primary/10 text-primary border border-primary/20'
                                                                         : 'bg-slate-100 text-slate-600'
                                                                 }`}>
@@ -759,15 +729,15 @@ const ContentPage = () => {
 
                                     {/* HOD Image Container (Provision) */}
                                     <div className="relative w-44 h-44 mx-auto rounded-full overflow-hidden border-4 border-accent shadow-lg bg-white/10 group">
-                                        {dept.hodImage ? (
+                                        {(departmentHod?.photo || dept.hodImage) ? (
                                             <img 
-                                                src={dept.hodImage} 
-                                                alt={dept.hod} 
+                                                src={departmentHod?.photo ? urlFor(departmentHod.photo).width(500).height(500).fit('crop').url() : dept.hodImage} 
+                                                alt={departmentHod?.name || dept.hod} 
                                                 className="w-full h-full object-cover"
                                             />
                                         ) : (
                                             <div className="w-full h-full bg-gradient-to-tr from-accent to-secondary flex items-center justify-center">
-                                                <span className="text-white text-5xl font-black">{dept.hod ? dept.hod.charAt(0) : 'H'}</span>
+                                                <span className="text-white text-5xl font-black">{(departmentHod?.name || dept.hod || 'H').charAt(0)}</span>
                                             </div>
                                         )}
                                     </div>
@@ -775,33 +745,34 @@ const ContentPage = () => {
                                     {/* HOD Text & Contact Details */}
                                     <div className="space-y-4 text-left">
                                         <div className="text-center">
-                                            <h4 className="text-2xl font-display font-black text-white">{dept.hod}</h4>
-                                            {dept.hodDesignation && (
+                                            <h4 className="text-2xl font-display font-black text-white">{departmentHod?.name || dept.hod}</h4>
+                                            {(departmentHod?.designation || dept.hodDesignation) && (
                                                 <p className="text-xs text-accent font-black uppercase tracking-widest mt-1">
-                                                    {dept.hodDesignation}
+                                                    {departmentHod?.designation || dept.hodDesignation}
                                                 </p>
                                             )}
                                         </div>
 
-                                        <div className="pt-4 border-t border-white/10 space-y-2 text-sm text-white/80 font-medium">
-                                            {dept.hodAddressLines ? (
-                                                dept.hodAddressLines.map((line, idx) => (
-                                                    <p key={idx} className="leading-relaxed">{line}</p>
-                                                ))
-                                            ) : (
-                                                <>
-                                                    <p className="leading-relaxed">{dept.hodAddress}</p>
-                                                </>
+                                        <div className="space-y-3 pt-4 border-t border-white/10">
+                                            {/* We can use either departmentHod.email or dept.hodEmail */}
+                                            {(departmentHod?.email || dept.hodEmail) && (
+                                                <a href={`mailto:${departmentHod?.email || dept.hodEmail}`} className="flex items-center gap-3 text-sm font-semibold hover:text-accent transition-colors">
+                                                    <span className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center shrink-0">
+                                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                                                    </span>
+                                                    <span className="truncate">{departmentHod?.email || dept.hodEmail}</span>
+                                                </a>
                                             )}
-                                        </div>
-
-                                        <div className="pt-2">
-                                            <a 
-                                                href={`mailto:${dept.hodEmail}`} 
-                                                className="block w-full text-center py-3 bg-accent text-primary font-black rounded-xl hover:bg-white hover:text-primary transition-all duration-300 shadow-md shadow-accent/15 text-sm"
-                                            >
-                                                {dept.hodEmail}
-                                            </a>
+                                            {dept.hodAddressLines && (
+                                                <div className="flex items-start gap-3 text-sm font-semibold text-white/80">
+                                                    <span className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center shrink-0 text-white">
+                                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                                                    </span>
+                                                    <div className="space-y-1 mt-1">
+                                                        {dept.hodAddressLines.map((line, i) => <p key={i}>{line}</p>)}
+                                                    </div>
+                                                </div>
+                                            )}
                                         </div>
                                     </div>
                                 </div>

@@ -62,6 +62,20 @@ export default {
               ]
             }
           ]
+        },
+        {
+          name: 'placementGallery',
+          title: 'Placement Photo Gallery (Sliding)',
+          type: 'array',
+          of: [
+            {
+              type: 'object',
+              fields: [
+                { name: 'year', title: 'Year (e.g., 2025)', type: 'string', validation: Rule => Rule.required() },
+                { name: 'image', title: 'Group Photo', type: 'image', validation: Rule => Rule.required(), options: { hotspot: true } }
+              ]
+            }
+          ]
         }
       ]
     },
