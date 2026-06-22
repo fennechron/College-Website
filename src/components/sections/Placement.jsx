@@ -121,7 +121,7 @@ const Placement = () => {
                                             <div className="absolute inset-0 bg-gradient-to-t from-primary/80 via-primary/20 to-transparent opacity-80 group-hover:opacity-100 transition-opacity duration-300"></div>
                                             <div className="absolute bottom-6 left-6 right-6">
                                                 <h4 className="text-white text-2xl font-display font-black tracking-wider uppercase transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
-                                                    Class of {placement.year}
+                                                    Year of {placement.year}
                                                 </h4>
                                                 <div className="w-12 h-1 bg-accent mt-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                                             </div>

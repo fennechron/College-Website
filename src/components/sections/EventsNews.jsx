@@ -2,34 +2,43 @@ import React, { useState, useEffect } from 'react';
 import { Calendar, ArrowRight } from 'lucide-react';
 import { client, urlFor } from '../../lib/sanity';
 import { Link } from 'react-router-dom';
+const truncateText = (text, maxLength) => {
+    if (!text) return '';
+    return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
+};
+
 const eventsNews = [
     { 
         id: 1, 
         date: "15 OCT 2025", 
         type: "EVENT", 
         title: "International Conference on AI & ML", 
-        desc: "A 3-day deep dive into Artificial Intelligence with global keynote speakers and industry experts." 
+        desc: "A 3-day deep dive into Artificial Intelligence with global keynote speakers and industry experts.",
+        actionType: "content"
     },
     { 
         id: 2, 
         date: "10 OCT 2025", 
         type: "NEWS", 
         title: "CEC Alumnus Receives Prestigious R&D Award", 
-        desc: "Our alumni from the 2018 batch recognized for their pioneering work in sustainable energy solutions." 
+        desc: "Our alumni from the 2018 batch recognized for their pioneering work in sustainable energy solutions.",
+        actionType: "content"
     },
     { 
         id: 3, 
         date: "05 OCT 2025", 
         type: "EVENT", 
         title: "Annual Sports Meet 'AARAMBH' 2025", 
-        desc: "The annual inter-collegiate sports championship returns. Register your teams by Oct 3rd." 
+        desc: "The annual inter-collegiate sports championship returns. Register your teams by Oct 3rd.",
+        actionType: "content"
     },
     { 
         id: 4, 
         date: "01 OCT 2025", 
         type: "NEWS", 
         title: "New Advanced Robotics Lab Inaugurated", 
-        desc: "A state-of-the-art facility for research in Automated Systems and IOT, funded by IHRD." 
+        desc: "A state-of-the-art facility for research in Automated Systems and IOT, funded by IHRD.",
+        actionType: "content"
     }
 ];
 
@@ -60,10 +69,6 @@ const EventsNews = () => {
                             Stay updated with the latest happenings, research breakthroughs, and upcoming cultural activities at CEC.
                         </p>
                     </div>
-                    <button className="flex items-center gap-2 px-8 py-4 bg-primary text-white rounded-full font-bold hover:bg-secondary transition-all hover:shadow-xl group shrink-0">
-                        View All Highlights
-                        <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
-                    </button>
                 </div>
 
                 <style>
@@ -87,9 +92,9 @@ const EventsNews = () => {
                 <div className="overflow-hidden relative py-10 mask-gradient-horizontal">
                     <div className="flex gap-8 events-track items-stretch min-w-max">
                         {[...displayData, ...displayData].map((item, idx) => (
-                            <div key={`${item._id || item.id}-${idx}`} className="w-[370px] group bg-white rounded-3xl border border-primary/10 overflow-hidden hover:shadow-[0_20px_50px_rgba(12,43,78,0.12)] transition-all duration-500 hover:-translate-y-2 flex flex-col h-full">
+                            <div key={`${item._id || item.id}-${idx}`} className="w-[370px] h-[460px] group bg-white rounded-3xl border border-primary/10 overflow-hidden hover:shadow-[0_20px_50px_rgba(12,43,78,0.12)] transition-all duration-500 hover:-translate-y-2 flex flex-col shrink-0">
                                 {/* Card Header with Date Banner */}
-                                <div className="h-48 relative bg-primary/5 flex items-center justify-center overflow-hidden">
+                                <div className="h-48 shrink-0 relative bg-primary/5 flex items-center justify-center overflow-hidden">
                                     {item.image ? (
                                         <img 
                                             src={urlFor(item.image).url()} 
@@ -113,20 +118,20 @@ const EventsNews = () => {
 
                                 {/* Card Body */}
                                 <div className="p-8 flex flex-col flex-grow">
-                                    <h3 className="text-[1.25rem] font-display font-bold text-primary mb-4 leading-tight group-hover:text-accent transition-colors">
+                                    <h3 className="text-[1.25rem] font-display font-bold text-primary mb-4 leading-tight group-hover:text-accent transition-colors line-clamp-2">
                                         {item.title}
                                     </h3>
-                                    <p className="text-secondary/70 text-base leading-relaxed mb-6 flex-grow ">
-                                        {item.desc || item.description}
+                                    <p className="text-secondary/70 text-base leading-relaxed mb-6 flex-grow min-h-[72px]">
+                                        {truncateText(item.desc || item.description, 110)}
                                     </p>
                                     
                                     {item.actionType === 'content' ? (
-                                        <Link to={`/event/${item._id}`} className="inline-flex items-center text-primary font-bold text-sm tracking-wide group/link">
+                                        <Link to={`/event/${item._id || item.id}`} className="inline-flex items-center text-primary font-bold text-sm tracking-wide group/link mt-auto">
                                             READ MORE
                                             <div className="ml-2 w-0 h-[2px] bg-accent group-hover/link:w-6 transition-all duration-300"></div>
                                         </Link>
                                     ) : (
-                                        <a href={item.linkUrl || "#"} target="_blank" rel="noopener noreferrer" className="inline-flex items-center text-primary font-bold text-sm tracking-wide group/link">
+                                        <a href={item.linkUrl || "#"} target="_blank" rel="noopener noreferrer" className="inline-flex items-center text-primary font-bold text-sm tracking-wide group/link mt-auto">
                                             READ MORE
                                             <div className="ml-2 w-0 h-[2px] bg-accent group-hover/link:w-6 transition-all duration-300"></div>
                                         </a>
