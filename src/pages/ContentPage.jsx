@@ -362,6 +362,7 @@ const ContentPage = () => {
     const { pathname } = useLocation();
 
     const [sanityContent, setSanityContent] = useState(null);
+    const [departmentInfo, setDepartmentInfo] = useState(null);
     const [departmentFaculty, setDepartmentFaculty] = useState([]);
     const [departmentHod, setDepartmentHod] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -387,19 +388,17 @@ const ContentPage = () => {
                     else if (slug === 'dept-electronics-engineering') deptShort = 'EC';
                     else if (slug === 'dept-electrical-engineering') deptShort = 'EEE';
 
-                    if (deptShort) {
-                        const facultyData = await client.fetch(`*[_type == "teacher" && references(*[_type == "department" && short == $short]._id) && !isHOD] | order(name asc)`, { short: deptShort });
-                        const hodData = await client.fetch(`*[_type == "teacher" && references(*[_type == "department" && short == $short]._id) && isHOD][0]`, { short: deptShort });
-                        
-                        setDepartmentFaculty(facultyData || []);
-                        setDepartmentHod(hodData || null);
-                    } else {
-                        setDepartmentFaculty([]);
-                        setDepartmentHod(null);
-                    }
+                    const facultyData = await client.fetch(`*[_type == "teacher" && references(*[_type == "department" && (slug.current == $slug || (short != null && $deptShort != "" && short == $deptShort))]._id) && !isHOD] | order(name asc)`, { slug, deptShort });
+                    const hodData = await client.fetch(`*[_type == "teacher" && references(*[_type == "department" && (slug.current == $slug || (short != null && $deptShort != "" && short == $deptShort))]._id) && isHOD][0]`, { slug, deptShort });
+                    const deptData = await client.fetch(`*[_type == "department" && (slug.current == $slug || (short != null && $deptShort != "" && short == $deptShort))][0]`, { slug, deptShort });
+                    
+                    setDepartmentFaculty(facultyData || []);
+                    setDepartmentHod(hodData || null);
+                    setDepartmentInfo(deptData || null);
                 } else {
                     setDepartmentFaculty([]);
                     setDepartmentHod(null);
+                    setDepartmentInfo(null);
                 }
 
                 setSanityContent(data);
@@ -457,8 +456,20 @@ const ContentPage = () => {
     }
 
     if (slug.startsWith('dept-')) {
-        const dept = departmentDetails[slug];
-        if (dept) {
+        const hardcodedDept = departmentDetails[slug] || {};
+        const fetchedDept = departmentInfo || {};
+        
+        const dept = {
+            ...hardcodedDept,
+            ...fetchedDept,
+            fullName: fetchedDept.fullName || hardcodedDept.fullName || fetchedDept.name || hardcodedDept.name,
+            description: fetchedDept.overview || hardcodedDept.description || [],
+            programmesTable: fetchedDept.programmes || hardcodedDept.programmesTable,
+            labsExtended: fetchedDept.labsExtended || hardcodedDept.labsExtended || fetchedDept.labs || hardcodedDept.labs,
+            technicalStaff: fetchedDept.technicalStaff || []
+        };
+
+        if (dept && Object.keys(dept).length > 0 && dept.name) {
             return (
                 <div className="min-h-screen bg-white">
                     {/* ─── Hero Section ─── */}
@@ -583,10 +594,24 @@ const ContentPage = () => {
                                         )}
                                         {dept.psos && (
                                             Array.isArray(dept.psos) ? (
-                                                <DepartmentAccordion 
-                                                    title="Program Specific Outcomes (PSOs)" 
-                                                    items={dept.psos} 
-                                                />
+                                                dept.psos.length > 0 && typeof dept.psos[0] === 'string' ? (
+                                                    <DepartmentAccordion 
+                                                        title="Program Specific Outcomes (PSOs)" 
+                                                        items={dept.psos} 
+                                                    />
+                                                ) : (
+                                                    <div className="space-y-4 mt-6">
+                                                        <div className="space-y-4">
+                                                            {dept.psos.map((prog, idx) => (
+                                                                <DepartmentAccordion 
+                                                                    key={idx}
+                                                                    title={`PSOs - ${prog.programName || prog}`} 
+                                                                    items={prog.outcomes || prog} 
+                                                                />
+                                                            ))}
+                                                        </div>
+                                                    </div>
+                                                )
                                             ) : (
                                                 <div className="space-y-4 mt-6">
                                                     <h4 className="text-xl font-display font-black text-primary uppercase">Program Specific Outcomes (PSOs)</h4>
@@ -710,6 +735,34 @@ const ContentPage = () => {
                                                             <td className="px-6 py-4 text-base font-black text-slate-400">{idx + 1}</td>
                                                             <td className="px-6 py-4 text-base font-black text-primary">{staff.name}</td>
                                                             <td className="px-6 py-4 text-base font-semibold text-slate-500">{staff.designation}</td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </section>
+                                )}
+
+                                {/* Technical Staff Section */}
+                                {dept.technicalStaff && dept.technicalStaff.length > 0 && (
+                                    <section className="space-y-8">
+                                        <h3 className="text-2xl font-display font-black text-primary uppercase flex items-center gap-4">
+                                            <span className="w-8 h-1.5 bg-accent rounded-full" />
+                                            Technical Staff
+                                        </h3>
+                                        <div className="overflow-x-auto rounded-2xl border border-slate-100 shadow-sm bg-white">
+                                            <table className="w-full text-left border-collapse bg-white">
+                                                <thead className="bg-slate-50">
+                                                    <tr className="border-b border-slate-100">
+                                                        <th className="px-6 py-4 font-black text-sm uppercase tracking-wider text-primary">Name</th>
+                                                        <th className="px-6 py-4 font-black text-sm uppercase tracking-wider text-primary">Designation</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody className="divide-y divide-slate-100">
+                                                    {dept.technicalStaff.map((staff, idx) => (
+                                                        <tr key={idx} className="hover:bg-slate-50/50 transition-colors">
+                                                            <td className="px-6 py-4 font-bold text-primary">{staff.name}</td>
+                                                            <td className="px-6 py-4 text-slate-600 font-medium">{staff.designation}</td>
                                                         </tr>
                                                     ))}
                                                 </tbody>

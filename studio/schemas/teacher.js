@@ -78,6 +78,27 @@ export default {
       type: 'text',
     },
     {
+      name: 'awards_and_honours',
+      title: 'Awards and Honours',
+      type: 'array',
+      of: [{type: 'string'}],
+      description: 'List of awards and honours received by this teacher',
+    },
+    {
+      name: 'positions_handled',
+      title: 'Positions Handled',
+      type: 'array',
+      of: [{type: 'string'}],
+      description: 'List of administrative or academic positions handled',
+    },
+    {
+      name: 'courses_handled',
+      title: 'Courses Handled',
+      type: 'array',
+      of: [{type: 'string'}],
+      description: 'List of courses taught by this teacher',
+    },
+    {
       name: 'publications',
       title: 'Publications',
       type: 'array',

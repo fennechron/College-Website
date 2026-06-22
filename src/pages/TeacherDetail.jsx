@@ -165,7 +165,7 @@ const TeacherDetail = () => {
                         viewport={{ once: true }}
                         className="space-y-6 pt-4"
                     >
-                        <h2 className="text-xl font-display font-black text-primary uppercase tracking-tight">Publication</h2>
+                        <h2 className="text-xl font-display font-black text-primary uppercase tracking-tight">Publications</h2>
                         <div className="space-y-4 max-w-4xl">
                             {teacher.publications.map((pub, i) => (
                                 <div 
@@ -174,6 +174,87 @@ const TeacherDetail = () => {
                                 >
                                     <p className="text-lg text-slate-700 font-medium">
                                         {pub}
+                                    </p>
+                                    <div className="w-10 h-10 rounded-full flex items-center justify-center bg-slate-50 text-slate-400 group-hover:bg-accent group-hover:text-white transition-colors shrink-0 ml-4">
+                                        <ChevronRight size={20} />
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </motion.div>
+                )}
+
+                {/* Awards & Honours Section */}
+                {teacher.awards_and_honours && teacher.awards_and_honours.length > 0 && (
+                    <motion.div 
+                        initial={{ y: 20, opacity: 0 }}
+                        whileInView={{ y: 0, opacity: 1 }}
+                        viewport={{ once: true }}
+                        className="space-y-6 pt-4"
+                    >
+                        <h2 className="text-xl font-display font-black text-primary uppercase tracking-tight">Awards & Honours</h2>
+                        <div className="space-y-4 max-w-4xl">
+                            {teacher.awards_and_honours.map((award, i) => (
+                                <div 
+                                    key={i} 
+                                    className="p-5 rounded-2xl bg-white border-2 border-slate-100 shadow-sm flex items-center justify-between group hover:border-accent/30 transition-colors cursor-pointer"
+                                >
+                                    <p className="text-lg text-slate-700 font-medium">
+                                        {award}
+                                    </p>
+                                    <div className="w-10 h-10 rounded-full flex items-center justify-center bg-slate-50 text-slate-400 group-hover:bg-accent group-hover:text-white transition-colors shrink-0 ml-4">
+                                        <ChevronRight size={20} />
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </motion.div>
+                )}
+
+                {/* Positions Handled Section */}
+                {teacher.positions_handled && teacher.positions_handled.length > 0 && (
+                    <motion.div 
+                        initial={{ y: 20, opacity: 0 }}
+                        whileInView={{ y: 0, opacity: 1 }}
+                        viewport={{ once: true }}
+                        className="space-y-6 pt-4"
+                    >
+                        <h2 className="text-xl font-display font-black text-primary uppercase tracking-tight">Positions Handled</h2>
+                        <div className="space-y-4 max-w-4xl">
+                            {teacher.positions_handled.map((position, i) => (
+                                <div 
+                                    key={i} 
+                                    className="p-5 rounded-2xl bg-white border-2 border-slate-100 shadow-sm flex items-center justify-between group hover:border-accent/30 transition-colors cursor-pointer"
+                                >
+                                    <p className="text-lg text-slate-700 font-medium">
+                                        {position}
+                                    </p>
+                                    <div className="w-10 h-10 rounded-full flex items-center justify-center bg-slate-50 text-slate-400 group-hover:bg-accent group-hover:text-white transition-colors shrink-0 ml-4">
+                                        <ChevronRight size={20} />
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </motion.div>
+                )}
+
+                {/* Courses Handled Section */}
+                {teacher.courses_handled && teacher.courses_handled.length > 0 && (
+                    <motion.div 
+                        initial={{ y: 20, opacity: 0 }}
+                        whileInView={{ y: 0, opacity: 1 }}
+                        viewport={{ once: true }}
+                        className="space-y-6 pt-4"
+                    >
+                        <h2 className="text-xl font-display font-black text-primary uppercase tracking-tight">Courses Handled</h2>
+                        <div className="space-y-4 max-w-4xl">
+                            {teacher.courses_handled.map((course, i) => (
+                                <div 
+                                    key={i} 
+                                    className="p-5 rounded-2xl bg-white border-2 border-slate-100 shadow-sm flex items-center justify-between group hover:border-accent/30 transition-colors cursor-pointer"
+                                >
+                                    <p className="text-lg text-slate-700 font-medium">
+                                        {course}
                                     </p>
                                     <div className="w-10 h-10 rounded-full flex items-center justify-center bg-slate-50 text-slate-400 group-hover:bg-accent group-hover:text-white transition-colors shrink-0 ml-4">
                                         <ChevronRight size={20} />
