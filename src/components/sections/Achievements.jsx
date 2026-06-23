@@ -33,7 +33,7 @@ const Achievements = () => {
                 <div className="relative w-full overflow-hidden rounded-xl shadow-lg border border-primary/20 bg-primary">
                     {/* Slider track */}
                     <div 
-                        className="flex h-[450px] md:h-[650px] w-full transition-transform duration-1000 ease-in-out"
+                        className="flex h-[350px] sm:h-[450px] md:h-[650px] w-full transition-transform duration-1000 ease-in-out"
                         style={{ transform: `translateX(-${currentIndex * 100}%)` }}
                     >
                         {slides.map((slide, index) => (
@@ -46,12 +46,12 @@ const Achievements = () => {
                                 <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-800/50 to-transparent"></div>
                                 
                                 {/* Text Content */}
-                                <div className="absolute inset-0 flex flex-col items-center justify-end text-center p-8 md:p-12 mb-10">
-                                    <div className={`transition-all duration-1000 transform ${currentIndex === index ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
-                                        <h3 className="text-3xl sm:text-4xl md:text-6xl font-display font-bold text-white mb-4 md:mb-6 drop-shadow-md">
+                                <div className="absolute inset-0 flex flex-col items-center justify-end text-center p-4 sm:p-12 mb-6 sm:mb-10">
+                                    <div className={`transition-all duration-1000 transform ${currentIndex === index ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'} max-w-[90%] sm:max-w-4xl`}>
+                                        <h3 className="text-xl sm:text-4xl md:text-6xl font-display font-bold text-white mb-2 sm:mb-6 drop-shadow-md">
                                             {slide.title}
                                         </h3>
-                                        <p className="text-lg md:text-2xl text-slate-200 max-w-4xl mx-auto drop-shadow-sm leading-relaxed">
+                                        <p className="text-xs sm:text-lg md:text-2xl text-slate-200 mx-auto drop-shadow-sm leading-relaxed">
                                             {slide.subtitle}
                                         </p>
                                     </div>

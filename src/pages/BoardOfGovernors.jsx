@@ -18,42 +18,42 @@ const BoardOfGovernors = () => {
     ];
 
     return (
-        <div className="min-h-screen bg-slate-50 pt-32 pb-24">
+        <div className="min-h-screen bg-slate-50 pt-20 sm:pt-32 pb-12 sm:pb-24">
             {/* ─── Header Section ─── */}
-            <div className="max-w-7xl mx-auto px-6 mb-16 text-center">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 mb-8 sm:mb-16 text-center">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="space-y-4"
+                    className="space-y-3 sm:space-y-4"
                 >
-                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-[0.7rem] font-black uppercase tracking-[0.3em]">
+                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-[0.65rem] sm:text-[0.7rem] font-black uppercase tracking-[0.3em]">
                         Administration
                     </div>
-                    <h1 className="text-5xl sm:text-6xl font-display font-black text-primary uppercase tracking-tighter">
+                    <h1 className="text-3xl sm:text-5xl lg:text-6xl font-display font-black text-primary uppercase tracking-tighter leading-none">
                         Board of Governors
                     </h1>
-                    <div className="w-24 h-1.5 bg-accent mx-auto rounded-full" />
-                    <p className="text-primary/60 font-bold max-w-2xl mx-auto mt-6">
+                    <div className="w-20 sm:w-24 h-1 sm:h-1.5 bg-accent mx-auto rounded-full" />
+                    <p className="text-primary/60 font-bold max-w-2xl mx-auto mt-4 sm:mt-6 text-xs sm:text-sm">
                         (As per GO. No. (Ms) No. 275/2020/HEDN dated 05/08/2020)
                     </p>
                 </motion.div>
             </div>
 
             {/* ─── Table Section ─── */}
-            <div className="max-w-7xl mx-auto px-6">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6">
                 <motion.div
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    className="bg-white rounded-[3rem] shadow-2xl border border-slate-100 overflow-hidden"
+                    className="bg-white rounded-2xl sm:rounded-[3rem] shadow-xl border border-slate-100 overflow-hidden"
                 >
                     <div className="overflow-x-auto">
                         <table className="w-full text-left border-collapse">
                             <thead>
                                 <tr className="bg-primary text-white">
-                                    <th className="py-8 px-8 font-display font-black uppercase tracking-widest text-[0.7rem] border-b border-white/10 w-24">Sl.No.</th>
-                                    <th className="py-8 px-8 font-display font-black uppercase tracking-widest text-[0.7rem] border-b border-white/10">Name and Designation</th>
-                                    <th className="py-8 px-8 font-display font-black uppercase tracking-widest text-[0.7rem] border-b border-white/10 w-48">Role</th>
-                                    <th className="py-8 px-8 font-display font-black uppercase tracking-widest text-[0.7rem] border-b border-white/10 w-48">Category</th>
+                                    <th className="py-4 sm:py-8 px-4 sm:px-8 font-display font-black uppercase tracking-widest text-[0.6rem] sm:text-[0.7rem] border-b border-white/10 w-16 sm:w-24 whitespace-nowrap">Sl.No.</th>
+                                    <th className="py-4 sm:py-8 px-4 sm:px-8 font-display font-black uppercase tracking-widest text-[0.6rem] sm:text-[0.7rem] border-b border-white/10 min-w-[200px]">Name and Designation</th>
+                                    <th className="py-4 sm:py-8 px-4 sm:px-8 font-display font-black uppercase tracking-widest text-[0.6rem] sm:text-[0.7rem] border-b border-white/10 w-36 sm:w-48 whitespace-nowrap">Role</th>
+                                    <th className="py-4 sm:py-8 px-4 sm:px-8 font-display font-black uppercase tracking-widest text-[0.6rem] sm:text-[0.7rem] border-b border-white/10 w-36 sm:w-48 whitespace-nowrap">Category</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -65,18 +65,18 @@ const BoardOfGovernors = () => {
                                         transition={{ delay: i * 0.05 }}
                                         className="group hover:bg-slate-50 transition-colors"
                                     >
-                                        <td className="py-8 px-8 border-b border-slate-50 font-display font-black text-primary/40 group-hover:text-accent transition-colors">
+                                        <td className="py-4 sm:py-8 px-4 sm:px-8 border-b border-slate-50 font-display font-black text-primary/40 group-hover:text-accent transition-colors text-xs sm:text-base">
                                             {gov.slNo.toString().padStart(2, '0')}
                                         </td>
-                                        <td className="py-8 px-8 border-b border-slate-50">
+                                        <td className="py-4 sm:py-8 px-4 sm:px-8 border-b border-slate-50">
                                             <div className="space-y-1">
-                                                <p className="text-lg font-bold text-primary leading-tight group-hover:translate-x-2 transition-transform duration-300">
+                                                <p className="text-sm sm:text-lg font-bold text-primary leading-tight group-hover:translate-x-2 transition-transform duration-300">
                                                     {gov.name}
                                                 </p>
                                             </div>
                                         </td>
-                                        <td className="py-8 px-8 border-b border-slate-50">
-                                            <span className={`inline-block px-4 py-1.5 rounded-lg text-[0.65rem] font-black uppercase tracking-widest ${
+                                        <td className="py-4 sm:py-8 px-4 sm:px-8 border-b border-slate-50 whitespace-nowrap">
+                                            <span className={`inline-block px-3 sm:px-4 py-1 sm:py-1.5 rounded-lg text-[0.6rem] sm:text-[0.65rem] font-black uppercase tracking-widest ${
                                                 gov.role === 'Chair Person' 
                                                 ? 'bg-accent text-white shadow-lg' 
                                                 : 'bg-slate-100 text-slate-500'
@@ -84,10 +84,10 @@ const BoardOfGovernors = () => {
                                                 {gov.role}
                                             </span>
                                         </td>
-                                        <td className="py-8 px-8 border-b border-slate-50">
+                                        <td className="py-4 sm:py-8 px-4 sm:px-8 border-b border-slate-50 whitespace-nowrap">
                                             {gov.category && (
-                                                <div className="flex items-center gap-2 text-primary font-bold text-sm">
-                                                    {gov.category === 'Educationalist' ? <BookOpen size={14} className="text-accent" /> : <Shield size={14} className="text-accent" />}
+                                                <div className="flex items-center gap-1.5 sm:gap-2 text-primary font-bold text-xs sm:text-sm">
+                                                    {gov.category === 'Educationalist' ? <BookOpen size={12} className="text-accent shrink-0" /> : <Shield size={12} className="text-accent shrink-0" />}
                                                     {gov.category}
                                                 </div>
                                             )}
@@ -98,8 +98,6 @@ const BoardOfGovernors = () => {
                         </table>
                     </div>
                 </motion.div>
-
-                 
             </div>
         </div>
     );

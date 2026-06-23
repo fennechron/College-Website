@@ -126,7 +126,7 @@ const NavItem = ({ item, closeMobileMenu }) => {
                 <Link
                     to={item.path}
                     onClick={closeMobileMenu}
-                    className="flex items-center gap-1 block whitespace-nowrap px-4 py-3 transition hover:bg-secondary hover:text-white md:py-[14px]"
+                    className="flex items-center gap-1 block whitespace-nowrap px-4 py-3 transition hover:bg-secondary hover:text-white md:py-[14px] text-white"
                 >
                     {item.isHome && <Home size={18} />} {item.name}
                 </Link>
@@ -139,23 +139,41 @@ const NavItem = ({ item, closeMobileMenu }) => {
             {/* Desktop link rendering */}
             <Link
                 to={item.path}
-                className="hidden md:flex items-center gap-1 whitespace-nowrap px-4 py-[14px] transition hover:bg-secondary hover:text-white cursor-pointer"
+                className="hidden md:flex items-center gap-1 whitespace-nowrap px-4 py-[14px] transition hover:bg-secondary hover:text-white cursor-pointer text-white"
             >
                 {item.name}
                 <ChevronDown size={14} className="group-hover:rotate-180 transition-transform duration-300" />
             </Link>
 
             {/* Mobile rendering */}
-            <div className="md:hidden flex items-center justify-between px-4 py-3 transition hover:bg-secondary hover:text-white">
-                <Link
-                    to={item.path}
-                    onClick={closeMobileMenu}
-                    className="flex-grow whitespace-nowrap font-semibold tracking-[0.03em]"
-                >
-                    {item.name}
-                </Link>
+            <div 
+                onClick={(e) => {
+                    if (item.path === '#') {
+                        e.preventDefault();
+                        setIsMobileExpanded(!isMobileExpanded);
+                    }
+                }}
+                className="md:hidden flex items-center justify-between px-4 py-3 transition hover:bg-secondary hover:text-white cursor-pointer"
+            >
+                {item.path === '#' ? (
+                    <span className="flex-grow whitespace-nowrap font-semibold tracking-[0.03em]">
+                        {item.name}
+                    </span>
+                ) : (
+                    <Link
+                        to={item.path}
+                        onClick={closeMobileMenu}
+                        className="flex-grow whitespace-nowrap font-semibold tracking-[0.03em]"
+                    >
+                        {item.name}
+                    </Link>
+                )}
                 <button
-                    onClick={(e) => { e.preventDefault(); setIsMobileExpanded(!isMobileExpanded); }}
+                    onClick={(e) => { 
+                        e.stopPropagation(); 
+                        e.preventDefault(); 
+                        setIsMobileExpanded(!isMobileExpanded); 
+                    }}
                     className="p-1 min-w-[32px] flex justify-end"
                 >
                     <ChevronDown size={18} className={`transition transform duration-300 ${isMobileExpanded ? 'rotate-180' : ''}`} />
@@ -270,6 +288,29 @@ const Navbar = () => {
         }).catch(console.error);
     }, []);
 
+    // Prevent body scrolling when mobile menu drawer is open
+    useEffect(() => {
+        if (isOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
+        return () => {
+            document.body.style.overflow = '';
+        };
+    }, [isOpen]);
+
+    // Close mobile menu automatically if user expands window to desktop size
+    useEffect(() => {
+        const handleResize = () => {
+            if (window.innerWidth >= 768) {
+                setIsOpen(false);
+            }
+        };
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
     const dynamicNavItems = navItems.map(item => {
         if (item.name === 'ORGANIZATIONS') {
             return {
@@ -289,45 +330,48 @@ const Navbar = () => {
                 <div className="flex w-full flex-col lg:flex-row items-center justify-between gap-[10px] lg:gap-[20px] px-4 lg:px-8">
                     {/* Left Side: College Logo and Title */}
                     <div className="flex flex-col sm:flex-row items-center gap-[10px] sm:gap-[20px] text-center sm:text-left">
-                        <img src={collegeLogo} alt="CEC Logo" className="h-[60px] w-[60px] sm:h-[70px] sm:w-[70px] lg:h-[100px] lg:w-[100px] shrink-0 object-contain rounded-sm shadow-sm" />
+                        <img src={collegeLogo} alt="CEC Logo" className="h-[50px] w-[50px] sm:h-[70px] sm:w-[70px] lg:h-[100px] lg:w-[100px] shrink-0 object-contain rounded-sm shadow-sm" />
                         <div className="flex flex-col justify-center">
-                            <h1 className="font-display text-[1rem] sm:text-[1rem] lg:text-[2.2rem] font-extrabold leading-tight text-primary uppercase mb-1 tracking-wide">
+                            <h1 className="font-display text-[1.1rem] sm:text-[1.5rem] lg:text-[2.2rem] font-extrabold leading-tight text-primary uppercase mb-1 tracking-wide">
                                 College Of Engineering Chengannur
                             </h1>
-                            <p className="text-[0.7rem] sm:text-[0.85rem] lg:text-[1.1rem] font-bold tracking-[0.02em] text-secondary">
+                            <p className="text-[0.75rem] sm:text-[0.85rem] lg:text-[1.1rem] font-bold tracking-[0.02em] text-secondary">
                                 ESTD : 1993 Institute of Human Resource Development(IHRD), Government of Kerala
                             </p>
-                            <p className="text-[0.65rem] sm:text-[0.8rem] lg:text-[1.05rem] font-semibold tracking-[0.02em] text-primary/80 mt-[2px]">
+                            <p className="text-[0.7rem] sm:text-[0.8rem] lg:text-[1.05rem] font-semibold tracking-[0.02em] text-primary/80 mt-[2px]">
                                 Affiliated to APJ Abdul Kalam Technological University, Kerala
                             </p>
                         </div>
                     </div>
 
                     {/* Right Side: Organizational Logos Provision (KTU, AICTE, IHRD etc.) */}
-                    <div className="flex items-center justify-center gap-4 lg:gap-6 mt-2 lg:mt-0 lg:pr-4">
-                        {/* Provision for 3 Logos: Replace with actual components or images as needed */}
+                    <div className="flex items-center justify-center gap-3 sm:gap-4 lg:gap-6 mt-2 lg:mt-0 lg:pr-4">
                         <div className="flex flex-col items-center gap-1 group/logo">
-                            <img src={excell} alt="IHRD Logo" className="h-[45px] w-[45px] sm:h-[50px] sm:w-[50px] lg:h-[110px] lg:w-[110px] shrink-0 object-contain rounded-sm shadow-sm" />
+                            <img src={excell} alt="IHRD Logo" className="h-[36px] w-[36px] sm:h-[50px] sm:w-[50px] lg:h-[110px] lg:w-[110px] shrink-0 object-contain rounded-sm shadow-sm" />
                         </div>
                         <div className="flex flex-col items-center gap-1 group/logo">
-                            <img src={ktulogo} alt="KTU Logo" className="h-[40px] w-[40px] sm:h-[45px] sm:w-[45px] lg:h-[90px] lg:w-[90px] shrink-0 object-contain rounded-sm shadow-sm" />
+                            <img src={ktulogo} alt="KTU Logo" className="h-[32px] w-[32px] sm:h-[45px] sm:w-[45px] lg:h-[90px] lg:w-[90px] shrink-0 object-contain rounded-sm shadow-sm" />
                         </div>
                         <div className="flex flex-col items-center gap-1 group/logo">
-                            <img src={ihrdlogo} alt="IHRD Logo" className="h-[40px] w-[40px] sm:h-[45px] sm:w-[45px] lg:h-[90px] lg:w-[90px] shrink-0 object-contain rounded-sm shadow-sm" />
+                            <img src={ihrdlogo} alt="IHRD Logo" className="h-[32px] w-[32px] sm:h-[45px] sm:w-[45px] lg:h-[90px] lg:w-[90px] shrink-0 object-contain rounded-sm shadow-sm" />
                         </div>
-
                     </div>
                 </div>
             </header>
 
-
-
-            {/* Bottom Tier: Navigation Links */}
+            {/* Bottom Tier: Sticky Navigation Links */}
             <nav className="sticky top-0 z-[1000] bg-primary transition-colors duration-300 shadow-[0_2px_20px_rgba(10,22,40,0.08)]">
-                <div className="relative flex w-full items-center px-4 lg:px-8">
-                    <ul
-                        className={`${isOpen ? 'flex' : 'hidden'} absolute left-0 top-[100%] w-full flex-col bg-primary py-2 text-[1rem] font-semibold tracking-[0.03em] text-white shadow-[0_15px_30px_rgba(0,0,0,0.3)] md:static md:flex md:w-auto md:flex-row md:py-0 md:shadow-none w-[100%] justify-between flex-wrap max-h-[calc(100vh-300px)] overflow-y-auto md:overflow-visible md:max-h-none custom-scrollbar`}
-                    >
+                <div className="relative flex w-full items-center px-4 lg:px-8 justify-between md:justify-start h-14 md:h-auto">
+                    {/* Mobile-only Branding on Sticky Navbar */}
+                    <div className="flex items-center gap-2 md:hidden">
+                        <img src={collegeLogo} alt="CEC Mini Logo" className="h-[32px] w-[32px] object-contain rounded bg-white p-0.5 shrink-0" />
+                        <span className="font-display text-[0.95rem] font-black text-white uppercase tracking-wider">
+                            CEC Chengannur
+                        </span>
+                    </div>
+
+                    {/* Desktop Navigation Links */}
+                    <ul className="hidden md:flex w-full md:w-auto md:flex-row md:py-0 md:shadow-none justify-between flex-wrap text-[1rem] font-semibold tracking-[0.03em] text-white">
                         {dynamicNavItems.map((item, index) => (
                             <NavItem key={index} item={item} closeMobileMenu={closeMobileMenu} />
                         ))}
@@ -335,14 +379,56 @@ const Navbar = () => {
 
                     {/* Hamburger Menu Toggle (Mobile) */}
                     <button
-                        onClick={() => setIsOpen(!isOpen)}
-                        className="ml-auto block p-[10px] text-white md:hidden my-2 border border-white/20 rounded-md hover:bg-white/10 transition"
-                        aria-label="Menu"
+                        onClick={() => setIsOpen(true)}
+                        className="ml-auto block p-2 text-white md:hidden border border-white/20 rounded-md hover:bg-white/10 transition shrink-0"
+                        aria-label="Open Menu"
                     >
-                        {isOpen ? <X size={24} /> : <Menu size={24} />}
+                        <Menu size={20} />
                     </button>
                 </div>
             </nav>
+
+            {/* Mobile Navigation Drawer */}
+            {/* Backdrop overlay */}
+            <div 
+                className={`fixed inset-0 z-[1001] bg-black/60 backdrop-blur-sm md:hidden transition-opacity duration-300 ${
+                    isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+                }`}
+                onClick={closeMobileMenu}
+            />
+
+            {/* Side Drawer Panel */}
+            <div
+                className={`fixed top-0 right-0 bottom-0 z-[1002] w-[290px] max-w-[85vw] bg-primary text-white shadow-2xl flex flex-col md:hidden transition-transform duration-300 ease-in-out transform ${
+                    isOpen ? 'translate-x-0' : 'translate-x-full'
+                }`}
+            >
+                {/* Drawer Header */}
+                <div className="flex items-center justify-between p-4 border-b border-white/10 shrink-0">
+                    <div className="flex items-center gap-2">
+                        <img src={collegeLogo} alt="CEC Mini Logo" className="h-[28px] w-[28px] object-contain rounded bg-white p-0.5 shrink-0" />
+                        <span className="font-display text-[0.85rem] font-black uppercase tracking-wider text-white">
+                            CEC Navigation
+                        </span>
+                    </div>
+                    <button 
+                        onClick={closeMobileMenu}
+                        className="p-1.5 hover:bg-white/10 rounded-lg transition"
+                        aria-label="Close Menu"
+                    >
+                        <X size={20} />
+                    </button>
+                </div>
+
+                {/* Drawer Links with custom scrollbar */}
+                <div className="flex-grow overflow-y-auto py-2 custom-scrollbar">
+                    <ul className="flex flex-col text-[0.9rem] font-semibold tracking-[0.03em] divide-y divide-white/5">
+                        {dynamicNavItems.map((item, index) => (
+                            <NavItem key={index} item={item} closeMobileMenu={closeMobileMenu} />
+                        ))}
+                    </ul>
+                </div>
+            </div>
         </>
     );
 };

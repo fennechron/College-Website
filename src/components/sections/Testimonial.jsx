@@ -62,45 +62,66 @@ const Testimonial = () => {
             </p>
         </div>
 
+        <style>
+        {`
+        :root {
+            --testimonial-width: 240px;
+            --testimonial-gap: 16px;
+        }
+        @media (min-width: 640px) {
+            :root {
+                --testimonial-width: 400px;
+                --testimonial-gap: 24px;
+            }
+        }
+        @keyframes scrollTestimonials {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(calc(-1 * (var(--testimonial-width) + var(--testimonial-gap)) * ${displayData.length})); }
+        }
+        .testimonials-track {
+            animation: scrollTestimonials 25s linear infinite;
+        }
+        .testimonials-track:hover {
+            animation-play-state: paused;
+        }
+        `}
+        </style>
+
         <div className="relative flex overflow-hidden group">
             {/* We duplicate the array to create an infinite scroll illusion */}
-            <motion.div 
-               className="flex space-x-6 min-w-max px-4 pb-8"
-               animate={{ x: [0, -1200] }}
-               transition={{ 
-                 repeat: Infinity,
-                 ease: "linear",
-                 duration: 25
-               }}
+            <div 
+               className="flex testimonials-track min-w-max px-4 pb-8"
+               style={{ gap: 'var(--testimonial-gap)' }}
             >
-                {[...displayData, ...displayData, ...displayData].map((t, idx) => (
+                {[...displayData, ...displayData].map((t, idx) => (
                     <div 
                         key={idx} 
-                        className="w-[350px] sm:w-[400px] relative rounded-2xl bg-white/10 border border-white/20 shadow-sm hover:shadow-md transition-shadow duration-300 cursor-pointer"
+                        className="relative rounded-2xl bg-white/10 border border-white/20 shadow-sm hover:shadow-md transition-shadow duration-300 cursor-pointer shrink-0"
+                        style={{ width: 'var(--testimonial-width)' }}
                     >
-                        <div className="h-full w-full rounded-2xl p-8 flex flex-col justify-between">
+                        <div className="h-full w-full rounded-2xl p-4 sm:p-8 flex flex-col justify-between">
                             <div>
-                                <div className="text-accent text-5xl font-serif leading-none mb-2 opacity-50">"</div>
-                                <p className="text-white leading-relaxed font-body mb-8">
+                                <div className="text-accent text-3xl sm:text-5xl font-serif leading-none mb-1 sm:mb-2 opacity-50">"</div>
+                                <p className="text-white text-xs sm:text-base leading-relaxed font-body mb-4 sm:mb-8">
                                     {t.quote}
                                 </p>
                             </div>
-                            <div className="flex items-center gap-4 mt-auto">
+                            <div className="flex items-center gap-2 sm:gap-4 mt-auto">
                                 <img 
                                     src={t.image && t.image.asset ? urlFor(t.image).url() : t.image} 
                                     alt={t.name} 
-                                    className="w-12 h-12 rounded-full object-cover border border-white/20"
+                                    className="w-8 h-8 sm:w-12 sm:h-12 rounded-full object-cover border border-white/20"
                                     loading="lazy"
                                 />
                                 <div>
-                                    <h4 className="text-white font-bold tracking-wide text-sm">{t.name}</h4>
-                                    <p className="text-white/70 text-[0.7rem] font-semibold uppercase tracking-wider">{t.role}</p>
+                                    <h4 className="text-white font-bold tracking-wide text-xs sm:text-sm">{t.name}</h4>
+                                    <p className="text-white/70 text-[0.65rem] sm:text-[0.7rem] font-semibold uppercase tracking-wider">{t.role}</p>
                                 </div>
                             </div>
                         </div>
                     </div>
                 ))}
-            </motion.div>
+            </div>
             
             {/* Fade overlays for smooth scrolling edges matching the new secondary background */}
             <div className="absolute inset-y-0 left-0 w-16 sm:w-32 bg-gradient-to-r from-secondary to-transparent z-20 pointer-events-none"></div>

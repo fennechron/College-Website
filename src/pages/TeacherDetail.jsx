@@ -71,29 +71,29 @@ const TeacherDetail = () => {
     const accent = teacher.color || '#0C2B4E';
 
     return (
-        <div className="min-h-screen bg-slate-50 pt-24 pb-20 px-6 sm:px-12">
-            <div className="max-w-6xl mx-auto space-y-20">
+        <div className="min-h-screen bg-slate-50 pt-20 sm:pt-28 pb-12 sm:pb-20 px-4 sm:px-12">
+            <div className="max-w-6xl mx-auto space-y-12 sm:space-y-20">
                 
                 {/* Top Section: Text and Blob Image */}
-                <div className="grid lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+                <div className="grid lg:grid-cols-12 gap-8 lg:gap-16 items-center">
                     
                     {/* Left Column: Info & About */}
-                    <div className="lg:col-span-7 space-y-8">
+                    <div className="lg:col-span-7 space-y-6 sm:space-y-8">
                         <div className="space-y-2">
-                            <h1 className="text-4xl sm:text-6xl font-display font-black text-primary leading-tight uppercase tracking-tighter">
+                            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-display font-black text-primary leading-tight uppercase tracking-tighter">
                                 {teacher.name}
                             </h1>
-                            <p className="text-xl font-bold uppercase tracking-widest" style={{ color: accent }}>
+                            <p className="text-base sm:text-xl font-bold uppercase tracking-widest" style={{ color: accent }}>
                                 {teacher.designation}
                             </p>
                         </div>
                         
-                        <div className="space-y-4 text-lg text-slate-600 leading-relaxed font-medium">
+                        <div className="space-y-3 sm:space-y-4 text-sm sm:text-lg text-slate-600 leading-relaxed font-medium text-justify">
                             {(teacher.about || []).map((p, i) => <p key={i}>{p}</p>)}
                         </div>
 
                         {/* Other Details - integrated gracefully as requested */}
-                        <div className="grid sm:grid-cols-2 gap-6 pt-8 border-t border-slate-200 mt-8">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 pt-6 sm:pt-8 border-t border-slate-200 mt-6 sm:mt-8">
                             <DetailItem icon={<GraduationCap />} label="Qualification" value={teacher.qualification} color={accent} />
                             <DetailItem icon={<Briefcase />} label="Experience" value={teacher.experience} color={accent} />
                             <DetailItem icon={<MapPin />} label="Office Location" value={teacher.staffRoom} color={accent} />
@@ -117,7 +117,7 @@ const TeacherDetail = () => {
                     {/* Right Column: Blob Image */}
                     <div className="lg:col-span-5 flex justify-center lg:justify-end">
                         <div 
-                            className="w-[300px] h-[350px] sm:w-[400px] sm:h-[450px] overflow-hidden shadow-2xl relative"
+                            className="w-[240px] h-[280px] xs:w-[300px] h-[350px] sm:w-[400px] sm:h-[450px] overflow-hidden shadow-2xl relative"
                             style={{ 
                                 borderRadius: '60% 40% 30% 70% / 60% 30% 70% 40%',
                                 border: `8px solid ${accent}20`
@@ -144,11 +144,11 @@ const TeacherDetail = () => {
                         className="space-y-6 pt-4"
                     >
                         <h2 className="text-xl font-display font-black text-primary uppercase tracking-tight">Specialization</h2>
-                        <div className="flex flex-wrap gap-3">
+                        <div className="flex flex-wrap gap-2 sm:gap-3">
                             {teacher.specialization.split(',').map((s, i) => (
                                 <span 
                                     key={i}
-                                    className="px-6 py-2.5 rounded-full bg-white border-2 border-slate-100 text-slate-700 font-bold text-sm shadow-sm hover:border-accent hover:text-accent transition-all cursor-default"
+                                    className="px-4 py-2 sm:px-6 sm:py-2.5 rounded-full bg-white border-2 border-slate-100 text-slate-700 font-bold text-xs sm:text-sm shadow-sm hover:border-accent hover:text-accent transition-all cursor-default"
                                 >
                                     {s.trim()}
                                 </span>
@@ -170,13 +170,13 @@ const TeacherDetail = () => {
                             {teacher.publications.map((pub, i) => (
                                 <div 
                                     key={i} 
-                                    className="p-5 rounded-2xl bg-white border-2 border-slate-100 shadow-sm flex items-center justify-between group hover:border-accent/30 transition-colors cursor-pointer"
+                                    className="p-4 sm:p-5 rounded-2xl bg-white border-2 border-slate-100 shadow-sm flex items-center justify-between group hover:border-accent/30 transition-colors cursor-pointer"
                                 >
-                                    <p className="text-lg text-slate-700 font-medium">
+                                    <p className="text-sm sm:text-lg text-slate-700 font-medium text-justify">
                                         {pub}
                                     </p>
-                                    <div className="w-10 h-10 rounded-full flex items-center justify-center bg-slate-50 text-slate-400 group-hover:bg-accent group-hover:text-white transition-colors shrink-0 ml-4">
-                                        <ChevronRight size={20} />
+                                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center bg-slate-50 text-slate-400 group-hover:bg-accent group-hover:text-white transition-colors shrink-0 ml-3 sm:ml-4">
+                                        <ChevronRight size={16} className="sm:w-5 sm:h-5" />
                                     </div>
                                 </div>
                             ))}
@@ -197,13 +197,13 @@ const TeacherDetail = () => {
                             {teacher.awards_and_honours.map((award, i) => (
                                 <div 
                                     key={i} 
-                                    className="p-5 rounded-2xl bg-white border-2 border-slate-100 shadow-sm flex items-center justify-between group hover:border-accent/30 transition-colors cursor-pointer"
+                                    className="p-4 sm:p-5 rounded-2xl bg-white border-2 border-slate-100 shadow-sm flex items-center justify-between group hover:border-accent/30 transition-colors cursor-pointer"
                                 >
-                                    <p className="text-lg text-slate-700 font-medium">
+                                    <p className="text-sm sm:text-lg text-slate-700 font-medium text-justify">
                                         {award}
                                     </p>
-                                    <div className="w-10 h-10 rounded-full flex items-center justify-center bg-slate-50 text-slate-400 group-hover:bg-accent group-hover:text-white transition-colors shrink-0 ml-4">
-                                        <ChevronRight size={20} />
+                                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center bg-slate-50 text-slate-400 group-hover:bg-accent group-hover:text-white transition-colors shrink-0 ml-3 sm:ml-4">
+                                        <ChevronRight size={16} className="sm:w-5 sm:h-5" />
                                     </div>
                                 </div>
                             ))}
@@ -224,13 +224,13 @@ const TeacherDetail = () => {
                             {teacher.positions_handled.map((position, i) => (
                                 <div 
                                     key={i} 
-                                    className="p-5 rounded-2xl bg-white border-2 border-slate-100 shadow-sm flex items-center justify-between group hover:border-accent/30 transition-colors cursor-pointer"
+                                    className="p-4 sm:p-5 rounded-2xl bg-white border-2 border-slate-100 shadow-sm flex items-center justify-between group hover:border-accent/30 transition-colors cursor-pointer"
                                 >
-                                    <p className="text-lg text-slate-700 font-medium">
+                                    <p className="text-sm sm:text-lg text-slate-700 font-medium text-justify">
                                         {position}
                                     </p>
-                                    <div className="w-10 h-10 rounded-full flex items-center justify-center bg-slate-50 text-slate-400 group-hover:bg-accent group-hover:text-white transition-colors shrink-0 ml-4">
-                                        <ChevronRight size={20} />
+                                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center bg-slate-50 text-slate-400 group-hover:bg-accent group-hover:text-white transition-colors shrink-0 ml-3 sm:ml-4">
+                                        <ChevronRight size={16} className="sm:w-5 sm:h-5" />
                                     </div>
                                 </div>
                             ))}
@@ -251,13 +251,13 @@ const TeacherDetail = () => {
                             {teacher.courses_handled.map((course, i) => (
                                 <div 
                                     key={i} 
-                                    className="p-5 rounded-2xl bg-white border-2 border-slate-100 shadow-sm flex items-center justify-between group hover:border-accent/30 transition-colors cursor-pointer"
+                                    className="p-4 sm:p-5 rounded-2xl bg-white border-2 border-slate-100 shadow-sm flex items-center justify-between group hover:border-accent/30 transition-colors cursor-pointer"
                                 >
-                                    <p className="text-lg text-slate-700 font-medium">
+                                    <p className="text-sm sm:text-lg text-slate-700 font-medium text-justify">
                                         {course}
                                     </p>
-                                    <div className="w-10 h-10 rounded-full flex items-center justify-center bg-slate-50 text-slate-400 group-hover:bg-accent group-hover:text-white transition-colors shrink-0 ml-4">
-                                        <ChevronRight size={20} />
+                                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center bg-slate-50 text-slate-400 group-hover:bg-accent group-hover:text-white transition-colors shrink-0 ml-3 sm:ml-4">
+                                        <ChevronRight size={16} className="sm:w-5 sm:h-5" />
                                     </div>
                                 </div>
                             ))}
@@ -274,12 +274,12 @@ const TeacherDetail = () => {
                         className="space-y-6 pt-4"
                     >
                         <h2 className="text-xl font-display font-black text-primary uppercase tracking-tight">Word from teacher</h2>
-                        <div className="relative p-10 sm:p-14 rounded-[2rem] bg-white border-2 border-slate-100 shadow-sm overflow-hidden group hover:border-accent/20 transition-all duration-500 max-w-5xl">
-                            <div className="absolute top-8 left-8 text-slate-100 transition-colors duration-500 group-hover:text-accent/10">
-                                <Quote size={64} fill="currentColor" />
+                        <div className="relative p-6 sm:p-14 rounded-2xl sm:rounded-[2rem] bg-white border-2 border-slate-100 shadow-sm overflow-hidden group hover:border-accent/20 transition-all duration-500 max-w-5xl">
+                            <div className="absolute top-4 left-4 sm:top-8 sm:left-8 text-slate-100 transition-colors duration-500 group-hover:text-accent/10">
+                                <Quote size={40} className="sm:w-16 sm:h-16" fill="currentColor" />
                             </div>
                             <div className="relative z-10">
-                                <p className="text-2xl sm:text-3xl font-display font-medium text-slate-800 leading-snug italic ml-8 sm:ml-12">
+                                <p className="text-base sm:text-2xl lg:text-3xl font-display font-medium text-slate-800 leading-snug italic ml-4 sm:ml-12 text-justify">
                                     "{teacher.wordFromTeacher}"
                                 </p>
                             </div>

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link, useLocation } from 'react-router-dom';
 import { pageContent } from '../data/pageContent';
 import { client, urlFor } from '../lib/sanity';
-import { ChevronRight, Home, ArrowLeft, Calendar, Users, BookOpen, Clock, FileText } from 'lucide-react';
+import { ChevronRight, Home, ArrowLeft, Calendar, Users, BookOpen, Clock, FileText, ExternalLink } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const AccordionItem = ({ title, items }) => {
@@ -322,22 +322,22 @@ const mcaCourse = {
 const DepartmentAccordion = ({ title, items }) => {
     const [isOpen, setIsOpen] = useState(false);
     return (
-        <div className="border border-slate-100 rounded-2xl overflow-hidden bg-white shadow-sm hover:shadow-md transition-all duration-300">
+        <div className="border border-slate-100 rounded-xl sm:rounded-2xl overflow-hidden bg-white shadow-sm hover:shadow-md transition-all duration-300">
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="w-full flex items-center justify-between px-6 py-5 bg-slate-50/50 hover:bg-slate-50 text-left transition-colors"
+                className="w-full flex items-center justify-between px-4 sm:px-6 py-4 sm:py-5 bg-slate-50/50 hover:bg-slate-50 text-left transition-colors"
             >
-                <span className="font-display font-black text-primary text-xl uppercase tracking-wide">{title}</span>
-                <span className={`text-accent font-black text-lg transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}>
+                <span className="font-display font-black text-primary text-base sm:text-xl uppercase tracking-wide">{title}</span>
+                <span className={`text-accent font-black text-sm sm:text-lg transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}>
                     ▼
                 </span>
             </button>
             {isOpen && (
-                <div className="p-6 border-t border-slate-100 bg-white space-y-4">
+                <div className="p-4 sm:p-6 border-t border-slate-100 bg-white space-y-3 sm:space-y-4">
                     {items && items.map((item, idx) => (
-                        <div key={idx} className="flex items-start gap-3.5 text-slate-700 font-bold text-[1.1rem] leading-relaxed">
-                            <span className="inline-flex items-center justify-center shrink-0 w-2.5 h-2.5 rounded-full bg-accent mt-2 shadow-sm" />
-                            <span className="flex-1">{item}</span>
+                        <div key={idx} className="flex items-start gap-3 text-slate-700 font-bold text-xs sm:text-base leading-relaxed">
+                            <span className="inline-flex items-center justify-center shrink-0 w-2 h-2 rounded-full bg-accent mt-2 shadow-sm" />
+                            <span className="flex-1 text-justify">{item}</span>
                         </div>
                     ))}
                 </div>
@@ -374,13 +374,27 @@ const ContentPage = () => {
         const fetchContent = async () => {
             setLoading(true);
             try {
-                const data = await client.fetch(`*[( _type == "pageContent" || _type == "committee" ) && slug.current == $slug][0] {
-                    ...,
-                    downloads[]{
-                        title,
-                        "pdfUrl": pdf.asset->url
-                    }
-                }`, { slug });
+                let data;
+                if (slug === 'admission-2026') {
+                    data = await client.fetch(`*[_type == "admission"][0] {
+                        ...,
+                        categories[]{
+                            ...,
+                            relatedDocuments[]{
+                                ...,
+                                "pdfUrl": file.asset->url
+                            }
+                        }
+                    }`);
+                } else {
+                    data = await client.fetch(`*[( _type == "pageContent" || _type == "committee" ) && slug.current == $slug][0] {
+                        ...,
+                        downloads[]{
+                            title,
+                            "pdfUrl": pdf.asset->url
+                        }
+                    }`, { slug });
+                }
                 
                 if (slug.startsWith('dept-')) {
                     let deptShort = '';
@@ -470,11 +484,69 @@ const ContentPage = () => {
             news: fetchedDept.news
         };
 
+        const renderHodCard = (extraClasses = '') => (
+            <div className={`bg-primary p-6 sm:p-8 rounded-[1.5rem] sm:rounded-[2rem] text-white shadow-xl text-center border border-white/5 space-y-6 ${extraClasses}`}>
+                <div className="text-left">
+                    <h3 className="text-lg sm:text-xl font-display font-black uppercase tracking-wider mb-2">Head of Department</h3>
+                    <div className="w-12 h-1 bg-accent rounded-full mb-4 sm:mb-6" />
+                </div>
+
+                {/* HOD Image Container (Provision) */}
+                <div className="relative w-36 h-36 sm:w-44 sm:h-44 mx-auto rounded-full overflow-hidden border-4 border-accent shadow-lg bg-white/10 group">
+                    {(departmentHod?.photo || dept.hodImage) ? (
+                        <img 
+                            src={departmentHod?.photo ? urlFor(departmentHod.photo).width(500).height(500).fit('crop').url() : dept.hodImage} 
+                            alt={departmentHod?.name || dept.hod} 
+                            className="w-full h-full object-cover"
+                        />
+                    ) : (
+                        <div className="w-full h-full bg-gradient-to-tr from-accent to-secondary flex items-center justify-center">
+                            <span className="text-white text-4xl sm:text-5xl font-black">{(departmentHod?.name || dept.hod || 'H').charAt(0)}</span>
+                        </div>
+                    )}
+                </div>
+
+                {/* HOD Text & Contact Details */}
+                <div className="space-y-4 text-left">
+                    <div className="text-center">
+                        <h4 className="text-xl sm:text-2xl font-display font-black text-white">{departmentHod?.name || dept.hod}</h4>
+                        {(departmentHod?.designation || dept.hodDesignation) && (
+                            <p className="text-[0.65rem] sm:text-xs text-accent font-black uppercase tracking-widest mt-1">
+                                {departmentHod?.designation || dept.hodDesignation}
+                            </p>
+                        )}
+                    </div>
+
+                    <div className="space-y-3 pt-4 border-t border-white/10">
+                        {/* We can use either departmentHod.email or dept.hodEmail */}
+                        {(departmentHod?.email || dept.hodEmail) && (
+                            <a href={`mailto:${departmentHod?.email || dept.hodEmail}`} className="flex items-center gap-3 text-sm font-semibold hover:text-accent transition-colors">
+                                <span className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center shrink-0">
+                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                                </span>
+                                <span className="truncate">{departmentHod?.email || dept.hodEmail}</span>
+                            </a>
+                        )}
+                        {dept.hodAddressLines && (
+                            <div className="flex items-start gap-3 text-sm font-semibold text-white/80">
+                                <span className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center shrink-0 text-white">
+                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                                </span>
+                                <div className="space-y-1 mt-1 text-xs sm:text-sm">
+                                    {dept.hodAddressLines.map((line, i) => <p key={i}>{line}</p>)}
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </div>
+        );
+
         if (dept && Object.keys(dept).length > 0 && dept.name) {
             return (
                 <div className="min-h-screen bg-white">
                     {/* ─── Hero Section ─── */}
-                    <div className="h-[60vh] relative overflow-hidden flex items-center justify-center">
+                    <div className="h-[40vh] sm:h-[60vh] min-h-[300px] relative overflow-hidden flex items-center justify-center">
                         <div className="absolute inset-0 z-0">
                             <img 
                                 src={dept.heroImage} 
@@ -484,17 +556,14 @@ const ContentPage = () => {
                             <div className="absolute inset-0 bg-gradient-to-b from-primary/80 via-primary/60 to-primary" />
                         </div>
                         
-                        <div className="relative z-10 max-w-6xl mx-auto px-6 text-center">
+                        <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 text-center">
                             <motion.div
                                 initial={{ opacity: 0, y: 30 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.6 }}
-                                className="space-y-6"
+                                className="space-y-4 sm:space-y-6"
                             >
-                                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/20 backdrop-blur-md text-white text-[0.7rem] font-black uppercase tracking-widest border border-white/10">
-                                    Academic Department
-                                </div>
-                                <h1 className="text-4xl sm:text-6xl font-display font-black text-white uppercase leading-tight tracking-tighter">
+                                <h1 className="text-xl sm:text-3xl lg:text-5xl font-display font-black text-white uppercase leading-tight tracking-tighter px-2">
                                     {dept.fullName}
                                 </h1>
                             </motion.div>
@@ -502,45 +571,48 @@ const ContentPage = () => {
                     </div>
 
                     {/* ─── Stats Bar ─── */}
-                    <div className="max-w-6xl mx-auto px-6 -mt-12 relative z-20">
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                    <div className="max-w-6xl mx-auto px-4 sm:px-6 -mt-8 sm:-mt-12 relative z-20">
+                        <div className="grid grid-cols-3 gap-2 sm:gap-6">
                             {dept.stats.map((stat, i) => (
                                 <motion.div
                                     key={i}
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ delay: i * 0.1 }}
-                                    className="bg-white p-8 rounded-2xl shadow-xl border border-slate-100 flex flex-col items-center text-center"
+                                    className="bg-white p-3 sm:p-8 rounded-xl sm:rounded-2xl shadow-xl border border-slate-100 flex flex-col items-center text-center justify-center min-h-[80px] sm:min-h-[120px]"
                                 >
-                                    <span className="text-3xl font-display font-black text-primary">{stat.value}</span>
-                                    <span className="text-[0.65rem] font-black uppercase tracking-widest text-slate-400 mt-1">{stat.label}</span>
+                                    <span className="text-lg sm:text-3xl font-display font-black text-primary leading-none">{stat.value}</span>
+                                    <span className="text-[0.5rem] sm:text-[0.65rem] font-black uppercase tracking-widest text-slate-400 mt-1 text-center leading-normal">{stat.label}</span>
                                 </motion.div>
                             ))}
                         </div>
                     </div>
 
                     {/* ─── Main Content ─── */}
-                    <div className="max-w-6xl mx-auto px-6 py-24 text-left">
-                        <div className="grid lg:grid-cols-3 gap-16">
+                    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-24 text-left">
+                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 lg:gap-16">
                             {/* Left: Detailed Description */}
-                            <div className="lg:col-span-2 space-y-12">
-                                <section className="space-y-8">
-                                    <h2 className="text-3xl font-display font-black text-primary uppercase flex items-center gap-4">
-                                        <span className="w-12 h-1.5 bg-accent rounded-full" />
+                            <div className="lg:col-span-2 space-y-10 lg:space-y-12">
+                                <section className="space-y-6 sm:space-y-8">
+                                    <h2 className="text-xl sm:text-3xl font-display font-black text-primary uppercase flex items-center gap-3 sm:gap-4">
+                                        <span className="w-10 sm:w-12 h-1 sm:h-1.5 bg-accent rounded-full" />
                                         Department Overview
                                     </h2>
-                                    <div className="space-y-6">
+                                    <div className="space-y-4 sm:space-y-6">
                                         {dept.description.map((para, i) => (
-                                            <p key={i} className="text-xl text-slate-600 leading-[1.8] font-medium text-justify">
+                                            <p key={i} className="text-sm sm:text-[1.15rem] leading-[1.8] text-slate-600 font-medium text-justify">
                                                 {para}
                                             </p>
                                         ))}
                                     </div>
                                 </section>
 
+                                {/* Render HOD Card on Mobile viewports right after Department Overview */}
+                                {renderHodCard('lg:hidden')}
+
                                 {/* Vision & Mission Accordions */}
                                 {(dept.vision || dept.mission) && (
-                                    <section className="space-y-6">
+                                    <section className="space-y-4 sm:space-y-6">
                                         {dept.vision && (
                                             <DepartmentAccordion 
                                                 title="Department Vision" 
@@ -557,25 +629,26 @@ const ContentPage = () => {
                                 )}
 
                                 {/* Programmes Offered Section */}
+                                {/* Programmes Offered Section */}
                                 {dept.programmesTable && (
-                                    <section className="space-y-8">
-                                        <h3 className="text-2xl font-display font-black text-primary uppercase flex items-center gap-4">
-                                            <span className="w-8 h-1.5 bg-accent rounded-full" />
+                                    <section className="space-y-6 sm:space-y-8">
+                                        <h3 className="text-lg sm:text-2xl font-display font-black text-primary uppercase flex items-center gap-3 sm:gap-4">
+                                            <span className="w-8 h-1 sm:h-1.5 bg-accent rounded-full" />
                                             Programmes Offered
                                         </h3>
-                                        <div className="overflow-x-auto rounded-2xl border border-slate-100 shadow-sm bg-white">
+                                        <div className="overflow-x-auto rounded-xl sm:rounded-2xl border border-slate-100 shadow-sm bg-white">
                                             <table className="w-full text-left border-collapse bg-white">
                                                 <thead>
                                                     <tr className="bg-slate-50 border-b border-slate-100">
-                                                        <th className="px-6 py-4 font-black text-sm uppercase tracking-wider text-primary">Programme</th>
-                                                        <th className="px-6 py-4 font-black text-sm uppercase tracking-wider text-primary">Duration</th>
+                                                        <th className="px-3 sm:px-6 py-2.5 sm:py-4 font-black text-[0.65rem] sm:text-sm uppercase tracking-wider text-primary">Programme</th>
+                                                        <th className="px-3 sm:px-6 py-2.5 sm:py-4 font-black text-[0.65rem] sm:text-sm uppercase tracking-wider text-primary">Duration</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody className="divide-y divide-slate-100 text-left">
                                                     {dept.programmesTable.map((prog, idx) => (
                                                         <tr key={idx} className="hover:bg-slate-50/50 transition-colors">
-                                                            <td className="px-6 py-5 text-base font-black text-primary">{prog.name}</td>
-                                                            <td className="px-6 py-5 text-base font-black text-accent">{prog.duration}</td>
+                                                            <td className="px-3 sm:px-6 py-3 sm:py-5 text-xs sm:text-base font-black text-primary">{prog.name}</td>
+                                                            <td className="px-3 sm:px-6 py-3 sm:py-5 text-xs sm:text-base font-black text-accent">{prog.duration}</td>
                                                         </tr>
                                                     ))}
                                                 </tbody>
@@ -615,7 +688,7 @@ const ContentPage = () => {
                                                 )
                                             ) : (
                                                 <div className="space-y-4 mt-6">
-                                                    <h4 className="text-xl font-display font-black text-primary uppercase">Program Specific Outcomes (PSOs)</h4>
+                                                    <h4 className="text-base sm:text-xl font-display font-black text-primary uppercase">Program Specific Outcomes (PSOs)</h4>
                                                     <div className="space-y-4">
                                                         {Object.entries(dept.psos).map(([prog, psos]) => (
                                                             <DepartmentAccordion 
@@ -632,26 +705,26 @@ const ContentPage = () => {
                                 )}
 
                                 {/* Laboratory Facility */}
-                                <section className="space-y-8">
-                                    <h3 className="text-2xl font-display font-black text-primary uppercase flex items-center gap-4">
-                                        <span className="w-8 h-1.5 bg-accent rounded-full" />
+                                <section className="space-y-6 sm:space-y-8">
+                                    <h3 className="text-lg sm:text-2xl font-display font-black text-primary uppercase flex items-center gap-3 sm:gap-4">
+                                        <span className="w-8 h-1 sm:h-1.5 bg-accent rounded-full" />
                                         Laboratory Facility
                                     </h3>
-                                    <div className="grid gap-6">
+                                    <div className="grid gap-4 sm:gap-6">
                                         {dept.labsExtended ? dept.labsExtended.map((lab, i) => {
                                             const [title, desc] = lab.split(': ');
                                             return (
-                                                <div key={i} className="bg-slate-50 p-6 rounded-2xl border border-slate-100 hover:shadow-md transition-all duration-300">
-                                                    <div className="flex items-start gap-4">
-                                                        <span className="inline-flex items-center justify-center shrink-0 w-8 h-8 rounded-full bg-accent text-primary font-black text-sm">
+                                                <div key={i} className="bg-slate-50 p-4 sm:p-6 rounded-xl sm:rounded-2xl border border-slate-100 hover:shadow-md transition-all duration-300">
+                                                    <div className="flex items-start gap-3 sm:gap-4">
+                                                        <span className="inline-flex items-center justify-center shrink-0 w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-accent text-primary font-black text-xs sm:text-sm">
                                                             {i + 1}
                                                         </span>
                                                         <div className="space-y-1">
-                                                            <h4 className="text-lg font-display font-black text-primary uppercase">
+                                                            <h4 className="text-sm sm:text-lg font-display font-black text-primary uppercase">
                                                                 {title}
                                                             </h4>
                                                             {desc && (
-                                                                <p className="text-slate-600 text-base font-medium leading-relaxed">
+                                                                <p className="text-slate-600 text-xs sm:text-base font-medium leading-relaxed text-justify">
                                                                     {desc}
                                                                 </p>
                                                             )}
@@ -660,11 +733,11 @@ const ContentPage = () => {
                                                 </div>
                                             );
                                         }) : dept.labs.map((lab, i) => (
-                                            <div key={i} className="flex items-start gap-3.5 p-4 bg-slate-50 rounded-xl border border-slate-100">
-                                                <span className="inline-flex items-center justify-center shrink-0 w-6 h-6 rounded-full bg-accent/15 text-accent text-xs font-black">
+                                            <div key={i} className="flex items-start gap-3 p-3.5 bg-slate-50 rounded-xl border border-slate-100">
+                                                <span className="inline-flex items-center justify-center shrink-0 w-5 h-5 rounded-full bg-accent/15 text-accent text-[0.6rem] sm:text-xs font-black">
                                                     ✓
                                                 </span>
-                                                <span className="text-primary font-bold text-base">{lab}</span>
+                                                <span className="text-primary font-bold text-xs sm:text-base">{lab}</span>
                                             </div>
                                         ))}
                                     </div>
@@ -672,31 +745,31 @@ const ContentPage = () => {
 
                                 {/* Faculty Section */}
                                 {departmentFaculty && departmentFaculty.length > 0 && (
-                                    <section className="space-y-8">
-                                        <h3 className="text-2xl font-display font-black text-primary uppercase flex items-center gap-4">
-                                            <span className="w-8 h-1.5 bg-accent rounded-full" />
+                                    <section className="space-y-6 sm:space-y-8">
+                                        <h3 className="text-lg sm:text-2xl font-display font-black text-primary uppercase flex items-center gap-3 sm:gap-4">
+                                            <span className="w-8 h-1 sm:h-1.5 bg-accent rounded-full" />
                                             Faculty
                                         </h3>
-                                        <div className="overflow-x-auto rounded-2xl border border-slate-100 shadow-sm bg-white max-h-[500px] overflow-y-auto custom-scrollbar">
+                                        <div className="overflow-x-auto rounded-xl sm:rounded-2xl border border-slate-100 shadow-sm bg-white max-h-[500px] overflow-y-auto custom-scrollbar">
                                             <table className="w-full text-left border-collapse bg-white">
                                                 <thead className="sticky top-0 z-10 bg-slate-50">
                                                     <tr className="border-b border-slate-100">
-                                                        <th className="px-6 py-4 font-black text-sm uppercase tracking-wider text-primary">SL NO.</th>
-                                                        <th className="px-6 py-4 font-black text-sm uppercase tracking-wider text-primary">Name</th>
-                                                        <th className="px-6 py-4 font-black text-sm uppercase tracking-wider text-primary">Designation</th>
+                                                        <th className="px-3 sm:px-6 py-3 sm:py-4 font-black text-[0.65rem] sm:text-sm uppercase tracking-wider text-primary">SL NO.</th>
+                                                        <th className="px-3 sm:px-6 py-3 sm:py-4 font-black text-[0.65rem] sm:text-sm uppercase tracking-wider text-primary">Name</th>
+                                                        <th className="px-3 sm:px-6 py-3 sm:py-4 font-black text-[0.65rem] sm:text-sm uppercase tracking-wider text-primary">Designation</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody className="divide-y divide-slate-100 text-left">
                                                     {departmentFaculty.map((fac, idx) => (
                                                         <tr key={idx} className="hover:bg-slate-50/50 transition-colors">
-                                                            <td className="px-6 py-4 text-base font-black text-slate-400">{idx + 1}</td>
-                                                            <td className="px-6 py-4 text-base font-black text-primary">
+                                                            <td className="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-base font-black text-slate-400">{idx + 1}</td>
+                                                            <td className="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-base font-black text-primary">
                                                                 <Link to={`/teacher/${fac._id || generateId(fac.name)}`} className="hover:text-accent hover:underline transition-colors">
                                                                     {fac.name}
                                                                 </Link>
                                                             </td>
-                                                            <td className="px-6 py-4 text-base font-semibold text-slate-600">
-                                                                <span className={`inline-block px-2.5 py-1 rounded-md text-[0.7rem] font-black uppercase tracking-wider ${
+                                                            <td className="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-base font-semibold text-slate-600">
+                                                                <span className={`inline-block px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md text-[0.6rem] sm:text-[0.7rem] font-black uppercase tracking-wider ${
                                                                     fac.designation && fac.designation.toLowerCase().includes('head')
                                                                         ? 'bg-accent/15 text-accent border border-accent/25'
                                                                         : fac.designation && fac.designation.toLowerCase().includes('associate')
@@ -714,28 +787,28 @@ const ContentPage = () => {
                                     </section>
                                 )}
 
-                                {/* Technical Staff Section */}
+                                {/* Technical Staff Section (List format) */}
                                 {dept.technicalStaffList && (
-                                    <section className="space-y-8">
-                                        <h3 className="text-2xl font-display font-black text-primary uppercase flex items-center gap-4">
-                                            <span className="w-8 h-1.5 bg-accent rounded-full" />
+                                    <section className="space-y-6 sm:space-y-8">
+                                        <h3 className="text-lg sm:text-2xl font-display font-black text-primary uppercase flex items-center gap-3 sm:gap-4">
+                                            <span className="w-8 h-1 sm:h-1.5 bg-accent rounded-full" />
                                             Technical Staff
                                         </h3>
-                                        <div className="overflow-x-auto rounded-2xl border border-slate-100 shadow-sm bg-white">
+                                        <div className="overflow-x-auto rounded-xl sm:rounded-2xl border border-slate-100 shadow-sm bg-white">
                                             <table className="w-full text-left border-collapse bg-white">
                                                 <thead>
                                                     <tr className="bg-slate-50 border-b border-slate-100">
-                                                        <th className="px-6 py-4 font-black text-sm uppercase tracking-wider text-primary">SL NO.</th>
-                                                        <th className="px-6 py-4 font-black text-sm uppercase tracking-wider text-primary">Name</th>
-                                                        <th className="px-6 py-4 font-black text-sm uppercase tracking-wider text-primary">Designation</th>
+                                                        <th className="px-3 sm:px-6 py-3 sm:py-4 font-black text-[0.65rem] sm:text-sm uppercase tracking-wider text-primary">SL NO.</th>
+                                                        <th className="px-3 sm:px-6 py-3 sm:py-4 font-black text-[0.65rem] sm:text-sm uppercase tracking-wider text-primary">Name</th>
+                                                        <th className="px-3 sm:px-6 py-3 sm:py-4 font-black text-[0.65rem] sm:text-sm uppercase tracking-wider text-primary">Designation</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody className="divide-y divide-slate-100 text-left">
                                                     {dept.technicalStaffList.map((staff, idx) => (
                                                         <tr key={idx} className="hover:bg-slate-50/50 transition-colors">
-                                                            <td className="px-6 py-4 text-base font-black text-slate-400">{idx + 1}</td>
-                                                            <td className="px-6 py-4 text-base font-black text-primary">{staff.name}</td>
-                                                            <td className="px-6 py-4 text-base font-semibold text-slate-500">{staff.designation}</td>
+                                                            <td className="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-base font-black text-slate-400">{idx + 1}</td>
+                                                            <td className="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-base font-black text-primary">{staff.name}</td>
+                                                            <td className="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-base font-semibold text-slate-500">{staff.designation}</td>
                                                         </tr>
                                                     ))}
                                                 </tbody>
@@ -744,26 +817,26 @@ const ContentPage = () => {
                                     </section>
                                 )}
 
-                                {/* Technical Staff Section */}
+                                {/* Technical Staff Section (Grid/Key format) */}
                                 {dept.technicalStaff && dept.technicalStaff.length > 0 && (
-                                    <section className="space-y-8">
-                                        <h3 className="text-2xl font-display font-black text-primary uppercase flex items-center gap-4">
-                                            <span className="w-8 h-1.5 bg-accent rounded-full" />
+                                    <section className="space-y-6 sm:space-y-8">
+                                        <h3 className="text-lg sm:text-2xl font-display font-black text-primary uppercase flex items-center gap-3 sm:gap-4">
+                                            <span className="w-8 h-1 sm:h-1.5 bg-accent rounded-full" />
                                             Technical Staff
                                         </h3>
-                                        <div className="overflow-x-auto rounded-2xl border border-slate-100 shadow-sm bg-white">
+                                        <div className="overflow-x-auto rounded-xl sm:rounded-2xl border border-slate-100 shadow-sm bg-white">
                                             <table className="w-full text-left border-collapse bg-white">
                                                 <thead className="bg-slate-50">
                                                     <tr className="border-b border-slate-100">
-                                                        <th className="px-6 py-4 font-black text-sm uppercase tracking-wider text-primary">Name</th>
-                                                        <th className="px-6 py-4 font-black text-sm uppercase tracking-wider text-primary">Designation</th>
+                                                        <th className="px-3 sm:px-6 py-3 sm:py-4 font-black text-[0.65rem] sm:text-sm uppercase tracking-wider text-primary">Name</th>
+                                                        <th className="px-3 sm:px-6 py-3 sm:py-4 font-black text-[0.65rem] sm:text-sm uppercase tracking-wider text-primary">Designation</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody className="divide-y divide-slate-100">
                                                     {dept.technicalStaff.map((staff, idx) => (
                                                         <tr key={idx} className="hover:bg-slate-50/50 transition-colors">
-                                                            <td className="px-6 py-4 font-bold text-primary">{staff.name}</td>
-                                                            <td className="px-6 py-4 text-slate-600 font-medium">{staff.designation}</td>
+                                                            <td className="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-base font-bold text-primary">{staff.name}</td>
+                                                            <td className="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-base text-slate-600 font-medium">{staff.designation}</td>
                                                         </tr>
                                                     ))}
                                                 </tbody>
@@ -774,81 +847,27 @@ const ContentPage = () => {
                             </div>
 
                             {/* Right Sidebar: HOD Profile & Details */}
-                            <div className="space-y-8">
-                                <div className="bg-primary p-8 rounded-[2rem] text-white shadow-xl text-center border border-white/5 space-y-6">
-                                    <div className="text-left">
-                                        <h3 className="text-xl font-display font-black uppercase tracking-wider mb-2">Head of Department</h3>
-                                        <div className="w-12 h-1 bg-accent rounded-full mb-6" />
-                                    </div>
-
-                                    {/* HOD Image Container (Provision) */}
-                                    <div className="relative w-44 h-44 mx-auto rounded-full overflow-hidden border-4 border-accent shadow-lg bg-white/10 group">
-                                        {(departmentHod?.photo || dept.hodImage) ? (
-                                            <img 
-                                                src={departmentHod?.photo ? urlFor(departmentHod.photo).width(500).height(500).fit('crop').url() : dept.hodImage} 
-                                                alt={departmentHod?.name || dept.hod} 
-                                                className="w-full h-full object-cover"
-                                            />
-                                        ) : (
-                                            <div className="w-full h-full bg-gradient-to-tr from-accent to-secondary flex items-center justify-center">
-                                                <span className="text-white text-5xl font-black">{(departmentHod?.name || dept.hod || 'H').charAt(0)}</span>
-                                            </div>
-                                        )}
-                                    </div>
-
-                                    {/* HOD Text & Contact Details */}
-                                    <div className="space-y-4 text-left">
-                                        <div className="text-center">
-                                            <h4 className="text-2xl font-display font-black text-white">{departmentHod?.name || dept.hod}</h4>
-                                            {(departmentHod?.designation || dept.hodDesignation) && (
-                                                <p className="text-xs text-accent font-black uppercase tracking-widest mt-1">
-                                                    {departmentHod?.designation || dept.hodDesignation}
-                                                </p>
-                                            )}
-                                        </div>
-
-                                        <div className="space-y-3 pt-4 border-t border-white/10">
-                                            {/* We can use either departmentHod.email or dept.hodEmail */}
-                                            {(departmentHod?.email || dept.hodEmail) && (
-                                                <a href={`mailto:${departmentHod?.email || dept.hodEmail}`} className="flex items-center gap-3 text-sm font-semibold hover:text-accent transition-colors">
-                                                    <span className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center shrink-0">
-                                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                                                    </span>
-                                                    <span className="truncate">{departmentHod?.email || dept.hodEmail}</span>
-                                                </a>
-                                            )}
-                                            {dept.hodAddressLines && (
-                                                <div className="flex items-start gap-3 text-sm font-semibold text-white/80">
-                                                    <span className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center shrink-0 text-white">
-                                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                                                    </span>
-                                                    <div className="space-y-1 mt-1">
-                                                        {dept.hodAddressLines.map((line, i) => <p key={i}>{line}</p>)}
-                                                    </div>
-                                                </div>
-                                            )}
-                                        </div>
-                                    </div>
-                                </div>
+                            <div className="space-y-6 sm:space-y-8">
+                                {renderHodCard('hidden lg:block')}
 
                                 {/* Programs & Department Info Card */}
-                                <div className="bg-slate-50 p-8 rounded-[2rem] border border-slate-100 text-left space-y-6">
+                                <div className="bg-slate-50 p-6 sm:p-8 rounded-[1.5rem] sm:rounded-[2rem] border border-slate-100 text-left space-y-6">
                                     <div>
-                                        <h3 className="text-lg font-display font-black text-primary uppercase tracking-wider mb-2">Department Info</h3>
+                                        <h3 className="text-base sm:text-lg font-display font-black text-primary uppercase tracking-wider mb-2">Department Info</h3>
                                         <div className="w-12 h-1 bg-accent rounded-full" />
                                     </div>
 
                                     <div className="space-y-4">
                                         <div className="bg-white p-4 rounded-xl border border-slate-100 shadow-sm">
-                                            <div className="text-xs text-slate-400 font-black uppercase tracking-wider mb-1">Established</div>
-                                            <div className="font-bold text-base text-primary">{dept.founded}</div>
+                                            <div className="text-[0.65rem] sm:text-xs text-slate-400 font-black uppercase tracking-wider mb-1">Established</div>
+                                            <div className="font-bold text-sm sm:text-base text-primary">{dept.founded}</div>
                                         </div>
 
                                         <div className="bg-white p-4 rounded-xl border border-slate-100 shadow-sm">
-                                            <div className="text-xs text-slate-400 font-black uppercase tracking-wider mb-2">Core Programs</div>
+                                            <div className="text-[0.65rem] sm:text-xs text-slate-400 font-black uppercase tracking-wider mb-2">Core Programs</div>
                                             <ul className="space-y-1.5">
                                                 {dept.programs.map((prog, i) => (
-                                                    <li key={i} className="text-slate-600 text-xs font-bold flex items-center gap-2">
+                                                    <li key={i} className="text-slate-600 text-[0.7rem] sm:text-xs font-bold flex items-center gap-2">
                                                         <span className="w-1.5 h-1.5 bg-accent rounded-full shrink-0" />
                                                         {prog}
                                                     </li>
@@ -861,35 +880,35 @@ const ContentPage = () => {
                         </div>
 
                         {/* Department News Section */}
-                        <section className="mt-16 pt-12 border-t border-slate-100 space-y-8 text-left">
-                            <div className="text-center space-y-3">
-                                <span className="text-xs font-black uppercase tracking-widest text-accent bg-accent/10 px-4 py-1.5 rounded-full">
+                        <section className="mt-12 sm:mt-16 pt-10 sm:pt-12 border-t border-slate-100 space-y-6 sm:space-y-8 text-left">
+                            <div className="text-center space-y-2 sm:space-y-3">
+                                <span className="text-[0.65rem] sm:text-xs font-black uppercase tracking-widest text-accent bg-accent/10 px-3 py-1 sm:px-4 sm:py-1.5 rounded-full">
                                     Announcements
                                 </span>
-                                <h3 className="text-3xl font-display font-black text-primary uppercase">
+                                <h3 className="text-2xl sm:text-3xl font-display font-black text-primary uppercase">
                                     Department News &amp; Updates
                                 </h3>
-                                <p className="text-slate-500 font-semibold max-w-xl mx-auto text-base">
+                                <p className="text-slate-500 font-semibold max-w-xl mx-auto text-sm sm:text-base">
                                     Stay informed with the latest updates, workshops, achievements, and notices from the department.
                                 </p>
                             </div>
-                            <div className="grid md:grid-cols-2 gap-8">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
                                 {dept.news ? dept.news.map((item, idx) => (
-                                    <div key={idx} className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md hover:border-accent/25 transition-all group flex flex-col justify-between">
-                                        <div className="space-y-4">
-                                            <span className="inline-flex items-center gap-2 text-xs font-black text-accent uppercase">
+                                    <div key={idx} className="bg-white p-6 sm:p-8 rounded-2xl sm:rounded-3xl border border-slate-100 shadow-sm hover:shadow-md hover:border-accent/25 transition-all group flex flex-col justify-between">
+                                        <div className="space-y-3 sm:space-y-4">
+                                            <span className="inline-flex items-center gap-2 text-[0.65rem] sm:text-xs font-black text-accent uppercase">
                                                 📅 {item.date}
                                             </span>
-                                            <h4 className="text-xl font-display font-black text-primary group-hover:text-accent transition-colors">
+                                            <h4 className="text-lg sm:text-xl font-display font-black text-primary group-hover:text-accent transition-colors">
                                                 {item.title}
                                             </h4>
-                                            <p className="text-slate-500 text-sm leading-relaxed font-semibold">
+                                            <p className="text-slate-500 text-xs sm:text-sm leading-relaxed font-semibold">
                                                 {item.description}
                                             </p>
                                         </div>
                                     </div>
                                 )) : (
-                                    <div className="col-span-2 text-center py-12 text-slate-400 font-bold">
+                                    <div className="col-span-1 md:col-span-2 text-center py-12 text-slate-400 font-bold">
                                         No recent announcements at this time.
                                     </div>
                                 )}
@@ -905,7 +924,7 @@ const ContentPage = () => {
         return (
             <div className="min-h-screen bg-white">
                 {/* ─── Hero Section ─── */}
-                <div className="h-[60vh] relative overflow-hidden flex items-center justify-center">
+                <div className="h-[40vh] sm:h-[60vh] min-h-[300px] relative overflow-hidden flex items-center justify-center">
                     <div className="absolute inset-0 z-0">
                         {content.image ? (
                             <img 
@@ -919,15 +938,15 @@ const ContentPage = () => {
                         <div className="absolute inset-0 bg-gradient-to-b from-primary/80 via-primary/60 to-primary" />
                     </div>
                     
-                    <div className="relative z-10 max-w-6xl mx-auto px-6 text-center">
+                    <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 text-center">
                         <motion.div
                             initial={{ opacity: 0, y: 30 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.6 }}
-                            className="space-y-6"
+                            className="space-y-4 sm:space-y-6"
                         >
                             {/* Breadcrumbs */}
-                            <div className="flex items-center justify-center gap-2 text-[0.8rem] font-bold tracking-widest text-white/60 uppercase mb-2">
+                            <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 text-[0.7rem] sm:text-[0.8rem] font-bold tracking-widest text-white/60 uppercase mb-2">
                                 <Link to="/" className="hover:text-accent transition-colors flex items-center gap-1.5 whitespace-nowrap">
                                     <Home size={14} /> HOME
                                 </Link>
@@ -937,10 +956,7 @@ const ContentPage = () => {
                                 <span className="text-accent underline decoration-2 underline-offset-4 whitespace-nowrap">{content.title}</span>
                             </div>
 
-                            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/20 backdrop-blur-md text-white text-[0.7rem] font-black uppercase tracking-widest border border-white/10">
-                                Campus Infrastructure
-                            </div>
-                            <h1 className="text-5xl sm:text-7xl font-display font-black text-white uppercase leading-tight tracking-tighter">
+                            <h1 className="text-3xl sm:text-5xl lg:text-7xl font-display font-black text-white uppercase leading-tight tracking-tighter">
                                 {content.title}
                             </h1>
                         </motion.div>
@@ -948,26 +964,26 @@ const ContentPage = () => {
                 </div>
 
                 {/* ─── Main Content ─── */}
-                <div className="max-w-6xl mx-auto px-6 py-24">
-                    <div className="grid lg:grid-cols-3 gap-16">
+                <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-24">
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 lg:gap-16">
                         {/* Left: Detailed Description */}
-                        <div className="lg:col-span-2 space-y-12 text-left">
-                            <section className="space-y-8">
-                                <h2 className="text-3xl font-display font-black text-primary uppercase flex items-center gap-4">
-                                    <span className="w-12 h-1.5 bg-accent rounded-full" />
+                        <div className="lg:col-span-2 space-y-10 lg:space-y-12 text-left">
+                            <section className="space-y-6 sm:space-y-8">
+                                <h2 className="text-2xl sm:text-3xl font-display font-black text-primary uppercase flex items-center gap-3 sm:gap-4">
+                                    <span className="w-10 sm:w-12 h-1 sm:h-1.5 bg-accent rounded-full" />
                                     About {content.title}
                                 </h2>
 
                                 {/* Dynamic Tabs Navigation */}
                                 {content.tabs && (
-                                    <div className="flex flex-wrap gap-2.5 border-b border-slate-100 pb-6 mb-8">
+                                    <div className="flex flex-wrap gap-2 border-b border-slate-100 pb-4 sm:pb-6 mb-6 sm:mb-8">
                                         {(Array.isArray(content.tabs) ? content.tabs.map(t => t.tabName) : Object.keys(content.tabs)).map((tabName) => {
                                             const isActive = activeTab === tabName;
                                             return (
                                                 <button
                                                     key={tabName}
                                                     onClick={() => setActiveTab(tabName)}
-                                                    className={`px-6 py-3 rounded-full font-black text-xs uppercase tracking-wider transition-all duration-300 ${
+                                                    className={`px-4 py-2 sm:px-6 sm:py-3 rounded-full font-black text-[0.7rem] sm:text-xs uppercase tracking-wider transition-all duration-300 ${
                                                         isActive
                                                             ? 'bg-accent text-white shadow-lg shadow-accent/25'
                                                             : 'bg-slate-50 text-slate-500 hover:bg-slate-100 hover:text-primary border border-slate-100'
@@ -980,7 +996,7 @@ const ContentPage = () => {
                                     </div>
                                 )}
 
-                                <div className="space-y-6">
+                                <div className="space-y-4 sm:space-y-6">
                                     {parseContent(content.tabs ? (Array.isArray(content.tabs) ? content.tabs.find(t => t.tabName === activeTab)?.tabContent : content.tabs[activeTab]) || '' : content.content).map((segment, i) => {
                                         if (segment.type === 'accordion') {
                                             return <AccordionItem key={i} title={segment.title} items={segment.items} />;
@@ -995,7 +1011,7 @@ const ContentPage = () => {
                                         
                                         if (isBullet) {
                                             return (
-                                                <p key={i} className="text-lg text-slate-600 leading-relaxed font-medium pl-6 relative text-justify whitespace-pre-wrap">
+                                                <p key={i} className="text-sm sm:text-lg text-slate-600 leading-relaxed font-medium pl-6 relative text-justify whitespace-pre-wrap">
                                                     <span className="absolute left-0 text-accent font-extrabold">•</span>
                                                     {renderTextWithBold(trimmed.substring(1).trim())}
                                                 </p>
@@ -1007,11 +1023,11 @@ const ContentPage = () => {
                                             const num = match ? match[1] : '';
                                             const text = match ? match[2].trim() : trimmed;
                                             return (
-                                                <div key={i} className="flex items-start gap-4 pl-1 py-1">
-                                                    <span className="inline-flex items-center justify-center shrink-0 w-8 h-8 rounded-full bg-accent/10 text-accent font-black text-sm">
+                                                <div key={i} className="flex items-start gap-3 sm:gap-4 pl-1 py-1">
+                                                    <span className="inline-flex items-center justify-center shrink-0 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-accent/10 text-accent font-black text-xs sm:text-sm">
                                                         {num}
                                                     </span>
-                                                    <p className="text-lg text-slate-600 leading-relaxed font-medium pt-0.5 text-justify whitespace-pre-wrap">
+                                                    <p className="text-sm sm:text-lg text-slate-600 leading-relaxed font-medium pt-0.5 text-justify whitespace-pre-wrap">
                                                         {renderTextWithBold(text)}
                                                     </p>
                                                 </div>
@@ -1030,15 +1046,15 @@ const ContentPage = () => {
                                                          trimmed.startsWith('Reference and');
                                         if (isHeader) {
                                             return (
-                                                <h3 key={i} className="text-xl font-display font-black text-primary uppercase pt-6 pb-2 border-b border-slate-100 flex items-center gap-3">
-                                                    <span className="w-1.5 h-6 bg-accent rounded-full shrink-0" />
+                                                <h3 key={i} className="text-lg sm:text-xl font-display font-black text-primary uppercase pt-4 sm:pt-6 pb-2 border-b border-slate-100 flex items-center gap-2 sm:gap-3">
+                                                    <span className="w-1.5 h-5 sm:h-6 bg-accent rounded-full shrink-0" />
                                                     {renderTextWithBold(trimmed)}
                                                 </h3>
                                             );
                                         }
 
                                         return (
-                                            <p key={i} className="text-lg text-slate-600 leading-relaxed font-medium text-justify">
+                                            <p key={i} className="text-sm sm:text-lg text-slate-600 leading-relaxed font-medium text-justify">
                                                 {renderTextWithBold(trimmed)}
                                             </p>
                                         );
@@ -1124,24 +1140,24 @@ const ContentPage = () => {
                             <span className="text-accent underline decoration-2 underline-offset-4 whitespace-nowrap">{content.title}</span>
                         </div>
                         
-                        <h1 className="text-[2.5rem] sm:text-[3.5rem] font-display font-black leading-tight tracking-tighter uppercase max-w-4xl">
+                        <h1 className="text-[1.8rem] sm:text-[3.5rem] font-display font-black leading-tight tracking-tighter uppercase max-w-4xl">
                             {content.title}
                         </h1>
-                        <div className="w-24 h-2 bg-accent rounded-full mt-2"></div>
+                        <div className="w-20 sm:w-24 h-1.5 sm:h-2 bg-accent rounded-full mt-2"></div>
                     </motion.div>
                 </div>
             </div>
 
             {/* Content Section */}
-            <div className="flex-grow py-16">
-                <div className="max-w-[90%] lg:max-w-[1280px] mx-auto px-4 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-16">
+            <div className="flex-grow py-8 sm:py-16">
+                <div className="max-w-[95%] lg:max-w-[1280px] mx-auto px-4 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16">
                     
                     {/* Main Content Area */}
                     <motion.div 
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ duration: 0.8, delay: 0.2 }}
-                        className={`${(slug === 'parents-teachers' || slug === 'right-to-info' || slug === 'btech' || slug === 'mca' || slug === 'doctoral' || slug === 'apjaktu' || slug === 'aicte') ? 'lg:col-span-12' : 'lg:col-span-8'} bg-white p-8 md:p-14 rounded-[2.5rem] shadow-[0_10px_50px_rgba(12,43,78,0.06)] border border-primary/5`}
+                        className={`${(slug === 'parents-teachers' || slug === 'right-to-info' || slug === 'btech' || slug === 'mca' || slug === 'doctoral' || slug === 'apjaktu' || slug === 'aicte') ? 'lg:col-span-12' : 'lg:col-span-8'} bg-white ${slug === 'admission-2026' ? 'py-4 sm:py-8 md:py-14 px-2 sm:px-4 md:px-8' : 'p-4 sm:p-8 md:p-14'} rounded-2xl sm:rounded-[2.5rem] shadow-[0_10px_50px_rgba(12,43,78,0.06)] border border-primary/5`}
                     >
                         <div className="prose prose-lg max-w-none prose-headings:text-primary prose-p:text-secondary/80 prose-p:leading-relaxed prose-li:text-secondary/80">
                             {slug !== 'parents-teachers' && slug !== 'right-to-info' && slug !== 'btech' && slug !== 'mca' && slug !== 'doctoral' && slug !== 'apjaktu' && slug !== 'aicte' && slug !== 'admission-2026' && (
@@ -1198,11 +1214,11 @@ const ContentPage = () => {
                                             <table className="w-full text-left border-collapse bg-white">
                                                 <thead>
                                                     <tr className="bg-slate-50 border-b border-slate-100">
-                                                        <th className="px-6 py-4 font-black text-xs uppercase tracking-wider text-primary">Sl. No.</th>
-                                                        <th className="px-6 py-4 font-black text-xs uppercase tracking-wider text-primary">Name</th>
-                                                        <th className="px-6 py-4 font-black text-xs uppercase tracking-wider text-primary">Mobile</th>
-                                                        <th className="px-6 py-4 font-black text-xs uppercase tracking-wider text-primary">Name of Student</th>
-                                                        <th className="px-6 py-4 font-black text-xs uppercase tracking-wider text-primary">Class</th>
+                                                        <th className="px-4 sm:px-6 py-3 sm:py-4 font-black text-xs uppercase tracking-wider text-primary whitespace-nowrap">Sl. No.</th>
+                                                        <th className="px-4 sm:px-6 py-3 sm:py-4 font-black text-xs uppercase tracking-wider text-primary whitespace-nowrap">Name</th>
+                                                        <th className="px-4 sm:px-6 py-3 sm:py-4 font-black text-xs uppercase tracking-wider text-primary whitespace-nowrap">Mobile</th>
+                                                        <th className="px-4 sm:px-6 py-3 sm:py-4 font-black text-xs uppercase tracking-wider text-primary whitespace-nowrap">Name of Student</th>
+                                                        <th className="px-4 sm:px-6 py-3 sm:py-4 font-black text-xs uppercase tracking-wider text-primary whitespace-nowrap">Class</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody className="divide-y divide-slate-100">
@@ -1215,14 +1231,14 @@ const ContentPage = () => {
                                                         { sl: 6, name: "Sri. Unnikrishnan K G", role: "Member", mob: "7025498009", student: "Arjun Krishna", class: "S2 EC" }
                                                     ].map((p) => (
                                                         <tr key={p.sl} className="hover:bg-slate-50/50 transition-colors">
-                                                            <td className="px-6 py-4 text-sm font-bold text-slate-400">{p.sl}</td>
-                                                            <td className="px-6 py-4 text-sm">
-                                                                <div className="font-bold text-primary">{p.name}</div>
-                                                                <div className="text-xs text-slate-500 font-semibold">{p.role}</div>
+                                                            <td className="px-4 sm:px-6 py-3 sm:py-4 text-sm font-bold text-slate-400">{p.sl}</td>
+                                                            <td className="px-4 sm:px-6 py-3 sm:py-4 text-sm">
+                                                                <div className="font-bold text-primary whitespace-nowrap">{p.name}</div>
+                                                                <div className="text-xs text-slate-500 font-semibold whitespace-nowrap">{p.role}</div>
                                                             </td>
-                                                            <td className="px-6 py-4 text-sm font-semibold text-slate-600">{p.mob}</td>
-                                                            <td className="px-6 py-4 text-sm font-bold text-accent">{p.student}</td>
-                                                            <td className="px-6 py-4 text-sm"><span className="px-2.5 py-1 rounded-md bg-slate-100 text-xs font-black text-slate-600 uppercase">{p.class}</span></td>
+                                                            <td className="px-4 sm:px-6 py-3 sm:py-4 text-sm font-semibold text-slate-600 whitespace-nowrap">{p.mob}</td>
+                                                            <td className="px-4 sm:px-6 py-3 sm:py-4 text-sm font-bold text-accent whitespace-nowrap">{p.student}</td>
+                                                            <td className="px-4 sm:px-6 py-3 sm:py-4 text-sm"><span className="px-2.5 py-1 rounded-md bg-slate-100 text-xs font-black text-slate-600 uppercase whitespace-nowrap">{p.class}</span></td>
                                                         </tr>
                                                     ))}
                                                 </tbody>
@@ -1240,10 +1256,10 @@ const ContentPage = () => {
                                             <table className="w-full text-left border-collapse bg-white">
                                                 <thead>
                                                     <tr className="bg-slate-50 border-b border-slate-100">
-                                                        <th className="px-6 py-4 font-black text-xs uppercase tracking-wider text-primary">Sl. No.</th>
-                                                        <th className="px-6 py-4 font-black text-xs uppercase tracking-wider text-primary">Name & Designation</th>
-                                                        <th className="px-6 py-4 font-black text-xs uppercase tracking-wider text-primary">Mobile</th>
-                                                        <th className="px-6 py-4 font-black text-xs uppercase tracking-wider text-primary">Position</th>
+                                                        <th className="px-4 sm:px-6 py-3 sm:py-4 font-black text-xs uppercase tracking-wider text-primary whitespace-nowrap">Sl. No.</th>
+                                                        <th className="px-4 sm:px-6 py-3 sm:py-4 font-black text-xs uppercase tracking-wider text-primary whitespace-nowrap">Name & Designation</th>
+                                                        <th className="px-4 sm:px-6 py-3 sm:py-4 font-black text-xs uppercase tracking-wider text-primary whitespace-nowrap">Mobile</th>
+                                                        <th className="px-4 sm:px-6 py-3 sm:py-4 font-black text-xs uppercase tracking-wider text-primary whitespace-nowrap">Position</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody className="divide-y divide-slate-100">
@@ -1259,13 +1275,13 @@ const ContentPage = () => {
                                                         { sl: 9, name: "Smt. Moni P John", desig: "HOD (Basic Science & Language)", mob: "9446538651", pos: "Member" }
                                                     ].map((t) => (
                                                         <tr key={t.sl} className="hover:bg-slate-50/50 transition-colors">
-                                                            <td className="px-6 py-4 text-sm font-bold text-slate-400">{t.sl}</td>
-                                                            <td className="px-6 py-4 text-sm">
-                                                                <div className="font-bold text-primary">{t.name}</div>
-                                                                <div className="text-xs text-slate-500 font-semibold">{t.desig}</div>
+                                                            <td className="px-4 sm:px-6 py-3 sm:py-4 text-sm font-bold text-slate-400">{t.sl}</td>
+                                                            <td className="px-4 sm:px-6 py-3 sm:py-4 text-sm">
+                                                                <div className="font-bold text-primary whitespace-nowrap">{t.name}</div>
+                                                                <div className="text-xs text-slate-500 font-semibold whitespace-nowrap">{t.desig}</div>
                                                             </td>
-                                                            <td className="px-6 py-4 text-sm font-semibold text-slate-600">{t.mob}</td>
-                                                            <td className="px-6 py-4 text-sm"><span className="px-2.5 py-1 rounded-md bg-accent/10 text-xs font-black text-accent uppercase">{t.pos}</span></td>
+                                                            <td className="px-4 sm:px-6 py-3 sm:py-4 text-sm font-semibold text-slate-600 whitespace-nowrap">{t.mob}</td>
+                                                            <td className="px-4 sm:px-6 py-3 sm:py-4 text-sm"><span className="px-2.5 py-1 rounded-md bg-accent/10 text-xs font-black text-accent uppercase whitespace-nowrap">{t.pos}</span></td>
                                                         </tr>
                                                     ))}
                                                 </tbody>
@@ -1274,55 +1290,55 @@ const ContentPage = () => {
                                     </div>
                                 </div>
                             ) : slug === 'btech' ? (
-                                <div className="space-y-12">
+                                <div className="space-y-8 sm:space-y-12">
                                     <div className="border-b border-slate-100 pb-6 mb-8 text-left">
                                         <span className="text-xs font-black uppercase tracking-widest text-accent bg-accent/10 px-4 py-1.5 rounded-full">
                                             Programmes
                                         </span>
-                                        <h2 className="text-3xl font-display font-black text-primary uppercase mt-3">
+                                        <h2 className="text-2xl sm:text-3xl font-display font-black text-primary uppercase mt-3">
                                             Engineering Full Time Courses
                                         </h2>
                                     </div>
 
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 text-left">
                                         {btechCourses.map((course, idx) => {
                                             const isExpanded = activeEligibility === idx;
                                             return (
                                                 <div 
                                                     key={idx} 
-                                                    className="bg-slate-50/50 hover:bg-white rounded-3xl p-8 border border-slate-100 hover:shadow-xl hover:border-accent/20 transition-all duration-300 flex flex-col justify-between group"
+                                                    className="bg-slate-50/50 hover:bg-white rounded-2xl sm:rounded-3xl p-5 sm:p-8 border border-slate-100 hover:shadow-xl hover:border-accent/20 transition-all duration-300 flex flex-col justify-between group"
                                                 >
-                                                    <div className="space-y-6">
-                                                        <div className="w-12 h-12 rounded-2xl bg-primary/5 flex items-center justify-center text-primary group-hover:bg-accent/10 group-hover:text-accent transition-colors duration-300">
+                                                    <div className="space-y-5 sm:space-y-6">
+                                                        <div className="w-12 h-12 rounded-xl sm:rounded-2xl bg-primary/5 flex items-center justify-center text-primary group-hover:bg-accent/10 group-hover:text-accent transition-colors duration-300">
                                                             <BookOpen size={24} />
                                                         </div>
                                                         <div className="space-y-2">
-                                                            <h3 className="text-xl font-display font-black text-primary group-hover:text-accent transition-colors duration-300 uppercase leading-snug">
+                                                            <h3 className="text-lg sm:text-xl font-display font-black text-primary group-hover:text-accent transition-colors duration-300 uppercase leading-snug">
                                                                 {course.name}
                                                             </h3>
                                                         </div>
-                                                        <div className="grid grid-cols-2 gap-4 pt-2">
-                                                            <div className="bg-white p-3 rounded-xl border border-slate-100/60 shadow-sm flex items-center gap-3">
+                                                        <div className="grid grid-cols-2 gap-3 sm:gap-4 pt-2">
+                                                            <div className="bg-white p-3 rounded-xl border border-slate-100/60 shadow-sm flex items-center gap-2 sm:gap-3">
                                                                 <Clock size={16} className="text-accent shrink-0" />
                                                                 <div>
-                                                                    <div className="text-[0.65rem] text-slate-400 font-black uppercase tracking-wider">Duration</div>
-                                                                    <div className="text-xs font-black text-primary">{course.duration}</div>
+                                                                    <div className="text-[0.6rem] sm:text-[0.65rem] text-slate-400 font-black uppercase tracking-wider">Duration</div>
+                                                                    <div className="text-[0.7rem] sm:text-xs font-black text-primary">{course.duration}</div>
                                                                 </div>
                                                             </div>
-                                                            <div className="bg-white p-3 rounded-xl border border-slate-100/60 shadow-sm flex items-center gap-3">
+                                                            <div className="bg-white p-3 rounded-xl border border-slate-100/60 shadow-sm flex items-center gap-2 sm:gap-3">
                                                                 <Users size={16} className="text-accent shrink-0" />
                                                                 <div>
-                                                                    <div className="text-[0.65rem] text-slate-400 font-black uppercase tracking-wider">Intake</div>
-                                                                    <div className="text-xs font-black text-primary">{course.intake}</div>
+                                                                    <div className="text-[0.6rem] sm:text-[0.65rem] text-slate-400 font-black uppercase tracking-wider">Intake</div>
+                                                                    <div className="text-[0.7rem] sm:text-xs font-black text-primary">{course.intake}</div>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
 
-                                                    <div className="mt-8 border-t border-slate-100 pt-6">
+                                                    <div className="mt-6 sm:mt-8 border-t border-slate-100 pt-5 sm:pt-6">
                                                         <button 
                                                             onClick={() => setActiveEligibility(isExpanded ? null : idx)}
-                                                            className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-wider text-accent hover:text-primary transition-colors cursor-pointer"
+                                                            className="inline-flex items-center gap-2 text-[0.65rem] sm:text-xs font-black uppercase tracking-wider text-accent hover:text-primary transition-colors cursor-pointer"
                                                         >
                                                             <span>Eligibility Requirements</span>
                                                             <span className="text-accent/60 font-medium">({isExpanded ? 'click to collapse' : 'click here'})</span>
@@ -1335,7 +1351,7 @@ const ContentPage = () => {
                                                             className="overflow-hidden"
                                                             transition={{ duration: 0.3, ease: "easeInOut" }}
                                                         >
-                                                            <div className="mt-4 p-5 rounded-2xl bg-white border border-slate-100 shadow-inner space-y-4 text-xs font-semibold text-slate-600 leading-relaxed">
+                                                            <div className="mt-4 p-4 sm:p-5 rounded-xl sm:rounded-2xl bg-white border border-slate-100 shadow-inner space-y-3 sm:space-y-4 text-[0.7rem] sm:text-xs font-semibold text-slate-600 leading-relaxed">
                                                                 <div>
                                                                     <span className="font-black text-primary uppercase block mb-1">Academic Qualification</span>
                                                                     {course.eligibility.academic}
@@ -1357,51 +1373,51 @@ const ContentPage = () => {
                                     </div>
                                 </div>
                             ) : slug === 'mca' ? (
-                                <div className="space-y-12">
+                                <div className="space-y-8 sm:space-y-12">
                                     <div className="border-b border-slate-100 pb-6 mb-8 text-left">
                                         <span className="text-xs font-black uppercase tracking-widest text-accent bg-accent/10 px-4 py-1.5 rounded-full">
                                             Programmes
                                         </span>
-                                        <h2 className="text-3xl font-display font-black text-primary uppercase mt-3">
+                                        <h2 className="text-2xl sm:text-3xl font-display font-black text-primary uppercase mt-3">
                                             Postgraduate Course
                                         </h2>
                                     </div>
 
                                     <div className="max-w-2xl mx-auto text-left">
                                         <div 
-                                            className="bg-slate-50/50 hover:bg-white rounded-3xl p-8 md:p-10 border border-slate-100 hover:shadow-xl hover:border-accent/20 transition-all duration-300 flex flex-col justify-between group"
+                                            className="bg-slate-50/50 hover:bg-white rounded-2xl sm:rounded-3xl p-5 sm:p-8 md:p-10 border border-slate-100 hover:shadow-xl hover:border-accent/20 transition-all duration-300 flex flex-col justify-between group"
                                         >
-                                            <div className="space-y-6">
-                                                <div className="w-12 h-12 rounded-2xl bg-primary/5 flex items-center justify-center text-primary group-hover:bg-accent/10 group-hover:text-accent transition-colors duration-300">
+                                            <div className="space-y-5 sm:space-y-6">
+                                                <div className="w-12 h-12 rounded-xl sm:rounded-2xl bg-primary/5 flex items-center justify-center text-primary group-hover:bg-accent/10 group-hover:text-accent transition-colors duration-300">
                                                     <BookOpen size={24} />
                                                 </div>
                                                 <div className="space-y-2">
-                                                    <h3 className="text-2xl font-display font-black text-primary group-hover:text-accent transition-colors duration-300 uppercase leading-snug">
+                                                    <h3 className="text-xl sm:text-2xl font-display font-black text-primary group-hover:text-accent transition-colors duration-300 uppercase leading-snug">
                                                         {mcaCourse.name}
                                                     </h3>
                                                 </div>
-                                                <div className="grid grid-cols-2 gap-4 pt-2">
-                                                    <div className="bg-white p-4 rounded-xl border border-slate-100/60 shadow-sm flex items-center gap-3">
+                                                <div className="grid grid-cols-2 gap-3 sm:gap-4 pt-2">
+                                                    <div className="bg-white p-3 sm:p-4 rounded-xl border border-slate-100/60 shadow-sm flex items-center gap-2 sm:gap-3">
                                                         <Clock size={18} className="text-accent shrink-0" />
                                                         <div>
-                                                            <div className="text-[0.65rem] text-slate-400 font-black uppercase tracking-wider">Duration</div>
-                                                            <div className="text-sm font-black text-primary">{mcaCourse.duration}</div>
+                                                            <div className="text-[0.6rem] sm:text-[0.65rem] text-slate-400 font-black uppercase tracking-wider">Duration</div>
+                                                            <div className="text-xs sm:text-sm font-black text-primary">{mcaCourse.duration}</div>
                                                         </div>
                                                     </div>
-                                                    <div className="bg-white p-4 rounded-xl border border-slate-100/60 shadow-sm flex items-center gap-3">
+                                                    <div className="bg-white p-3 sm:p-4 rounded-xl border border-slate-100/60 shadow-sm flex items-center gap-2 sm:gap-3">
                                                         <Users size={18} className="text-accent shrink-0" />
                                                         <div>
-                                                            <div className="text-[0.65rem] text-slate-400 font-black uppercase tracking-wider">Intake</div>
-                                                            <div className="text-sm font-black text-primary">{mcaCourse.intake}</div>
+                                                            <div className="text-[0.6rem] sm:text-[0.65rem] text-slate-400 font-black uppercase tracking-wider">Intake</div>
+                                                            <div className="text-xs sm:text-sm font-black text-primary">{mcaCourse.intake}</div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
 
-                                            <div className="mt-8 border-t border-slate-100 pt-6">
+                                            <div className="mt-6 sm:mt-8 border-t border-slate-100 pt-5 sm:pt-6">
                                                 <button 
                                                     onClick={() => setActiveEligibility(activeEligibility === 'mca' ? null : 'mca')}
-                                                    className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-wider text-accent hover:text-primary transition-colors cursor-pointer"
+                                                    className="inline-flex items-center gap-2 text-[0.65rem] sm:text-xs font-black uppercase tracking-wider text-accent hover:text-primary transition-colors cursor-pointer"
                                                 >
                                                     <span>Eligibility Requirements</span>
                                                     <span className="text-accent/60 font-medium">({activeEligibility === 'mca' ? 'click to collapse' : 'click here'})</span>
@@ -1414,7 +1430,7 @@ const ContentPage = () => {
                                                     className="overflow-hidden"
                                                     transition={{ duration: 0.3, ease: "easeInOut" }}
                                                 >
-                                                    <div className="mt-4 p-6 rounded-2xl bg-white border border-slate-100 shadow-inner space-y-4 text-xs font-semibold text-slate-600 leading-relaxed">
+                                                    <div className="mt-4 p-4 sm:p-6 rounded-xl sm:rounded-2xl bg-white border border-slate-100 shadow-inner space-y-3 sm:space-y-4 text-[0.7rem] sm:text-xs font-semibold text-slate-600 leading-relaxed">
                                                         <div>
                                                             <span className="font-black text-primary uppercase block mb-1">Academic Qualification</span>
                                                             {mcaCourse.eligibility.academic}
@@ -1433,31 +1449,168 @@ const ContentPage = () => {
                                         </div>
                                     </div>
                                 </div>
-                             ) : slug === 'apjaktu' || slug === 'aicte' ? (
+                            ) : slug === 'right-to-info' ? (
                                 <div className="space-y-12 text-left">
-                                    {/* University Affiliation Header */}
                                     <div className="border-b border-slate-100 pb-6 mb-8">
                                         <span className="text-xs font-black uppercase tracking-widest text-accent bg-accent/10 px-4 py-1.5 rounded-full">
+                                            RTI Act Compliance
+                                        </span>
+                                        <h2 className="text-2xl sm:text-3xl font-display font-black text-primary uppercase mt-3">
+                                            Right to Information
+                                        </h2>
+                                        <p className="text-slate-500 font-semibold text-sm sm:text-base mt-2">
+                                            In compliance with the Right to Information (RTI) Act, College of Engineering Chengannur maintains absolute transparency in all its academic, administrative, and financial activities. The designated officers under the RTI Act are listed below:
+                                        </p>
+                                    </div>
+
+                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+                                        {[
+                                            {
+                                                role: "Public Information Officer",
+                                                name: "Smt. Asha K Pillai",
+                                                desig: "Senior Superintendent",
+                                                email: "ashakpillai2016@gmail.com",
+                                                phone: "94473731"
+                                            },
+                                            {
+                                                role: "Assistant Public Information Officer",
+                                                name: "Sri. Anoop Raj T V",
+                                                desig: "Junior Superintendent",
+                                                email: "anoopraj@ceconline.edu",
+                                                phone: "7561866090"
+                                            },
+                                            {
+                                                role: "Appellate Authority",
+                                                name: "Dr. Hari V S",
+                                                desig: "Principal, College of Engineering Chengannur",
+                                                email: "principal@ceconline.edu",
+                                                phone: "8547005032"
+                                            }
+                                        ].map((officer, idx) => (
+                                            <div 
+                                                key={idx}
+                                                className="bg-slate-50/50 hover:bg-white rounded-2xl sm:rounded-3xl p-5 sm:p-8 border border-slate-100 hover:shadow-xl hover:border-accent/20 transition-all duration-300 flex flex-col justify-between group"
+                                            >
+                                                <div className="space-y-4">
+                                                    <span className="text-[0.65rem] font-black uppercase tracking-widest text-accent bg-accent/5 px-3 py-1 rounded-md inline-block">
+                                                        {officer.role}
+                                                    </span>
+                                                    <div>
+                                                        <h3 className="text-lg sm:text-xl font-display font-black text-primary group-hover:text-accent transition-colors uppercase leading-snug">
+                                                            {officer.name}
+                                                        </h3>
+                                                        <p className="text-xs text-slate-400 font-bold uppercase mt-1">
+                                                            {officer.desig}
+                                                        </p>
+                                                    </div>
+                                                </div>
+
+                                                <div className="mt-6 pt-6 border-t border-slate-100/80 space-y-3">
+                                                    <a href={`mailto:${officer.email}`} className="flex items-center gap-3 text-xs sm:text-sm font-bold text-slate-600 hover:text-accent transition-colors min-w-0">
+                                                        <svg className="w-4 h-4 text-slate-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                                                        <span className="truncate">{officer.email}</span>
+                                                    </a>
+                                                    <a href={`tel:${officer.phone}`} className="flex items-center gap-3 text-xs sm:text-sm font-bold text-slate-600 hover:text-accent transition-colors min-w-0">
+                                                        <svg className="w-4 h-4 text-slate-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.94.725l.548 2.2a1 1 0 01-.321.988l-1.305.98a10.582 10.582 0 004.872 4.872l.98-1.305a1 1 0 01.988-.321l2.2.548a1 1 0 01.725.94V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+                                                        <span className="truncate">{officer.phone}</span>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            ) : slug === 'admission-2026' ? (
+                                <div className="space-y-10 sm:space-y-12 text-left">
+                                    {/* Introduction Card */}
+                                    {content.description && (
+                                        <div className="bg-slate-50/50 p-6 sm:p-8 rounded-2xl border border-slate-100/80 shadow-sm">
+                                            <p className="text-base sm:text-xl font-medium text-slate-700 leading-relaxed whitespace-pre-wrap">
+                                                {content.description}
+                                            </p>
+                                        </div>
+                                    )}
+
+                                    {/* Admission Categories Grid */}
+                                    <div className="grid grid-cols-1 gap-6">
+                                        {content.categories && content.categories.map((category, idx) => (
+                                            <div key={idx} className="bg-white p-6 sm:p-8 rounded-2xl border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.03)] hover:shadow-lg hover:border-accent/20 transition-all duration-300 flex flex-col md:flex-row md:items-start md:justify-between gap-6 md:gap-12 group">
+                                                <div className="space-y-4 md:flex-1">
+                                                    <div className="flex items-center">
+                                                        {category.isOpen ? (
+                                                            <span className="text-[0.65rem] font-black uppercase tracking-widest text-emerald-600 bg-emerald-50 px-3 py-1 rounded-md border border-emerald-100">
+                                                                Admission Open
+                                                            </span>
+                                                        ) : (
+                                                            <span className="text-[0.65rem] font-black uppercase tracking-widest text-slate-500 bg-slate-50 px-3 py-1 rounded-md border border-slate-100">
+                                                                Currently Closed
+                                                            </span>
+                                                        )}
+                                                    </div>
+                                                    <h3 className="text-xl font-display font-black text-primary uppercase group-hover:text-accent transition-colors">
+                                                        {category.heading}
+                                                    </h3>
+                                                    {category.shortDescription && (
+                                                        <p className="text-sm text-slate-500 font-medium leading-relaxed whitespace-pre-wrap max-w-xl">
+                                                            {category.shortDescription}
+                                                        </p>
+                                                    )}
+                                                </div>
+
+                                                <div className="md:w-[40%] flex flex-col space-y-4 shrink-0 w-full">
+                                                    {category.registrationLink && category.registrationLink.url && (
+                                                        <div className="pt-0">
+                                                            <a href={category.registrationLink.url} target="_blank" rel="noopener noreferrer" className={`inline-flex items-center justify-between w-full gap-2 px-6 py-4 font-bold rounded-xl transition-all duration-300 text-xs sm:text-sm uppercase tracking-wider ${category.isOpen ? 'bg-primary text-white shadow-lg shadow-primary/20 hover:bg-accent hover:-translate-y-0.5' : 'bg-slate-100 text-slate-400 cursor-not-allowed pointer-events-none'}`}>
+                                                                {category.registrationLink.text || 'Register Now'} {category.isOpen && <ChevronRight size={18} className="opacity-70" />}
+                                                            </a>
+                                                        </div>
+                                                    )}
+
+                                                    {category.relatedDocuments && category.relatedDocuments.length > 0 && (
+                                                        <div className="space-y-2 pt-2">
+                                                            <span className="text-[0.65rem] font-black uppercase tracking-widest text-slate-400 block mb-3">Related Resources</span>
+                                                            {category.relatedDocuments.map((doc, docIdx) => (
+                                                                <a key={docIdx} href={doc.type === 'file' ? doc.pdfUrl : doc.url} target="_blank" rel="noopener noreferrer" className="flex items-start gap-4 p-4 bg-slate-50 hover:bg-slate-100 rounded-xl transition-colors group/doc border border-transparent hover:border-slate-200">
+                                                                    <div className="text-slate-400 bg-white shadow-sm border border-slate-100 p-2.5 rounded-lg group-hover/doc:text-accent group-hover/doc:border-accent/20 transition-all">
+                                                                        {doc.type === 'file' ? <FileText size={18} /> : <ExternalLink size={18} />}
+                                                                    </div>
+                                                                    <div className="pt-0.5 flex-1">
+                                                                        <div className="text-[0.85rem] font-bold text-primary group-hover/doc:text-accent transition-colors leading-tight">{doc.title}</div>
+                                                                        {doc.description && <div className="text-[0.7rem] font-semibold text-slate-500 mt-1.5">{doc.description}</div>}
+                                                                    </div>
+                                                                </a>
+                                                            ))}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            ) : slug === 'apjaktu' || slug === 'aicte' ? (
+                                <div className="space-y-8 sm:space-y-12 text-left">
+                                    {/* University Affiliation Header */}
+                                    <div className="border-b border-slate-100 pb-4 sm:pb-6 mb-6 sm:mb-8">
+                                        <span className="text-[0.65rem] sm:text-xs font-black uppercase tracking-widest text-accent bg-accent/10 px-3 sm:px-4 py-1 sm:py-1.5 rounded-full">
                                             {slug === 'apjaktu' ? 'University Affiliation' : 'National Council'}
                                         </span>
-                                        <h2 className="text-3xl font-display font-black text-primary uppercase mt-3">
+                                        <h2 className="text-xl sm:text-3xl font-display font-black text-primary uppercase mt-3">
                                             {slug === 'apjaktu' ? 'APJ Abdul Kalam Technological University' : 'All India Council for Technical Education'}
                                         </h2>
                                     </div>
 
-                                    <div className="grid lg:grid-cols-[1fr_300px] gap-12 items-start">
+                                    <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-6 sm:gap-12 items-start">
                                         {/* Description Card */}
-                                        <div className="bg-slate-50/50 rounded-[2rem] p-8 md:p-10 border border-slate-100 shadow-sm text-justify flex flex-col justify-between h-full">
-                                            <p className="text-xl leading-[1.8] text-slate-700 font-medium font-sans mb-8">
+                                        <div className="bg-slate-50/50 rounded-2xl sm:rounded-[2rem] p-5 sm:p-8 md:p-10 border border-slate-100 shadow-sm text-justify flex flex-col justify-between h-full">
+                                            <p className="text-sm sm:text-lg lg:text-xl leading-relaxed sm:leading-[1.8] text-slate-700 font-medium font-sans mb-6 sm:mb-8">
                                                 {content.content}
                                             </p>
 
                                             {slug === 'apjaktu' && (
-                                                <div className="flex flex-wrap gap-4 mt-auto pt-6 border-t border-slate-200/60">
-                                                    <a href="https://ktu.edu.in/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-primary text-white font-bold rounded-xl hover:bg-accent transition-colors text-sm uppercase tracking-wider">
+                                                <div className="flex flex-col sm:flex-row flex-wrap gap-3 mt-auto pt-4 sm:pt-6 border-t border-slate-200/60">
+                                                    <a href="https://ktu.edu.in/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 bg-primary text-white font-bold rounded-xl hover:bg-accent transition-colors text-xs sm:text-sm uppercase tracking-wider text-center">
                                                         Official KTU Website
                                                     </a>
-                                                    <a href="https://app.ktu.edu.in/login.htm/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white text-primary border-2 border-primary font-bold rounded-xl hover:bg-slate-50 transition-colors text-sm uppercase tracking-wider">
+                                                    <a href="https://app.ktu.edu.in/login.htm/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 bg-white text-primary border-2 border-primary font-bold rounded-xl hover:bg-slate-50 transition-colors text-xs sm:text-sm uppercase tracking-wider text-center">
                                                        KTU Login Portal
                                                     </a>
                                                 </div>
@@ -1466,11 +1619,11 @@ const ContentPage = () => {
 
                                         {/* Logo Branding Card */}
                                         <div className="flex justify-center">
-                                            <div className="bg-white p-6 md:p-8 rounded-[2rem] border border-slate-100 shadow-[0_15px_40px_rgba(12,43,78,0.04)] flex items-center justify-center w-full transition-transform duration-500 hover:scale-[1.02]">
+                                            <div className="bg-white p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-[2rem] border border-slate-100 shadow-[0_15px_40px_rgba(12,43,78,0.04)] flex items-center justify-center w-full transition-transform duration-500 hover:scale-[1.02]">
                                                 <img 
                                                     src={slug === 'apjaktu' ? "/images/apjaktu_logo.png" : "/images/aicte_logo.jpg"} 
                                                     alt={`${content.title} Logo`} 
-                                                    className="w-full max-w-[200px] object-contain"
+                                                    className="w-full max-w-[140px] sm:max-w-[200px] object-contain"
                                                 />
                                             </div>
                                         </div>
@@ -1492,7 +1645,7 @@ const ContentPage = () => {
                                         
                                         if (isBullet) {
                                             return (
-                                                <p key={i} className="text-lg text-slate-600 leading-relaxed font-medium pl-6 relative whitespace-pre-wrap">
+                                                <p key={i} className="text-sm sm:text-lg text-slate-600 leading-relaxed font-medium pl-6 relative text-justify whitespace-pre-wrap">
                                                     <span className="absolute left-0 text-accent font-extrabold">•</span>
                                                     {renderTextWithBold(trimmed.substring(1).trim())}
                                                 </p>
@@ -1504,11 +1657,11 @@ const ContentPage = () => {
                                             const num = match ? match[1] : '';
                                             const text = match ? match[2].trim() : trimmed;
                                             return (
-                                                <div key={i} className="flex items-start gap-4 pl-1 py-1">
-                                                    <span className="inline-flex items-center justify-center shrink-0 w-8 h-8 rounded-full bg-accent/10 text-accent font-black text-sm">
+                                                <div key={i} className="flex items-start gap-3 sm:gap-4 pl-1 py-1">
+                                                    <span className="inline-flex items-center justify-center shrink-0 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-accent/10 text-accent font-black text-xs sm:text-sm">
                                                         {num}
                                                     </span>
-                                                    <p className="text-lg text-slate-600 leading-relaxed font-medium pt-0.5 whitespace-pre-wrap">
+                                                    <p className="text-sm sm:text-lg text-slate-600 leading-relaxed font-medium pt-0.5 text-justify whitespace-pre-wrap">
                                                         {renderTextWithBold(text)}
                                                     </p>
                                                 </div>
@@ -1521,15 +1674,15 @@ const ContentPage = () => {
                                                          trimmed.startsWith('Key Resources');
                                         if (isHeader) {
                                             return (
-                                                <h3 key={i} className="text-xl font-display font-black text-primary uppercase pt-6 pb-2 border-b border-slate-100 flex items-center gap-3">
-                                                    <span className="w-1.5 h-6 bg-accent rounded-full shrink-0" />
+                                                <h3 key={i} className="text-lg sm:text-xl font-display font-black text-primary uppercase pt-4 sm:pt-6 pb-2 border-b border-slate-100 flex items-center gap-2 sm:gap-3">
+                                                    <span className="w-1.5 h-5 sm:h-6 bg-accent rounded-full shrink-0" />
                                                     {trimmed}
                                                 </h3>
                                             );
                                         }
 
                                         return (
-                                            <p key={i} className="text-[1.15rem] leading-[1.8] text-secondary/80 font-medium whitespace-pre-wrap">
+                                            <p key={i} className="text-sm sm:text-[1.15rem] leading-[1.8] text-secondary/80 font-medium text-justify whitespace-pre-wrap">
                                                 {renderTextWithBold(trimmed)}
                                             </p>
                                         );
@@ -1625,12 +1778,16 @@ const ContentPage = () => {
                                    Related Info
                                </h3>
                                <ul className="space-y-4">
-                                   {['Academic Calendar', 'Mandatory Disclosures', 'Anti-Ragging Committee'].map((link, i) => (
+                                   {[
+                                       { label: 'Academic Calendar', path: '/downloads' },
+                                       { label: 'Mandatory Disclosures', path: '/downloads' },
+                                       { label: 'Anti-Ragging Committee', path: '/page/anti-ragging' }
+                                   ].map((link, i) => (
                                        <li key={i}>
-                                           <a href="#" className="flex items-center justify-between group py-2">
-                                               <span className="text-[0.95rem] font-bold text-secondary/60 group-hover:text-accent transition-colors">{link}</span>
+                                           <Link to={link.path} className="flex items-center justify-between group py-2">
+                                               <span className="text-[0.95rem] font-bold text-secondary/60 group-hover:text-accent transition-colors">{link.label}</span>
                                                <ChevronRight size={16} className="text-primary/20 group-hover:text-accent group-hover:translate-x-1 transition-all" />
-                                           </a>
+                                           </Link>
                                        </li>
                                    ))}
                                 </ul>

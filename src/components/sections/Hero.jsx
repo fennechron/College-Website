@@ -63,11 +63,11 @@ const Hero = () => {
                         {imgObj.title && (
                             <>
                                 <div className="absolute inset-0 bg-black/40"></div>
-                                <div className="relative z-10 p-4 sm:p-6 md:p-12">
-                                    <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-bold text-white mb-2 sm:mb-4 drop-shadow-xl tracking-tight">
+                                <div className="relative z-10 p-4 sm:p-6 md:p-12 max-w-[90%] sm:max-w-2xl lg:max-w-4xl mx-auto">
+                                    <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-bold text-white mb-2 sm:mb-4 drop-shadow-xl tracking-tight leading-tight">
                                         {imgObj.title}
                                     </h1>
-                                    <p className="text-lg sm:text-xl md:text-2xl font-body text-white/90 drop-shadow-md font-light">
+                                    <p className="text-sm sm:text-lg md:text-xl lg:text-2xl font-body text-white/90 drop-shadow-md font-light">
                                         {imgObj.subtitle}
                                     </p>
                                 </div>

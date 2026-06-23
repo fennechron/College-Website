@@ -163,50 +163,49 @@ const LibraryStaff = () => {
     return (
         <div className="min-h-screen bg-slate-50 flex flex-col font-body">
             {/* ─── Hero Section ─── */}
-            <div className="bg-primary text-white py-24 relative overflow-hidden">
+            <div className="bg-primary text-white py-12 sm:py-24 relative overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-br from-primary via-secondary to-accent opacity-95"></div>
                 <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10"></div>
                 
-                <div className="relative z-10 max-w-7xl mx-auto px-6">
+                <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6">
                     <motion.div 
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.6 }}
-                        className="flex flex-col gap-4 text-left"
+                        className="flex flex-col gap-3 sm:gap-4 text-left"
                     >
                         {/* Breadcrumbs */}
-                        <div className="flex items-center gap-2 text-[0.8rem] font-bold tracking-widest text-white/60 mb-2 uppercase">
+                        <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 text-[0.7rem] sm:text-[0.8rem] font-bold tracking-widest text-white/60 mb-1 sm:mb-2 uppercase">
                             <Link to="/" className="hover:text-accent transition-colors flex items-center gap-1.5 whitespace-nowrap">
-                                <Home size={14} /> HOME
+                                <Home size={12} /> HOME
                             </Link>
-                            <ArrowIcon size={12} className="text-white/40" />
+                            <ArrowIcon size={10} className="text-white/40" />
                             <span className="text-white/40 whitespace-nowrap">ABOUT</span>
-                            <ArrowIcon size={12} className="text-white/40" />
+                            <ArrowIcon size={10} className="text-white/40" />
                             <span className="text-white/40 whitespace-nowrap">ADMINISTRATIONS</span>
-                            <ArrowIcon size={12} className="text-white/40" />
+                            <ArrowIcon size={10} className="text-white/40" />
                             <span className="text-accent underline decoration-2 underline-offset-4 whitespace-nowrap">LIBRARY STAFF</span>
                         </div>
                         
-                        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-display font-black leading-tight tracking-tighter uppercase max-w-4xl">
+                        <h1 className="text-3xl sm:text-5xl lg:text-6xl font-display font-black leading-tight tracking-tighter uppercase max-w-4xl">
                             Library Staff
                         </h1>
-                        
                     </motion.div>
                 </div>
             </div>
 
             {/* ─── Main Content Grid ─── */}
-            <div className="max-w-7xl mx-auto px-6 py-16 w-full grid grid-cols-1 lg:grid-cols-12 gap-12 flex-grow">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-16 w-full grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-12 flex-grow">
                 
                 {/* ─── Left Column: Search Bar & Table ─── */}
                 <motion.div 
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8 }}
-                    className="lg:col-span-8 space-y-8"
+                    className="lg:col-span-8 space-y-6 sm:space-y-8"
                 >
                     {/* Search & Stats Bar */}
-                    <div className="bg-white p-6 rounded-[2rem] shadow-[0_10px_40px_rgba(12,43,78,0.04)] border border-primary/5 flex flex-col md:flex-row gap-4 items-center justify-between">
+                    <div className="bg-white p-4 sm:p-6 rounded-2xl sm:rounded-[2rem] shadow-[0_10px_40px_rgba(12,43,78,0.04)] border border-primary/5 flex flex-col md:flex-row gap-4 items-center justify-between">
                         <div className="relative w-full md:max-w-md">
                             <span className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                                 <Search className="h-5 w-5 text-primary/40" />
@@ -216,7 +215,7 @@ const LibraryStaff = () => {
                                 placeholder="Search by name or designation..."
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
-                                className="w-full pl-12 pr-10 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-primary font-semibold placeholder:text-slate-400 focus:outline-none focus:bg-white focus:border-accent focus:ring-2 focus:ring-accent/15 transition-all text-sm"
+                                className="w-full pl-12 pr-10 py-3 bg-slate-50 border border-slate-200 rounded-xl sm:rounded-2xl text-primary font-semibold placeholder:text-slate-400 focus:outline-none focus:bg-white focus:border-accent focus:ring-2 focus:ring-accent/15 transition-all text-xs sm:text-sm"
                             />
                             {searchTerm && (
                                 <button 
@@ -227,23 +226,23 @@ const LibraryStaff = () => {
                                 </button>
                             )}
                         </div>
-                        <div className="flex items-center gap-2.5 bg-primary/5 px-4.5 py-2.5 rounded-2xl border border-primary/10">
-                            <UserCheck className="h-4.5 w-4.5 text-accent" />
-                            <span className="text-xs font-black uppercase text-primary tracking-wider">
+                        <div className="flex items-center gap-2 bg-primary/5 px-3.5 py-2 rounded-xl border border-primary/10">
+                            <UserCheck className="h-4 w-4 text-accent shrink-0" />
+                            <span className="text-[0.65rem] sm:text-xs font-black uppercase text-primary tracking-wider whitespace-nowrap">
                                 {filteredStaff.length} Staff Members Found
                             </span>
                         </div>
                     </div>
 
                     {/* Staff Table Card */}
-                    <div className="bg-white rounded-[2.5rem] shadow-[0_10px_50px_rgba(12,43,78,0.06)] border border-primary/5 overflow-hidden">
+                    <div className="bg-white rounded-2xl sm:rounded-[2.5rem] shadow-[0_10px_50px_rgba(12,43,78,0.06)] border border-primary/5 overflow-hidden">
                         <div className="overflow-x-auto">
                             <table className="w-full text-left border-collapse">
                                 <thead>
                                     <tr className="bg-primary text-white border-b border-white/10">
-                                        <th className="py-6 px-8 font-display font-black uppercase tracking-wider text-[0.7rem] w-24">Profile</th>
-                                        <th className="py-6 px-8 font-display font-black uppercase tracking-wider text-[0.7rem]">Name</th>
-                                        <th className="py-6 px-8 font-display font-black uppercase tracking-wider text-[0.7rem]">Designation</th>
+                                        <th className="py-4 sm:py-6 px-4 sm:px-8 font-display font-black uppercase tracking-wider text-[0.6rem] sm:text-[0.7rem] w-16 sm:w-24 whitespace-nowrap">Profile</th>
+                                        <th className="py-4 sm:py-6 px-4 sm:px-8 font-display font-black uppercase tracking-wider text-[0.6rem] sm:text-[0.7rem] whitespace-nowrap">Name</th>
+                                        <th className="py-4 sm:py-6 px-4 sm:px-8 font-display font-black uppercase tracking-wider text-[0.6rem] sm:text-[0.7rem] whitespace-nowrap">Designation</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -259,22 +258,22 @@ const LibraryStaff = () => {
                                                     className="group border-b border-slate-50 hover:bg-slate-50/70 transition-colors"
                                                 >
                                                     {/* Avatar / Circle Icon */}
-                                                    <td className="py-5 px-8">
-                                                        <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-primary/10 to-accent/15 flex items-center justify-center font-display font-black text-accent text-sm group-hover:scale-105 transition-transform duration-300 shadow-sm border border-primary/5">
+                                                    <td className="py-3 sm:py-5 px-4 sm:px-8">
+                                                        <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-xl sm:rounded-2xl bg-gradient-to-br from-primary/10 to-accent/15 flex items-center justify-center font-display font-black text-accent text-xs sm:text-sm group-hover:scale-105 transition-transform duration-300 shadow-sm border border-primary/5">
                                                             {getInitials(staff.name)}
                                                         </div>
                                                     </td>
                                                     
                                                     {/* Name */}
-                                                    <td className="py-5 px-8">
-                                                        <p className="text-base font-black text-primary group-hover:text-accent transition-colors duration-300">
+                                                    <td className="py-3 sm:py-5 px-4 sm:px-8">
+                                                        <p className="text-sm sm:text-base font-black text-primary group-hover:text-accent transition-colors duration-300 whitespace-nowrap">
                                                             {staff.name}
                                                         </p>
                                                     </td>
                                                     
                                                     {/* Designation */}
-                                                    <td className="py-5 px-8">
-                                                        <span className="inline-block px-3.5 py-1.5 rounded-xl text-xs font-bold bg-slate-100/80 text-secondary border border-slate-200/50 group-hover:bg-accent/10 group-hover:text-accent group-hover:border-accent/15 transition-all">
+                                                    <td className="py-3 sm:py-5 px-4 sm:px-8">
+                                                        <span className="inline-block px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-lg sm:rounded-xl text-[0.65rem] sm:text-xs font-bold bg-slate-100/80 text-secondary border border-slate-200/50 group-hover:bg-accent/10 group-hover:text-accent group-hover:border-accent/15 transition-all whitespace-nowrap">
                                                             {staff.designation}
                                                         </span>
                                                     </td>
@@ -282,13 +281,13 @@ const LibraryStaff = () => {
                                             ))
                                         ) : (
                                             <tr>
-                                                <td colSpan={3} className="py-16 text-center text-slate-400">
-                                                    <div className="flex flex-col items-center justify-center gap-4">
-                                                        <span className="p-4 bg-slate-100 rounded-full text-slate-300">
-                                                            <Search size={32} />
+                                                <td colSpan={3} className="py-12 sm:py-16 text-center text-slate-400">
+                                                    <div className="flex flex-col items-center justify-center gap-3 sm:gap-4 px-4">
+                                                        <span className="p-3 sm:p-4 bg-slate-100 rounded-full text-slate-300">
+                                                            <Search size={28} />
                                                         </span>
-                                                        <p className="text-lg font-bold text-primary/70">No Staff Members Found</p>
-                                                        <p className="text-sm max-w-xs leading-relaxed">
+                                                        <p className="text-base sm:text-lg font-bold text-primary/70">No Staff Members Found</p>
+                                                        <p className="text-xs sm:text-sm max-w-xs leading-relaxed">
                                                             We couldn't find any staff matching "{searchTerm}". Please double-check the spelling or search parameters.
                                                         </p>
                                                     </div>
@@ -301,50 +300,50 @@ const LibraryStaff = () => {
                         </div>
                     </div>
                 </motion.div>
-
+ 
                 {/* ─── Right Column: Interactive Calendar ─── */}
                 <motion.div 
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.2 }}
-                    className="lg:col-span-4 space-y-8"
+                    className="lg:col-span-4 space-y-6 sm:space-y-8"
                 >
-                    <div className="bg-white p-8 rounded-[2.5rem] shadow-[0_10px_50px_rgba(12,43,78,0.06)] border border-primary/5 space-y-6">
-                        <div className="flex items-center gap-2 border-b border-slate-100 pb-4">
-                            <Calendar className="text-accent" size={24} />
-                            <h3 className="text-lg font-black text-primary uppercase tracking-wider">
+                    <div className="bg-white p-4 sm:p-8 rounded-2xl sm:rounded-[2.5rem] shadow-[0_10px_50px_rgba(12,43,78,0.06)] border border-primary/5 space-y-4 sm:space-y-6">
+                        <div className="flex items-center gap-2 border-b border-slate-100 pb-3 sm:pb-4">
+                            <Calendar className="text-accent" size={20} />
+                            <h3 className="text-base sm:text-lg font-black text-primary uppercase tracking-wider">
                                 Library Calendar
                             </h3>
                         </div>
-
+ 
                         {/* Calendar Body */}
-                        <div className="space-y-4">
+                        <div className="space-y-3 sm:space-y-4">
                             {/* Calendar Header with Controls */}
                             <div className="flex items-center justify-between">
-                                <span className="text-sm font-black uppercase text-primary/80 tracking-widest">
+                                <span className="text-xs sm:text-sm font-black uppercase text-primary/80 tracking-widest">
                                     {monthNames[month]} {year}
                                 </span>
-                                <div className="flex items-center gap-1.5">
+                                <div className="flex items-center gap-1">
                                     <button 
                                         onClick={prevMonth}
-                                        className="p-2 hover:bg-slate-100 rounded-xl transition text-primary/60 hover:text-primary"
+                                        className="p-1.5 hover:bg-slate-100 rounded-lg transition text-primary/60 hover:text-primary"
                                     >
-                                        <ChevronLeft size={16} />
+                                        <ChevronLeft size={14} />
                                     </button>
                                     <button 
                                         onClick={nextMonth}
-                                        className="p-2 hover:bg-slate-100 rounded-xl transition text-primary/60 hover:text-primary"
+                                        className="p-1.5 hover:bg-slate-100 rounded-lg transition text-primary/60 hover:text-primary"
                                     >
-                                        <ChevronRight size={16} />
+                                        <ChevronRight size={14} />
                                     </button>
                                 </div>
                             </div>
-
+ 
                             {/* Calendar Grid */}
-                            <div className="grid grid-cols-7 gap-y-2 text-center">
+                            <div className="grid grid-cols-7 gap-y-1 sm:gap-y-2 text-center">
                                 {/* Week Days */}
                                 {["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"].map((day) => (
-                                    <div key={day} className="text-xs font-black uppercase text-slate-400 py-1">
+                                    <div key={day} className="text-[0.65rem] sm:text-xs font-black uppercase text-slate-400 py-1">
                                         {day}
                                     </div>
                                 ))}
@@ -352,9 +351,9 @@ const LibraryStaff = () => {
                                 {renderCalendarDays()}
                             </div>
                         </div>
-
+ 
                         {/* Calendar Event Display Details */}
-                        <div className="pt-4 border-t border-slate-100">
+                        <div className="pt-3 sm:pt-4 border-t border-slate-100">
                             <AnimatePresence mode="wait">
                                 {selectedEvent ? (
                                     <motion.div
@@ -363,21 +362,21 @@ const LibraryStaff = () => {
                                         animate={{ opacity: 1, y: 0 }}
                                         exit={{ opacity: 0, y: -10 }}
                                         transition={{ duration: 0.2 }}
-                                        className="bg-slate-50 p-5 rounded-2xl border-l-4 border-accent space-y-3"
+                                        className="bg-slate-50 p-4 sm:p-5 rounded-xl sm:rounded-2xl border-l-4 border-accent space-y-2.5"
                                     >
                                         <div className="flex justify-between items-start gap-4">
-                                            <span className="inline-block px-2.5 py-1 text-[0.6rem] font-black uppercase tracking-wider rounded bg-accent/10 text-accent">
+                                            <span className="inline-block px-2 py-0.5 text-[0.55rem] sm:text-[0.6rem] font-black uppercase tracking-wider rounded bg-accent/10 text-accent">
                                                 {selectedEvent.type}
                                             </span>
-                                            <div className="flex items-center gap-1.5 text-slate-500 font-bold text-xs shrink-0">
-                                                <Clock size={12} />
+                                            <div className="flex items-center gap-1 text-slate-500 font-bold text-[0.65rem] sm:text-xs shrink-0">
+                                                <Clock size={10} />
                                                 <span>{selectedEvent.time}</span>
                                             </div>
                                         </div>
-                                        <h4 className="font-black text-primary text-[0.95rem] leading-tight">
+                                        <h4 className="font-black text-primary text-xs sm:text-[0.95rem] leading-tight">
                                             {selectedEvent.title}
                                         </h4>
-                                        <p className="text-xs text-secondary/70 leading-relaxed font-semibold">
+                                        <p className="text-[0.65rem] sm:text-xs text-secondary/70 leading-relaxed font-semibold">
                                             {selectedEvent.desc}
                                         </p>
                                     </motion.div>
@@ -386,7 +385,7 @@ const LibraryStaff = () => {
                                         key="no-event"
                                         initial={{ opacity: 0 }}
                                         animate={{ opacity: 1 }}
-                                        className="text-center py-6 text-slate-400 text-xs font-bold"
+                                        className="text-center py-4 sm:py-6 text-slate-400 text-[0.65rem] sm:text-xs font-bold leading-normal"
                                     >
                                         No scheduled events on this date.<br />
                                         Select highlighted dates to view details.
@@ -397,73 +396,73 @@ const LibraryStaff = () => {
                     </div>
                 </motion.div>
             </div>
-
+ 
             {/* ─── Bottom Section: RECENT POSTS ─── */}
-            <div className="bg-slate-100 py-20 border-t border-slate-200">
-                <div className="max-w-7xl mx-auto px-6 space-y-12">
-                    <div className="flex flex-col md:flex-row items-start md:items-end justify-between gap-6">
-                        <div className="space-y-3 text-left">
-                            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/10 border border-accent/20 text-accent text-[0.65rem] font-black uppercase tracking-[0.2em]">
+            <div className="bg-slate-100 py-12 sm:py-20 border-t border-slate-200">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 space-y-8 sm:space-y-12">
+                    <div className="flex flex-col md:flex-row items-start md:items-end justify-between gap-4 sm:gap-6">
+                        <div className="space-y-2 sm:space-y-3 text-left">
+                            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/10 border border-accent/20 text-accent text-[0.6rem] sm:text-[0.65rem] font-black uppercase tracking-[0.2em]">
                                 Communications
                             </div>
-                            <h2 className="text-[2.2rem] font-display font-black text-primary uppercase tracking-tight leading-tight">
+                            <h2 className="text-2xl sm:text-[2.2rem] font-display font-black text-primary uppercase tracking-tight leading-tight">
                                 Recent Posts
                             </h2>
-                            <p className="text-secondary/70 text-base font-semibold max-w-xl">
+                            <p className="text-secondary/70 text-sm sm:text-base font-semibold max-w-xl">
                                 Stay informed with the latest updates, subscription reports, circulars, and book collection announcements from the central library.
                             </p>
                         </div>
                         {/* Link to central Downloads/Notice page */}
                         <Link 
                             to="/page/downloads" 
-                            className="flex items-center gap-2 px-8 py-4 bg-primary text-white rounded-full font-bold hover:bg-secondary transition-all hover:shadow-xl group shrink-0"
+                            className="flex items-center gap-2 px-6 py-3.5 bg-primary text-white rounded-full font-bold hover:bg-secondary transition-all hover:shadow-xl group shrink-0 text-xs sm:text-sm"
                         >
                             View All Announcements
-                            <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                            <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
                         </Link>
                     </div>
-
+ 
                     {/* Posts Cards Grid */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
                         {recentPosts.map((post, index) => (
                             <motion.div 
                                 key={post.id}
                                 initial={{ opacity: 0, y: 30 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                                className="group bg-white rounded-3xl border border-primary/10 overflow-hidden hover:shadow-[0_20px_50px_rgba(12,43,78,0.08)] transition-all duration-500 hover:-translate-y-2 flex flex-col h-full text-left"
+                                className="group bg-white rounded-2xl sm:rounded-3xl border border-primary/10 overflow-hidden hover:shadow-[0_20px_50px_rgba(12,43,78,0.08)] transition-all duration-500 hover:-translate-y-2 flex flex-col h-full text-left"
                             >
                                 {/* Card Header with category & date */}
-                                <div className="p-8 pb-0 flex items-center justify-between">
-                                    <span className="px-3 py-1 bg-accent/5 text-accent text-[0.65rem] font-black rounded-full tracking-widest uppercase">
+                                <div className="p-5 sm:p-8 pb-0 flex items-center justify-between">
+                                    <span className="px-3 py-1 bg-accent/5 text-accent text-[0.6rem] sm:text-[0.65rem] font-black rounded-full tracking-widest uppercase">
                                         {post.category}
                                     </span>
-                                    <span className="text-xs text-slate-400 font-bold">
+                                    <span className="text-[0.65rem] sm:text-xs text-slate-400 font-bold">
                                         {post.date}
                                     </span>
                                 </div>
-
+ 
                                 {/* Card Body */}
-                                <div className="p-8 flex flex-col flex-grow">
-                                    <h3 className="text-lg font-display font-bold text-primary mb-4 leading-snug group-hover:text-accent transition-colors">
+                                <div className="p-5 sm:p-8 flex flex-col flex-grow">
+                                    <h3 className="text-base sm:text-lg font-display font-bold text-primary mb-3 sm:mb-4 leading-snug group-hover:text-accent transition-colors">
                                         {post.title}
                                     </h3>
-                                    <p className="text-secondary/70 text-sm leading-relaxed mb-6 flex-grow font-semibold">
+                                    <p className="text-secondary/70 text-xs sm:text-sm leading-relaxed mb-4 sm:mb-6 flex-grow font-semibold">
                                         {post.summary}
                                     </p>
                                     
                                     {/* Action link */}
-                                    <div className="flex items-center justify-between pt-4 border-t border-slate-50 mt-auto">
-                                        <div className="flex items-center gap-1.5 text-xs text-slate-400 font-bold">
-                                            <Clock size={12} />
+                                    <div className="flex items-center justify-between pt-3 sm:pt-4 border-t border-slate-50 mt-auto">
+                                        <div className="flex items-center gap-1.5 text-[0.65rem] sm:text-xs text-slate-400 font-bold">
+                                            <Clock size={10} />
                                             <span>{post.readTime}</span>
                                         </div>
                                         <Link 
                                             to={post.link} 
-                                            className="inline-flex items-center text-primary hover:text-accent font-black text-xs tracking-wider group/link transition-colors"
+                                            className="inline-flex items-center text-primary hover:text-accent font-black text-[0.65rem] sm:text-xs tracking-wider group/link transition-colors"
                                         >
                                             READ POST
-                                            <ArrowIcon size={12} className="ml-1 text-primary group-hover/link:text-accent group-hover/link:translate-x-1 transition-all" />
+                                            <ArrowIcon size={10} className="ml-1 text-primary group-hover/link:text-accent group-hover/link:translate-x-1 transition-all" />
                                         </Link>
                                     </div>
                                 </div>

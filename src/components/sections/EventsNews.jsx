@@ -73,12 +73,22 @@ const EventsNews = () => {
 
                 <style>
                 {`
+                :root {
+                    --event-card-width: 240px;
+                    --event-card-gap: 16px;
+                }
+                @media (min-width: 640px) {
+                    :root {
+                        --event-card-width: 370px;
+                        --event-card-gap: 32px;
+                    }
+                }
                 @keyframes scrollEvents {
                     0% { transform: translateX(0); }
-                    100% { transform: translateX(calc(-403px * 4)); }
+                    100% { transform: translateX(calc(-1 * (var(--event-card-width) + var(--event-card-gap)) * ${displayData.length})); }
                 }
                 .events-track {
-                    animation: scrollEvents 40s linear infinite;
+                    animation: scrollEvents ${displayData.length * 8}s linear infinite;
                 }
                 .events-track:hover {
                     animation-play-state: paused;
@@ -90,11 +100,11 @@ const EventsNews = () => {
                 </style>
 
                 <div className="overflow-hidden relative py-10 mask-gradient-horizontal">
-                    <div className="flex gap-8 events-track items-stretch min-w-max">
+                    <div className="flex events-track items-stretch min-w-max" style={{ gap: 'var(--event-card-gap)' }}>
                         {[...displayData, ...displayData].map((item, idx) => (
-                            <div key={`${item._id || item.id}-${idx}`} className="w-[370px] h-[460px] group bg-white rounded-3xl border border-primary/10 overflow-hidden hover:shadow-[0_20px_50px_rgba(12,43,78,0.12)] transition-all duration-500 hover:-translate-y-2 flex flex-col shrink-0">
+                            <div key={`${item._id || item.id}-${idx}`} className="h-[360px] sm:h-[460px] group bg-white rounded-[1.5rem] sm:rounded-3xl border border-primary/10 overflow-hidden hover:shadow-[0_20px_50px_rgba(12,43,78,0.12)] transition-all duration-500 hover:-translate-y-2 flex flex-col shrink-0" style={{ width: 'var(--event-card-width)' }}>
                                 {/* Card Header with Date Banner */}
-                                <div className="h-48 shrink-0 relative bg-primary/5 flex items-center justify-center overflow-hidden">
+                                <div className="h-32 sm:h-48 shrink-0 relative bg-primary/5 flex items-center justify-center overflow-hidden">
                                     {item.image ? (
                                         <img 
                                             src={urlFor(item.image).url()} 
@@ -106,9 +116,9 @@ const EventsNews = () => {
                                     )}
                                     <div className="absolute inset-0 bg-slate-900/40 group-hover:bg-slate-900/20 transition-colors duration-500"></div>
                                     
-                                    <div className="relative z-10 flex flex-col items-center bg-white/90 backdrop-blur-sm px-6 py-3 rounded-2xl shadow-lg border border-white/50 transform group-hover:-translate-y-1 transition-transform duration-300">
-                                        <Calendar className="text-accent mb-1" size={24} />
-                                        <span className="text-primary font-black tracking-widest text-sm">{item.date}</span>
+                                    <div className="relative z-10 flex flex-col items-center bg-white/90 backdrop-blur-sm px-4 py-2 sm:py-3 rounded-xl sm:rounded-2xl shadow-lg border border-white/50 transform group-hover:-translate-y-1 transition-transform duration-300">
+                                        <Calendar className="text-accent mb-1 h-4 w-4 sm:h-5 sm:w-5" />
+                                        <span className="text-primary font-black tracking-widest text-[0.65rem] sm:text-sm">{item.date}</span>
                                     </div>
                                     
                                     <div className="absolute top-4 right-4 bg-accent text-white text-[0.65rem] font-black px-3 py-1 rounded-full tracking-widest z-10 shadow-md">
@@ -117,21 +127,21 @@ const EventsNews = () => {
                                 </div>
 
                                 {/* Card Body */}
-                                <div className="p-8 flex flex-col flex-grow">
-                                    <h3 className="text-[1.25rem] font-display font-bold text-primary mb-4 leading-tight group-hover:text-accent transition-colors line-clamp-2">
+                                <div className="p-4 sm:p-8 flex flex-col flex-grow">
+                                    <h3 className="text-[0.95rem] sm:text-[1.25rem] font-display font-bold text-primary mb-2 sm:mb-4 leading-tight group-hover:text-accent transition-colors line-clamp-2">
                                         {item.title}
                                     </h3>
-                                    <p className="text-secondary/70 text-base leading-relaxed mb-6 flex-grow min-h-[72px]">
+                                    <p className="text-secondary/70 text-xs sm:text-base leading-relaxed mb-4 sm:mb-6 flex-grow min-h-[48px] sm:min-h-[72px]">
                                         {truncateText(item.desc || item.description, 110)}
                                     </p>
                                     
                                     {item.actionType === 'content' ? (
-                                        <Link to={`/event/${item._id || item.id}`} className="inline-flex items-center text-primary font-bold text-sm tracking-wide group/link mt-auto">
+                                        <Link to={`/event/${item._id || item.id}`} className="inline-flex items-center text-primary font-bold text-[0.7rem] sm:text-sm tracking-wide group/link mt-auto">
                                             READ MORE
                                             <div className="ml-2 w-0 h-[2px] bg-accent group-hover/link:w-6 transition-all duration-300"></div>
                                         </Link>
                                     ) : (
-                                        <a href={item.linkUrl || "#"} target="_blank" rel="noopener noreferrer" className="inline-flex items-center text-primary font-bold text-sm tracking-wide group/link mt-auto">
+                                        <a href={item.linkUrl || "#"} target="_blank" rel="noopener noreferrer" className="inline-flex items-center text-primary font-bold text-[0.7rem] sm:text-sm tracking-wide group/link mt-auto">
                                             READ MORE
                                             <div className="ml-2 w-0 h-[2px] bg-accent group-hover/link:w-6 transition-all duration-300"></div>
                                         </a>

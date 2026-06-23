@@ -15,6 +15,7 @@ import orgCategory from './orgCategory'
 import homePage from './homePage'
 import siteSettings from './siteSettings'
 import administration from './administration'
+import admission from './admission'
 
 export const schemaTypes = [
   siteSettings,
@@ -33,6 +34,7 @@ export const schemaTypes = [
   carouselImage,
   principal,
   committee,
-  administration
+  administration,
+  admission
 ]
 
