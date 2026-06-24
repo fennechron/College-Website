@@ -39,19 +39,18 @@ const Achievements = () => {
                         {slides.map((slide, index) => (
                             <div
                                 key={index}
-                                className="relative h-full min-w-full bg-cover bg-center"
+                                className="relative h-full min-w-full bg-contain bg-center bg-no-repeat"
                                 style={{ backgroundImage: `url(${urlFor(slide.image).url()})` }}
                             >
-                                {/* Overlay */}
-                                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-800/50 to-transparent"></div>
+                                {/* Overlay removed as per user request */}
                                 
                                 {/* Text Content */}
                                 <div className="absolute inset-0 flex flex-col items-center justify-end text-center p-4 sm:p-12 mb-6 sm:mb-10">
                                     <div className={`transition-all duration-1000 transform ${currentIndex === index ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'} max-w-[90%] sm:max-w-4xl`}>
-                                        <h3 className="text-xl sm:text-4xl md:text-6xl font-display font-bold text-white mb-2 sm:mb-6 drop-shadow-md">
+                                        <h3 className="text-xl sm:text-4xl md:text-6xl font-display font-bold text-white mb-2 sm:mb-6">
                                             {slide.title}
                                         </h3>
-                                        <p className="text-xs sm:text-lg md:text-2xl text-slate-200 mx-auto drop-shadow-sm leading-relaxed">
+                                        <p className="text-xs sm:text-lg md:text-2xl text-slate-200 mx-auto leading-relaxed">
                                             {slide.subtitle}
                                         </p>
                                     </div>
