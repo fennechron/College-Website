@@ -116,10 +116,7 @@ const EventsNews = () => {
                                     )}
                                     <div className="absolute inset-0 bg-slate-900/40 group-hover:bg-slate-900/20 transition-colors duration-500"></div>
                                     
-                                    <div className="relative z-10 flex flex-col items-center bg-white/90 backdrop-blur-sm px-4 py-2 sm:py-3 rounded-xl sm:rounded-2xl shadow-lg border border-white/50 transform group-hover:-translate-y-1 transition-transform duration-300">
-                                        <Calendar className="text-accent mb-1 h-4 w-4 sm:h-5 sm:w-5" />
-                                        <span className="text-primary font-black tracking-widest text-[0.65rem] sm:text-sm">{item.date}</span>
-                                    </div>
+
                                     
                                     <div className="absolute top-4 right-4 bg-accent text-white text-[0.65rem] font-black px-3 py-1 rounded-full tracking-widest z-10 shadow-md">
                                         {item.type}
