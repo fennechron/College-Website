@@ -11,7 +11,7 @@ const AccordionItem = ({ title, items }) => {
         <div className="border border-slate-100 rounded-2xl overflow-hidden bg-slate-50/50 mb-4 transition-all">
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="w-full px-6 py-4 flex items-center justify-between text-left font-black text-sm uppercase tracking-wider bg-slate-50 hover:bg-slate-100/80 text-primary transition-all"
+                className="w-full px-6 py-4 flex items-center justify-between text-left font-black text-sm tracking-wider bg-slate-50 hover:bg-slate-100/80 text-primary transition-all"
             >
                 <span>{title}</span>
                 <span className={`transform transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}>
@@ -182,7 +182,7 @@ const departmentDetails = {
             "Control Systems Lab",
             "Measurements & Instrumentation Lab"
         ],
-        programs: ["B.Tech Electrical & Electronics Eng.", "Research Fellowships (Ph.D.)"],
+        programs: ["B.Tech Electrical & Electronics Eng.", "Research Fellowships (PhD)"],
         hod: "Smt. Sunitha Sajeev",
         hodEmail: "sunitha@ceconline.edu"
     },
@@ -209,7 +209,7 @@ const departmentDetails = {
             "Microwave & RF Engineering Lab",
             "Integrated Circuits Laboratory"
         ],
-                programs: ["B.Tech Electronics & Comm. Eng.", "Ph.D. in Electronics Engineering"],
+                programs: ["B.Tech Electronics & Comm. Eng.", "PhD in Electronics Engineering"],
         hod: "Dr. C V Anilkumar",
         hodEmail: "cvanilkumar@ceconline.edu"
     },
@@ -327,7 +327,7 @@ const DepartmentAccordion = ({ title, items }) => {
                 onClick={() => setIsOpen(!isOpen)}
                 className="w-full flex items-center justify-between px-4 sm:px-6 py-4 sm:py-5 bg-slate-50/50 hover:bg-slate-50 text-left transition-colors"
             >
-                <span className="font-display font-black text-primary text-base sm:text-xl uppercase tracking-wide">{title}</span>
+                <span className="font-display font-black text-primary text-base sm:text-xl tracking-wide">{title}</span>
                 <span className={`text-accent font-black text-sm sm:text-lg transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}>
                     ▼
                 </span>
@@ -688,12 +688,11 @@ const ContentPage = () => {
                                                 )
                                             ) : (
                                                 <div className="space-y-4 mt-6">
-                                                    <h4 className="text-base sm:text-xl font-display font-black text-primary uppercase">Program Specific Outcomes (PSOs)</h4>
                                                     <div className="space-y-4">
                                                         {Object.entries(dept.psos).map(([prog, psos]) => (
                                                             <DepartmentAccordion 
                                                                 key={prog}
-                                                                title={`PSOs - ${prog}`} 
+                                                                title={`${prog}`} 
                                                                 items={psos} 
                                                             />
                                                         ))}
@@ -1130,7 +1129,7 @@ const ContentPage = () => {
                         className="flex flex-col gap-4"
                     >
                         {/* Breadcrumbs */}
-                        <div className="flex items-center gap-2 text-[0.8rem] font-bold tracking-widest text-white/60 mb-2 uppercase">
+                        <div className="flex items-center gap-2 text-[0.8rem] font-bold tracking-widest text-white/60 mb-2">
                             <Link to="/" className="hover:text-accent transition-colors flex items-center gap-1.5 whitespace-nowrap">
                                 <Home size={14} /> HOME
                             </Link>
@@ -1140,7 +1139,7 @@ const ContentPage = () => {
                             <span className="text-accent underline decoration-2 underline-offset-4 whitespace-nowrap">{content.title}</span>
                         </div>
                         
-                        <h1 className="text-[1.8rem] sm:text-[3.5rem] font-display font-black leading-tight tracking-tighter uppercase max-w-4xl">
+                        <h1 className="text-[1.8rem] sm:text-[3.5rem] font-display font-black leading-tight tracking-tighter max-w-4xl">
                             {content.title}
                         </h1>
                         <div className="w-20 sm:w-24 h-1.5 sm:h-2 bg-accent rounded-full mt-2"></div>
@@ -1291,18 +1290,9 @@ const ContentPage = () => {
                                 </div>
                             ) : slug === 'btech' ? (
                                 <div className="space-y-8 sm:space-y-12">
-                                    <div className="border-b border-slate-100 pb-6 mb-8 text-left">
-                                        <span className="text-xs font-black uppercase tracking-widest text-accent bg-accent/10 px-4 py-1.5 rounded-full">
-                                            Programmes
-                                        </span>
-                                        <h2 className="text-2xl sm:text-3xl font-display font-black text-primary uppercase mt-3">
-                                            Engineering Full Time Courses
-                                        </h2>
-                                    </div>
 
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 text-left">
                                         {btechCourses.map((course, idx) => {
-                                            const isExpanded = activeEligibility === idx;
                                             return (
                                                 <div 
                                                     key={idx} 
@@ -1313,7 +1303,7 @@ const ContentPage = () => {
                                                             <BookOpen size={24} />
                                                         </div>
                                                         <div className="space-y-2">
-                                                            <h3 className="text-lg sm:text-xl font-display font-black text-primary group-hover:text-accent transition-colors duration-300 uppercase leading-snug">
+                                                            <h3 className="text-lg sm:text-xl font-display font-black text-primary group-hover:text-accent transition-colors duration-300 leading-snug">
                                                                 {course.name}
                                                             </h3>
                                                         </div>
@@ -1334,42 +1324,36 @@ const ContentPage = () => {
                                                             </div>
                                                         </div>
                                                     </div>
-
-                                                    <div className="mt-6 sm:mt-8 border-t border-slate-100 pt-5 sm:pt-6">
-                                                        <button 
-                                                            onClick={() => setActiveEligibility(isExpanded ? null : idx)}
-                                                            className="inline-flex items-center gap-2 text-[0.65rem] sm:text-xs font-black uppercase tracking-wider text-accent hover:text-primary transition-colors cursor-pointer"
-                                                        >
-                                                            <span>Eligibility Requirements</span>
-                                                            <span className="text-accent/60 font-medium">({isExpanded ? 'click to collapse' : 'click here'})</span>
-                                                            <ChevronRight size={14} className={`transform transition-transform duration-300 ${isExpanded ? 'rotate-90' : ''}`} />
-                                                        </button>
-
-                                                        <motion.div
-                                                            initial={false}
-                                                            animate={{ height: isExpanded ? 'auto' : 0, opacity: isExpanded ? 1 : 0 }}
-                                                            className="overflow-hidden"
-                                                            transition={{ duration: 0.3, ease: "easeInOut" }}
-                                                        >
-                                                            <div className="mt-4 p-4 sm:p-5 rounded-xl sm:rounded-2xl bg-white border border-slate-100 shadow-inner space-y-3 sm:space-y-4 text-[0.7rem] sm:text-xs font-semibold text-slate-600 leading-relaxed">
-                                                                <div>
-                                                                    <span className="font-black text-primary uppercase block mb-1">Academic Qualification</span>
-                                                                    {course.eligibility.academic}
-                                                                </div>
-                                                                <div>
-                                                                    <span className="font-black text-primary uppercase block mb-1">Marks Requirement</span>
-                                                                    {course.eligibility.marks}
-                                                                </div>
-                                                                <div>
-                                                                    <span className="font-black text-primary uppercase block mb-1">Entrance Exam</span>
-                                                                    {course.eligibility.entrance}
-                                                                </div>
-                                                            </div>
-                                                        </motion.div>
-                                                    </div>
                                                 </div>
                                             );
                                         })}
+                                    </div>
+
+                                    <div className="mt-8 sm:mt-12 bg-slate-50/50 rounded-2xl sm:rounded-3xl p-6 sm:p-10 border border-slate-100 text-left">
+                                        <h3 className="text-xl sm:text-2xl font-display font-black text-primary uppercase mb-6 flex items-center gap-3">
+                                            <span className="w-8 h-1 bg-accent rounded-full" />
+                                            Eligibility Requirements
+                                        </h3>
+                                        <div className="grid gap-6 md:grid-cols-3">
+                                            <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm">
+                                                <span className="font-black text-accent uppercase block mb-2 text-xs sm:text-sm tracking-wider">Academic Qualification</span>
+                                                <p className="text-slate-600 text-[0.7rem] sm:text-xs font-semibold leading-relaxed">
+                                                    {btechCourses[0].eligibility.academic}
+                                                </p>
+                                            </div>
+                                            <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm">
+                                                <span className="font-black text-accent uppercase block mb-2 text-xs sm:text-sm tracking-wider">Marks Requirement</span>
+                                                <p className="text-slate-600 text-[0.7rem] sm:text-xs font-semibold leading-relaxed">
+                                                    {btechCourses[0].eligibility.marks}
+                                                </p>
+                                            </div>
+                                            <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm">
+                                                <span className="font-black text-accent uppercase block mb-2 text-xs sm:text-sm tracking-wider">Entrance Exam</span>
+                                                <p className="text-slate-600 text-[0.7rem] sm:text-xs font-semibold leading-relaxed">
+                                                    {btechCourses[0].eligibility.entrance}
+                                                </p>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             ) : slug === 'mca' ? (
@@ -1392,7 +1376,7 @@ const ContentPage = () => {
                                                     <BookOpen size={24} />
                                                 </div>
                                                 <div className="space-y-2">
-                                                    <h3 className="text-xl sm:text-2xl font-display font-black text-primary group-hover:text-accent transition-colors duration-300 uppercase leading-snug">
+                                                    <h3 className="text-xl sm:text-2xl font-display font-black text-primary group-hover:text-accent transition-colors duration-300 leading-snug">
                                                         {mcaCourse.name}
                                                     </h3>
                                                 </div>

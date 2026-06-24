@@ -391,9 +391,9 @@ Spot Admission:
         content: "Details about our highly sought-after postgraduate course in computer applications, focusing on advanced software development. Lorem ipsum dolor sit amet."
     },
     "doctoral": {
-        title: "Doctoral Programmes (Ph.D)",
+        title: "Doctoral Programmes (PhD)",
         category: "Programmes",
-        content: "Information on research opportunities and Ph.D. programs affiliated with KTU in various engineering disciplines. Lorem ipsum dolor sit amet."
+        content: "Information on research opportunities and PhD programs affiliated with KTU in various engineering disciplines. Lorem ipsum dolor sit amet."
     },
 
     // ORGANIZATIONS
