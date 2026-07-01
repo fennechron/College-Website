@@ -25,12 +25,12 @@ const AboutUs = () => {
                                 <img src={urlFor(principalImage).url()} alt="Principal" className="w-full h-full object-cover" />
                             )}
                         </div>
-                        <h3 className="text-[1.5rem] md:text-[2.2rem] font-display font-bold text-primary mb-2">Principal</h3>
+                        <h3 className="text-2xl md:text-3xl lg:text-4xl font-display font-bold text-primary mb-2">Principal</h3>
                         <div className="w-16 h-[5px] bg-accent mb-4 rounded-full mx-auto md:mx-0"></div>
-                        <p className="text-secondary/80 font-body text-[1rem] md:text-[1.1rem] leading-relaxed mb-5 text-justify">
+                        <p className="text-secondary/80 font-body text-sm sm:text-base lg:text-lg leading-relaxed mb-5 text-justify">
                             Dedicated to fostering academic excellence, innovation, and the holistic development of our students. We focus on nurturing a thriving engineering community ready to face global technological challenges.
                         </p>
-                        <Link to="/page/principal" className="inline-block px-10 py-3 bg-primary text-white font-bold text-[1rem] md:text-[1.1rem] tracking-widest uppercase rounded hover:bg-secondary transition-colors duration-300 shadow-sm">
+                        <Link to="/page/principal" className="inline-block px-8 py-3 bg-primary text-white font-bold text-sm sm:text-base lg:text-lg tracking-widest uppercase rounded hover:bg-secondary transition-colors duration-300 shadow-sm">
                             Read More
                         </Link>
                     </div>
@@ -39,8 +39,8 @@ const AboutUs = () => {
                     <div className="w-full md:w-3/5">
                         {/* About Us */}
                         <div className="mb-8 text-center md:text-left">
-                            <h2 className="text-[1.8rem] sm:text-[2.2rem] md:text-[3rem] font-display font-bold text-primary mb-4 uppercase tracking-wide leading-tight">About Us</h2>
-                            <p className="text-secondary font-body leading-relaxed text-[1rem] md:text-[1.2rem] text-justify">
+                            <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-bold text-primary mb-4 uppercase tracking-wide leading-tight">About Us</h2>
+                            <p className="text-secondary font-body leading-relaxed text-sm sm:text-base lg:text-lg text-justify">
                                 {data.aboutUs?.description}
                             </p>
                         </div>
@@ -48,15 +48,15 @@ const AboutUs = () => {
                         {/* Vision & Mission Grid */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
                             <div className="bg-white p-6 rounded border-t-4 border-primary shadow-sm border-l border-r border-b border-primary/5">
-                                <h3 className="text-[1.5rem] md:text-[1.8rem] font-display font-bold text-primary mb-3">Our Vision</h3>
-                                <p className="text-secondary font-body text-[1rem] md:text-[1.15rem] leading-relaxed text-justify">
+                                <h3 className="text-xl sm:text-2xl lg:text-3xl font-display font-bold text-primary mb-3">Our Vision</h3>
+                                <p className="text-secondary font-body text-sm sm:text-base lg:text-lg leading-relaxed text-justify">
                                     {data.aboutUs?.vision}
                                 </p>
                             </div>
 
                             <div className="bg-primary p-6 rounded border-t-[5px] border-accent shadow-md">
-                                <h3 className="text-[1.5rem] md:text-[1.8rem] font-display font-bold text-white mb-3">Our Mission</h3>
-                                <ul className="text-white/80 font-body text-[1rem] md:text-[1.15rem] leading-relaxed list-none space-y-2 text-justify">
+                                <h3 className="text-xl sm:text-2xl lg:text-3xl font-display font-bold text-white mb-3">Our Mission</h3>
+                                <ul className="text-white/80 font-body text-sm sm:text-base lg:text-lg leading-relaxed list-none space-y-2 text-justify">
                                     {data.aboutUs?.mission?.map((m, idx) => (
                                         <li key={idx} className="flex items-start">
                                             <span className="text-accent mr-3 font-bold text-xl">•</span>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Menu, X, Home, ChevronDown, ChevronRight } from 'lucide-react';
+import { Menu, X, Home, ChevronDown, ChevronRight, Bell } from 'lucide-react';
 import collegeLogo from '../../assets/cec122.png';
 import ktulogo from '../../assets/ktu.png';
 import ihrdlogo from '../../assets/ihrd.png';
@@ -191,7 +191,10 @@ const NavItem = ({ item, closeMobileMenu }) => {
                                         <span className="text-[0.95rem] font-medium tracking-wide text-white/95">{subItem.label}</span>
                                         <ChevronRight size={14} className="text-white/70" />
                                     </div>
-                                    <div className={`absolute ${subItem.label === 'Committees' ? 'top-[-100px]' : 'top-[-10px]'} left-full -ml-[2px] bg-primary shadow-[0_10px_30px_rgba(0,0,0,0.3)] min-w-[320px] max-h-[calc(100vh-200px)] overflow-y-auto z-[1000] border-l-2 border-accent rounded-r-md opacity-0 pointer-events-none group-hover/sub:opacity-100 group-hover/sub:pointer-events-auto hidden md:block transition-all duration-300 custom-scrollbar`}>
+                                    <div 
+                                        className={`absolute ${subItem.label === 'Committees' ? 'top-[-100px]' : 'top-[-10px]'} left-full -ml-[2px] bg-primary shadow-[0_10px_30px_rgba(0,0,0,0.3)] min-w-[320px] max-h-[calc(100vh-200px)] overflow-y-auto z-[1000] border-l-2 border-accent rounded-r-md opacity-0 pointer-events-none group-hover/sub:opacity-100 group-hover/sub:pointer-events-auto hidden md:block transition-all duration-300 custom-scrollbar`}
+                                        data-lenis-prevent="true"
+                                    >
                                         <ul className="flex flex-col py-2">
                                             {subItem.subItems.map((sItem, sIdx) => (
                                                 <li key={sIdx}>
@@ -292,11 +295,14 @@ const Navbar = () => {
     useEffect(() => {
         if (isOpen) {
             document.body.style.overflow = 'hidden';
+            if (window.lenis) window.lenis.stop();
         } else {
             document.body.style.overflow = '';
+            if (window.lenis) window.lenis.start();
         }
         return () => {
             document.body.style.overflow = '';
+            if (window.lenis) window.lenis.start();
         };
     }, [isOpen]);
 
@@ -363,7 +369,7 @@ const Navbar = () => {
             <nav className="sticky top-0 z-[1000] bg-primary transition-colors duration-300 shadow-[0_2px_20px_rgba(10,22,40,0.08)]">
                 <div className="relative flex w-full items-center px-4 lg:px-8 justify-between md:justify-start h-14 md:h-auto">
                     {/* Mobile-only Branding on Sticky Navbar */}
-                    <div className="flex items-center gap-2 md:hidden">
+                    <div className="flex items-center gap-2 lg:hidden">
                         <img src={collegeLogo} alt="CEC Mini Logo" className="h-[32px] w-[32px] object-contain rounded bg-white p-0.5 shrink-0" />
                         <span className="font-display text-[0.95rem] font-black text-white uppercase tracking-wider">
                             CEC Chengannur
@@ -371,20 +377,29 @@ const Navbar = () => {
                     </div>
 
                     {/* Desktop Navigation Links */}
-                    <ul className="hidden md:flex w-full md:w-auto md:flex-row md:py-0 md:shadow-none justify-between flex-wrap text-[1rem] font-semibold tracking-[0.03em] text-white">
+                    <ul className="hidden lg:flex w-full md:w-auto md:flex-row md:py-0 md:shadow-none justify-between flex-nowrap text-[0.75rem] xl:text-[0.95rem] 2xl:text-[1rem] font-semibold tracking-[0.03em] text-white">
                         {dynamicNavItems.map((item, index) => (
                             <NavItem key={index} item={item} closeMobileMenu={closeMobileMenu} />
                         ))}
                     </ul>
 
-                    {/* Hamburger Menu Toggle (Mobile) */}
-                    <button
-                        onClick={() => setIsOpen(true)}
-                        className="ml-auto block p-2 text-white md:hidden border border-white/20 rounded-md hover:bg-white/10 transition shrink-0"
-                        aria-label="Open Menu"
-                    >
-                        <Menu size={20} />
-                    </button>
+                    {/* Mobile Action Buttons (Bell & Hamburger) */}
+                    <div className="ml-auto flex items-center gap-2 lg:hidden shrink-0">
+                        <Link
+                            to="/page/notifications"
+                            className="p-2 text-white border border-white/20 rounded-md hover:bg-white/10 transition"
+                            aria-label="View Notifications"
+                        >
+                            <Bell size={20} />
+                        </Link>
+                        <button
+                            onClick={() => setIsOpen(true)}
+                            className="p-2 text-white border border-white/20 rounded-md hover:bg-white/10 transition"
+                            aria-label="Open Menu"
+                        >
+                            <Menu size={20} />
+                        </button>
+                    </div>
                 </div>
             </nav>
 
@@ -421,7 +436,7 @@ const Navbar = () => {
                 </div>
 
                 {/* Drawer Links with custom scrollbar */}
-                <div className="flex-grow overflow-y-auto py-2 custom-scrollbar">
+                <div className="flex-grow overflow-y-auto py-2 custom-scrollbar" data-lenis-prevent="true">
                     <ul className="flex flex-col text-[0.9rem] font-semibold tracking-[0.03em] divide-y divide-white/5">
                         {dynamicNavItems.map((item, index) => (
                             <NavItem key={index} item={item} closeMobileMenu={closeMobileMenu} />

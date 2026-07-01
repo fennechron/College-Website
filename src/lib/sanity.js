@@ -55,5 +55,5 @@ const builder = createImageUrlBuilder(client);
  * @returns {Object} The URL builder object used to generate the final image URL.
  */
 export const urlFor = (source) => {
-  return builder.image(source);
+  return builder.image(source).format('webp');
 };

@@ -16,6 +16,7 @@ import homePage from './homePage'
 import siteSettings from './siteSettings'
 import administration from './administration'
 import admission from './admission'
+import programme from './programme'
 
 export const schemaTypes = [
   siteSettings,
@@ -35,6 +36,7 @@ export const schemaTypes = [
   principal,
   committee,
   administration,
-  admission
+  admission,
+  programme
 ]
 

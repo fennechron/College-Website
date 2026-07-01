@@ -22,6 +22,7 @@ import CampusLifePage from './pages/CampusLifePage.jsx';
 import EventDetail from './pages/EventDetail.jsx';
 import NotFoundPage from './pages/NotFoundPage.jsx';
 import MaintenancePage from './pages/MaintenancePage.jsx';
+import NotificationsPage from './pages/NotificationsPage.jsx';
 import { client } from './lib/sanity.js';
 
 /**
@@ -65,6 +66,7 @@ function App() {
 
     useEffect(() => {
         const lenis = new Lenis();
+        window.lenis = lenis; // Export to window for global access
         function raf(time) {
             lenis.raf(time);
             requestAnimationFrame(raf);
@@ -106,42 +108,41 @@ function App() {
         };
     }, []);
 
-    if (loading) {
-        return <Preloader />;
-    }
-
-    if (isMaintenance) {
-        return <MaintenancePage />;
-    }
-
     return (
         <Router>
             <Preloader />
-            <Navbar />
-            <main>
-                <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/page/teachers" element={<TeachersPage />} />
-                    <Route path="/page/placement" element={<PlacementPage />} />
-                    <Route path="/page/downloads" element={<DownloadsPage />} />
-                    <Route path="/page/contact" element={<ContactPage />} />
-                    <Route path="/organization/:id" element={<OrganizationDetail />} />
-                    <Route path="/page/principal" element={<PrincipalPage />} />
-                    <Route path="/page/board-of-governors" element={<BoardOfGovernors />} />
-                    <Route path="/page/administrative-staff" element={<AdministrativeStaff />} />
-                    <Route path="/page/library-staff" element={<LibraryStaff />} />
-                    <Route path="/teacher/:id" element={<TeacherDetail />} />
-                    <Route path="/event/:id" element={<EventDetail />} />
-                    <Route path="/page/campus-life" element={<CampusLifePage />} />
-                    <Route path="/page/:slug" element={<ContentPage />} />
-                    <Route path="/maintenance" element={<MaintenancePage />} />
-                    <Route path="*" element={<NotFoundPage />} />
-                </Routes>
-            </main>
-            <Footer />
+            {loading ? null : isMaintenance ? (
+                <MaintenancePage />
+            ) : (
+                <>
+                    <Navbar />
+                    <main className="overflow-x-hidden w-full">
+                        <Routes>
+                            <Route path="/" element={<Home />} />
+                            <Route path="/page/teachers" element={<TeachersPage />} />
+                            <Route path="/page/placement" element={<PlacementPage />} />
+                            <Route path="/page/downloads" element={<DownloadsPage />} />
+                            <Route path="/page/contact" element={<ContactPage />} />
+                            <Route path="/organization/:id" element={<OrganizationDetail />} />
+                            <Route path="/page/principal" element={<PrincipalPage />} />
+                            <Route path="/page/board-of-governors" element={<BoardOfGovernors />} />
+                            <Route path="/page/administrative-staff" element={<AdministrativeStaff />} />
+                            <Route path="/page/library-staff" element={<LibraryStaff />} />
+                            <Route path="/teacher/:id" element={<TeacherDetail />} />
+                            <Route path="/event/:id" element={<EventDetail />} />
+                            <Route path="/page/campus-life" element={<CampusLifePage />} />
+                            <Route path="/page/notifications" element={<NotificationsPage />} />
+                            <Route path="/page/:slug" element={<ContentPage />} />
+                            <Route path="/maintenance" element={<MaintenancePage />} />
+                            <Route path="*" element={<NotFoundPage />} />
+                        </Routes>
+                    </main>
+                    <Footer />
 
-            {/* Floating Admissions Button */}
-            <FloatingAdmissionsButton isFooterVisible={isFooterVisible} />
+                    {/* Floating Admissions Button */}
+                    <FloatingAdmissionsButton isFooterVisible={isFooterVisible} />
+                </>
+            )}
         </Router>
     );
 }

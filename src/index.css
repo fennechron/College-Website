@@ -3,6 +3,9 @@
 @tailwind utilities;
 
 @layer base {
+  html, body {
+    scroll-behavior: smooth;
+  }
   body {
     @apply bg-background text-primary;
   }
@@ -24,9 +27,11 @@
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     background: #2A789A;
   }
-  .mask-gradient {
-    mask-image: linear-gradient(to right, transparent, black 150px, black calc(100% - 150px), transparent);
-    -webkit-mask-image: linear-gradient(to right, transparent, black 150px, black calc(100% - 150px), transparent);
+  @media (min-width: 768px) {
+    .mask-gradient {
+      mask-image: linear-gradient(to right, transparent, black 150px, black calc(100% - 150px), transparent);
+      -webkit-mask-image: linear-gradient(to right, transparent, black 150px, black calc(100% - 150px), transparent);
+    }
   }
 }
 

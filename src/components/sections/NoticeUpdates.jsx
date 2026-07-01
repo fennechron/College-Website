@@ -35,70 +35,123 @@ const events = [
 ];
 
 // Helper to duplicate items for smooth infinite scrolling
-const ScrollList = ({ items }) => (
-    <div className="relative h-[300px] w-full overflow-hidden px-4">
-        <style>
-            {`
-            @keyframes scrollVertical {
-                0% { transform: translateY(0); }
-                100% { transform: translateY(-50%); }
+const ScrollList = ({ items }) => {
+    const containerRef = React.useRef(null);
+    const [isHovered, setIsHovered] = useState(false);
+    const [showLatestBtn, setShowLatestBtn] = useState(false);
+    
+    const needsScroll = items.length > 3;
+
+    useEffect(() => {
+        const container = containerRef.current;
+        if (!container || items.length === 0 || !needsScroll) return;
+
+        let animationId;
+        const scrollStep = () => {
+            if (!isHovered && container) {
+                container.scrollTop += 1;
+                // If we scrolled past the first half of the duplicated content, reset back to 0
+                if (container.scrollTop >= container.scrollHeight / 2) {
+                    container.scrollTop = 0;
+                }
+                
+                // Show button if scrolled down a bit
+                setShowLatestBtn(container.scrollTop > 50);
             }
-            .anim-scroll {
-                animation: scrollVertical var(--scroll-duration, 20s) linear infinite;
-            }
-            .anim-scroll:hover {
-                animation-play-state: paused;
-            }
-            `}
-        </style>
-        <div className="w-full anim-scroll pb-4" style={{ '--scroll-duration': `${Math.max(20, items.length * 6)}s` }}>
-            <ul className="flex flex-col gap-6 pb-6 pt-4 pr-4">
-                {items.map((item, idx) => (
-                    <li key={`first-${idx}`} className="text-[1.15rem] font-semibold leading-[1.6] text-secondary border-b border-primary/10 pb-5 last:border-0 cursor-pointer hover:text-accent hover:translate-x-1 transition-all duration-200">
-                        {idx === 0 && (
-                            <span className="inline-flex items-center gap-1.5 rounded-md bg-accent px-2 py-0.5 text-[0.7rem] font-extrabold uppercase tracking-wider text-white mr-2.5 align-middle select-none shadow-[0_2px_8px_rgba(29,84,108,0.25)] shrink-0">
-                                <span className="relative flex h-1.5 w-1.5">
-                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
-                                    <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-white"></span>
+            animationId = requestAnimationFrame(scrollStep);
+        };
+
+        animationId = requestAnimationFrame(scrollStep);
+        return () => cancelAnimationFrame(animationId);
+    }, [isHovered, items.length, needsScroll]);
+
+    // Handle manual scroll to update button visibility when user swipes manually
+    const handleScroll = () => {
+        if (containerRef.current) {
+            setShowLatestBtn(containerRef.current.scrollTop > 50);
+        }
+    };
+
+    const scrollToTop = () => {
+        if (containerRef.current) {
+            containerRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+            // Temporarily pause auto-scroll so user can read the top item
+            setIsHovered(true);
+            setTimeout(() => setIsHovered(false), 2000);
+        }
+    };
+
+    return (
+        <div 
+            className="relative h-[300px] w-full overflow-hidden"
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+            onTouchStart={() => setIsHovered(true)}
+            onTouchEnd={() => setIsHovered(false)}
+        >
+            <div 
+                ref={containerRef}
+                onScroll={handleScroll}
+                className="w-full h-full overflow-y-hidden no-scrollbar px-4 pb-4" 
+            >
+                <ul className="flex flex-col gap-6 pb-6 pt-4 pr-4">
+                    {items.map((item, idx) => (
+                        <li key={`first-${idx}`} className="text-sm md:text-[1.15rem] font-semibold leading-[1.6] text-secondary border-b border-primary/10 pb-5 last:border-0 cursor-pointer hover:text-accent hover:translate-x-1 transition-all duration-200">
+                            {idx === 0 && (
+                                <span className="inline-flex items-center gap-1 sm:gap-1.5 rounded-md bg-accent px-1.5 sm:px-2 py-0.5 text-[0.55rem] sm:text-[0.7rem] font-extrabold uppercase tracking-wider text-white mr-2 sm:mr-2.5 align-middle select-none shadow-[0_2px_8px_rgba(29,84,108,0.25)] shrink-0">
+                                    <span className="relative flex h-1.5 w-1.5">
+                                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                                        <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-white"></span>
+                                    </span>
+                                    LATEST
                                 </span>
-                                LATEST
-                            </span>
-                        )}
-                        {typeof item === 'object' && item !== null && (item.externalLink || item.pdfUrl) ? (
-                            <a href={item.externalLink || item.pdfUrl} target="_blank" rel="noreferrer" className="align-middle hover:underline block">
-                                {item.text}
-                            </a>
-                        ) : (
-                            <span className="align-middle block">{typeof item === 'object' && item !== null ? item.text : item}</span>
-                        )}
-                    </li>
-                ))}
-            </ul>
-            <ul className="flex flex-col gap-6 pb-6 pr-4" aria-hidden="true">
-                {items.map((item, idx) => (
-                    <li key={`second-${idx}`} className="text-[1.15rem] font-semibold leading-[1.6] text-secondary border-b border-primary/10 pb-5 last:border-0 cursor-pointer hover:text-accent hover:translate-x-1 transition-all duration-200">
-                        {idx === 0 && (
-                            <span className="inline-flex items-center gap-1.5 rounded-md bg-accent px-2 py-0.5 text-[0.7rem] font-extrabold uppercase tracking-wider text-white mr-2.5 align-middle select-none shadow-[0_2px_8px_rgba(29,84,108,0.25)] shrink-0">
-                                <span className="relative flex h-1.5 w-1.5">
-                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
-                                    <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-white"></span>
-                                </span>
-                                LATEST
-                            </span>
-                        )}
-                        {typeof item === 'object' && item !== null && (item.externalLink || item.pdfUrl) ? (
-                            <a href={item.externalLink || item.pdfUrl} target="_blank" rel="noreferrer" className="align-middle hover:underline block">
-                                {item.text}
-                            </a>
-                        ) : (
-                            <span className="align-middle block">{typeof item === 'object' && item !== null ? item.text : item}</span>
-                        )}
-                    </li>
-                ))}
-            </ul>
+                            )}
+                            {typeof item === 'object' && item !== null && (item.externalLink || item.pdfUrl) ? (
+                                <a href={item.externalLink || item.pdfUrl} target="_blank" rel="noreferrer" className="align-middle hover:underline block">
+                                    {item.text}
+                                </a>
+                            ) : (
+                                <span className="align-middle block">{typeof item === 'object' && item !== null ? item.text : item}</span>
+                            )}
+                        </li>
+                    ))}
+                </ul>
+                {needsScroll && (
+                    <ul className="flex flex-col gap-6 pb-6 pr-4" aria-hidden="true">
+                        {items.map((item, idx) => (
+                            <li key={`second-${idx}`} className="text-sm md:text-[1.15rem] font-semibold leading-[1.6] text-secondary border-b border-primary/10 pb-5 last:border-0 cursor-pointer hover:text-accent hover:translate-x-1 transition-all duration-200">
+                                {idx === 0 && (
+                                    <span className="inline-flex items-center gap-1 sm:gap-1.5 rounded-md bg-accent px-1.5 sm:px-2 py-0.5 text-[0.55rem] sm:text-[0.7rem] font-extrabold uppercase tracking-wider text-white mr-2 sm:mr-2.5 align-middle select-none shadow-[0_2px_8px_rgba(29,84,108,0.25)] shrink-0">
+                                        <span className="relative flex h-1.5 w-1.5">
+                                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                                            <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-white"></span>
+                                        </span>
+                                        LATEST
+                                    </span>
+                                )}
+                                {typeof item === 'object' && item !== null && (item.externalLink || item.pdfUrl) ? (
+                                    <a href={item.externalLink || item.pdfUrl} target="_blank" rel="noreferrer" className="align-middle hover:underline block">
+                                        {item.text}
+                                    </a>
+                                ) : (
+                                    <span className="align-middle block">{typeof item === 'object' && item !== null ? item.text : item}</span>
+                                )}
+                            </li>
+                        ))}
+                    </ul>
+                )}
+            </div>
+            
+            {/* Scroll to Top / Latest Button */}
+            <button
+                onClick={scrollToTop}
+                className={`absolute bottom-4 right-4 bg-primary text-white text-xs font-bold px-3 py-2 rounded-full shadow-lg hover:bg-accent hover:scale-105 transition-all duration-300 flex items-center gap-1 z-20 ${showLatestBtn ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'}`}
+            >
+                ↑ LATEST
+            </button>
         </div>
-    </div>
-);
+    );
+};
 
 const NoticeUpdates = () => {
     const [sanityAnnouncements, setSanityAnnouncements] = useState([]);

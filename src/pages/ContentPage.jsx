@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link, useLocation } from 'react-router-dom';
-import { pageContent } from '../data/pageContent';
 import { client, urlFor } from '../lib/sanity';
-import { ChevronRight, Home, ArrowLeft, Calendar, Users, BookOpen, Clock, FileText, ExternalLink } from 'lucide-react';
+import { ChevronRight, Home, ArrowLeft, Calendar, Users, BookOpen, Clock, FileText, ExternalLink, Phone, Copy, Check } from 'lucide-react';
 import { motion } from 'framer-motion';
+import NotFoundPage from './NotFoundPage';
 
 const AccordionItem = ({ title, items }) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -79,245 +79,6 @@ const generateId = (name) => {
     return cleanName.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
 };
 
-const departmentDetails = {
-    "dept-computer-engineering": {
-        name: "Computer Engineering",
-        fullName: "Department of Computer Engineering",
-        heroImage: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&q=80&w=1200",
-        founded: "1993",
-        stats: [
-            { value: "180+", label: "B.Tech Intake" },
-            { value: "30", label: "MCA Intake" },
-            { value: "38", label: "Faculty Members" }
-        ],
-        description: [
-            "The core courses offered by the Department of Computer Engineering are B.Tech Degree in Computer Science and Engineering, B.Tech Degree in Computer Science and Engineering (Artificial Intelligence and Machine Learning) and Masters Degree Programme in Computer Application from Kerala Technological University, Kerala. These courses are aimed at providing theoretical and practical knowledge of Computer Science.",
-            "The subjects in Bachelor’s level programme include Computer Architecture and Organization, Automata Languages and Computation, Data Structures and Algorithms, Database Management Systems, Language Processor, Computer Networks, Advanced Architecture and Parallel Processing, Software Engineering, Digital Signal Processing, Analysis and Design of Algorithms etc. The curriculum also includes management papers like Industrial Organization and Management.",
-            "In order to bridge the gap between knowledge and its true application, students are required to undertake seminars, mini-project and the main project that put them through an industry-like situation. The course produces an ideal computer engineer, well-equipped to meet the challenges of the rapidly growing IT industry."
-        ],
-        labs: [
-            "High-Performance Computing Lab",
-            "Embedded Systems & IoT Laboratory",
-            "Cloud Computing & Virtualization Centre",
-            "Advanced Software Development Lab",
-            "Data Science & Analytics Wing",
-            "Hardware & Microprocessor Lab"
-        ],
-        programs: ["B.Tech Computer Engineering", "B.Tech AI & ML", "Master of Computer Applications (MCA)"],
-        programmesTable: [
-            { name: "B.Tech in Computer Engineering", duration: "4 years" },
-            { name: "B.Tech in Artificial Intelligence & Machine Learning", duration: "4 years" },
-            { name: "Master of Computer Applications (MCA)", duration: "2 years" }
-        ],
-        hod: "Dr. Renu George",
-        hodDesignation: "Professor & Head Of the Department",
-        hodImage: "https://ceconline.edu/wp-content/uploads/2025/09/renu.jpeg",
-        hodAddressLines: [
-            "Department of Computer Engineering",
-            "College of Engineering, Chengannur",
-            "Alappuzha (Dist.) – 689121"
-        ],
-        hodEmail: "hod.cse@ceconline.edu",
-        vision: [
-            "Emerge as a meritorious centre  in computing to mould competent and socially committed professionals."
-        ],
-        mission: [
-            "M1: Nurture a stimulating environment by means of quality education and state of the art facilities to groom young minds for their professional career, higher education and innovative research.",
-            "M2: Foster managerial and entrepreneurial skills of students through co-curricular and extra-curricular activities.",
-            "M3: Facilitate the students to address socially relevant problems with professional ethics and values."
-        ],
-        peos: [
-            "PEO1: Graduates shall have a sound knowledge in Computer Science adaptable to the evolving technical challenges to pursue a profession in computing.",
-            "PEO2: Graduates shall be theoretically proficient for higher studies and contribute to the advancements in computing through research.",
-            "PEO3: Graduates shall have leadership and teamwork qualities competent of being good entrepreneurs.",
-            "PEO4: Graduates shall exhibit social commitment with ethical values in designing computing  solutions."
-        ],
-        psos: {
-            "B.Tech Computer Engineering": [
-                "PSO1: Able to analyze real world situations to develop software solutions incorporating new ideas and modern technology.",
-                "PSO2: Competent to Design and develop digital hardware based programming solutions"
-            ],
-            "Master of Computer Applications (MCA)": [
-                "PSO1: To work productively as IT professional both at supportive and leadership roles.",
-                "PSO2: To advance successfully in their profession by drawing upon their firm analytical, computational and programming skills."
-            ]
-        },
-        labsExtended: [
-            "High-Performance Computing Lab: Equipped with advanced server systems and GPUs for deep learning and heavy computation.",
-            "Embedded Systems & IoT Laboratory: Providing microcontrollers, sensors, and development boards for hardware interfacing projects.",
-            "Cloud Computing & Virtualization Centre: Virtualized hardware hosts running private cloud services and containerized deployments.",
-            "Advanced Software Development Lab: Dedicated environments with compiler tools, database servers, and modeling suites.",
-            "Data Science & Analytics Wing: Specialized suites with R, Python environments, and Spark systems for data engineering.",
-            "Hardware & Microprocessor Lab: Equipped with 8086 trainer kits, logic analyzers, and digital interfacing boards."
-        ],
-        news: [
-            {
-                date: "May 15, 2026",
-                title: "Smart Kerala Hackathon 2025 Victory",
-                description: "CEC Computer Engineering students won the first prize in the Smart Kerala Hackathon 2025 with their innovative AI-driven emergency response model."
-            },
-            {
-                date: "April 28, 2026",
-                title: "National Workshop on Cloud Security",
-                description: "The department successfully conducted a 3-day national hands-on workshop in collaboration with AWS Academics on next-generation virtualization security."
-            }
-        ]
-    },
-    "dept-electrical-engineering": {
-        name: "Electrical Engineering",
-        fullName: "Department of Electrical & Electronics Engineering",
-        heroImage: "https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?auto=format&fit=crop&q=80&w=1200",
-        founded: "1993",
-        stats: [
-            { value: "60", label: "B.Tech Intake" },
-            { value: "15+", label: "Faculty Members" },
-            { value: "6+", label: "Advanced Labs" }
-        ],
-        description: [
-            "The Department of Electrical and Electronics Engineering offers a comprehensive B.Tech program designed to provide students with a strong foundation in electrical systems, electronics, and control engineering."
-        ],
-        labs: [
-            "Electrical Machines Lab",
-            "Power Electronics Lab",
-            "Control Systems Lab",
-            "Measurements & Instrumentation Lab"
-        ],
-        programs: ["B.Tech Electrical & Electronics Eng.", "Research Fellowships (PhD)"],
-        hod: "Smt. Sunitha Sajeev",
-        hodEmail: "sunitha@ceconline.edu"
-    },
-    "dept-electronics-engineering": {
-        name: "Electronics Engineering",
-        fullName: "Department of Electronics & Communication Engineering",
-        heroImage: "https://images.unsplash.com/photo-1581092335397-9583fe92d232?auto=format&fit=crop&q=80&w=1200",
-        founded: "1993",
-        stats: [
-            { value: "120", label: "B.Tech Intake" },
-            { value: "18+", label: "Faculty Members" },
-            { value: "8+", label: "Advanced Labs" }
-        ],
-        description: [
-            "The Department of Electronics Engineering is a premier center of technical learning, famous for its contributions to embedded hardware, VLSI design, signal processing, and communication networks.",
-            "Our curriculum merges strong fundamental knowledge in semiconductor physics with advanced experimental studies in RF engineering, network architectures, and smart automation systems.",
-            "The department hosts highly active academic societies like IEEE and PRODECC, organizing regular technical hackathons and internships."
-        ],
-        labs: [
-            "Advanced Microprocessors & VLSI Lab",
-            "Digital Signal Processing Centre",
-            "Analog & Digital Communication Lab",
-            "Smart Hardware & Robotics Wing",
-            "Microwave & RF Engineering Lab",
-            "Integrated Circuits Laboratory"
-        ],
-                programs: ["B.Tech Electronics & Comm. Eng.", "PhD in Electronics Engineering"],
-        hod: "Dr. C V Anilkumar",
-        hodEmail: "cvanilkumar@ceconline.edu"
-    },
-    "dept-general-engineering": {
-        name: "General Engineering",
-        fullName: "Department of General Engineering",
-        heroImage: "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&q=80&w=1200",
-        founded: "1993",
-        stats: [
-            { value: "400+", label: "First-Year Intake" },
-            { value: "8+", label: "Expert Instructors" },
-            { value: "3+", label: "Central Workshops" }
-        ],
-        description: [
-            "The Department of General Engineering handles essential foundational training in mechanical systems, drafting, graphic design, and hardware construction, serving all engineering streams.",
-            "Designed to nurture multi-disciplinary competencies, our physical workshop systems guide first-year students from structural conceptualization to manual fabrication.",
-            "Our facilities are fully certified and aligned with strict university guidelines, maintaining zero accidents through modern safety protocols."
-        ],
-        labs: [
-            "Central Engineering Workshop",
-            "Computer-Aided Drafting (CAD) Lab",
-            "Fluid Mechanics & Mechanical Lab",
-            "Basic Machine & Tool Shop",
-            "Carpentry & Fitting Shop"
-        ],
-        programs: ["Foundational Engineering Training"],
-        hod: "Dr. Ashok Kumar T V",
-        hodEmail: "ashokkumar@ceconline.edu"
-    },
-    "dept-basic-science-language": {
-        name: "Basic Science & Language",
-        fullName: "Department of Basic Science & Language",
-        heroImage: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=1200",
-        founded: "1993",
-        stats: [
-            { value: "100%", label: "First-Year Coverage" },
-            { value: "10+", label: "Core Faculty" },
-            { value: "3+", label: "Research Labs" }
-        ],
-        description: [
-            "The Department of Basic Science & Language builds a strong mathematical, scientific, and professional communication foundation for undergraduate engineers.",
-            "Merging advanced scientific theory with professional development programs, we ensure students develop analytical expertise alongside premium corporate communication skills.",
-            "Our science laboratories feature high-precision instruments to help students learn the empirical basis of modern engineering technologies."
-        ],
-        labs: [
-            "Applied Physics Laboratory",
-            "Engineering Chemistry Lab",
-            "Digital Language & Rhetoric Centre",
-            "Mathematics Research & Analytics Lab"
-        ],
-                programs: ["Applied Mathematics, Sciences & Professional English"],
-        hod: "Dr. Hari V S (Principal / Head)",
-    }
-};
-
-const btechCourses = [
-    {
-        name: "B.Tech Computer Engineering",
-        duration: "8 Semesters",
-        intake: "180+ seats",
-        eligibility: {
-            academic: "Passed Higher Secondary Examination, Kerala, or Examinations recognized as equivalent thereto, with Physics and Mathematics as compulsory subjects and Chemistry/Computer Science/Biotechnology/Biology as one of the optional subjects.",
-            marks: "Minimum of 45% marks in the above subjects put together (relaxation applicable for SC/ST/OBC categories as per government norms).",
-            entrance: "Must have qualified in the KEAM (Kerala Engineering Entrance Exam) conducted by the Commissioner for Entrance Examinations, Kerala."
-        }
-    },
-    {
-        name: "B.Tech Electronics & Communication Engineering",
-        duration: "8 Semesters",
-        intake: "120 seats",
-        eligibility: {
-            academic: "Passed Higher Secondary Examination, Kerala, or Examinations recognized as equivalent thereto, with Physics and Mathematics as compulsory subjects and Chemistry/Computer Science/Biotechnology/Biology as one of the optional subjects.",
-            marks: "Minimum of 45% marks in the above subjects put together (relaxation applicable for SC/ST/OBC categories as per government norms).",
-            entrance: "Must have qualified in the KEAM (Kerala Engineering Entrance Exam) conducted by the Commissioner for Entrance Examinations, Kerala."
-        }
-    },
-    {
-        name: "B.Tech Electrical & Electronics Engineering",
-        duration: "8 Semesters",
-        intake: "60 seats",
-        eligibility: {
-            academic: "Passed Higher Secondary Examination, Kerala, or Examinations recognized as equivalent thereto, with Physics and Mathematics as compulsory subjects and Chemistry/Computer Science/Biotechnology/Biology as one of the optional subjects.",
-            marks: "Minimum of 45% marks in the above subjects put together (relaxation applicable for SC/ST/OBC categories as per government norms).",
-            entrance: "Must have qualified in the KEAM (Kerala Engineering Entrance Exam) conducted by the Commissioner for Entrance Examinations, Kerala."
-        }
-    },
-    {
-        name: "B.Tech CSE (Artificial Intelligence & Machine Learning)",
-        duration: "8 Semesters",
-        intake: "60 seats",
-        eligibility: {
-            academic: "Passed Higher Secondary Examination, Kerala, or Examinations recognized as equivalent thereto, with Physics and Mathematics as compulsory subjects and Chemistry/Computer Science/Biotechnology/Biology as one of the optional subjects.",
-            marks: "Minimum of 45% marks in the above subjects put together (relaxation applicable for SC/ST/OBC categories as per government norms).",
-            entrance: "Must have qualified in the KEAM (Kerala Engineering Entrance Exam) conducted by the Commissioner for Entrance Examinations, Kerala."
-        }
-    }
-];
-
-const mcaCourse = {
-    name: "Master of Computer Applications (M.C.A)",
-    duration: "4 Semesters",
-    intake: "60 seats",
-    eligibility: {
-        academic: "Passed BCA/Bachelor Degree in Computer Science Engineering or equivalent Degree. OR passed B.Sc./B.Com./B.A. with Mathematics at 10+2 Level or at Graduation Level (with additional bridge courses as per the norms of the concerned University).",
-        marks: "Obtained at least 50% marks (45% marks in case of candidates belonging to reserved category) in the qualifying examination.",
-        entrance: "Must have qualified in the Kerala State MCA Entrance Examination conducted by the Commissioner for Entrance Examinations or an equivalent university-approved entrance exam."
-    }
-};
 
 const DepartmentAccordion = ({ title, items }) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -346,8 +107,10 @@ const DepartmentAccordion = ({ title, items }) => {
     );
 };
 
+
+
 /**
- * Dynamic Content Page Component.
+ * Main Dynamic Content Page Component.
  * 
  * Renders pages dynamically based on the 'slug' parameter from the URL.
  * Fetches content from Sanity CMS and falls back to local data if needed.
@@ -369,6 +132,43 @@ const ContentPage = () => {
 
     const [activeTab, setActiveTab] = useState('');
     const [activeEligibility, setActiveEligibility] = useState(null);
+    const [copiedNumber, setCopiedNumber] = useState(null);
+
+    const handleCopy = async (num, e) => {
+        e.preventDefault();
+        try {
+            if (navigator.clipboard && window.isSecureContext) {
+                await navigator.clipboard.writeText(num);
+            } else {
+                // Fallback for non-secure contexts (like local network testing on mobile)
+                const textArea = document.createElement("textarea");
+                textArea.value = num;
+                textArea.style.position = "fixed";
+                textArea.style.left = "-999999px";
+                textArea.style.top = "-999999px";
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                } catch (error) {
+                    console.error("Fallback copy failed", error);
+                }
+                textArea.remove();
+            }
+        } catch (err) {
+            console.error("Failed to copy", err);
+        }
+        
+        // Always show the tick mark to give feedback
+        setCopiedNumber(num);
+        setTimeout(() => setCopiedNumber(null), 2000);
+    };
+
+    const isValidPhoneNumber = (num) => {
+        if (typeof num !== 'string') return false;
+        return /^[\d\s+]+$/.test(num) && /\d/.test(num);
+    };
 
     useEffect(() => {
         const fetchContent = async () => {
@@ -386,6 +186,8 @@ const ContentPage = () => {
                             }
                         }
                     }`);
+                } else if (slug === 'btech' || slug === 'mca' || slug === 'doctoral') {
+                    data = await client.fetch(`*[_type == "programme" && slug.current == $slug][0]`, { slug });
                 } else {
                     data = await client.fetch(`*[( _type == "pageContent" || _type == "committee" ) && slug.current == $slug][0] {
                         ...,
@@ -402,12 +204,23 @@ const ContentPage = () => {
                     else if (slug === 'dept-electronics-engineering') deptShort = 'EC';
                     else if (slug === 'dept-electrical-engineering') deptShort = 'EEE';
 
-                    const facultyData = await client.fetch(`*[_type == "teacher" && references(*[_type == "department" && (slug.current == $slug || (short != null && $deptShort != "" && short == $deptShort))]._id) && !isHOD] | order(name asc)`, { slug, deptShort });
-                    const hodData = await client.fetch(`*[_type == "teacher" && references(*[_type == "department" && (slug.current == $slug || (short != null && $deptShort != "" && short == $deptShort))]._id) && isHOD][0]`, { slug, deptShort });
+                    const facultyData = await client.fetch(`*[_type == "teacher" && references(*[_type == "department" && (slug.current == $slug || (short != null && $deptShort != "" && short == $deptShort))]._id)] | order(name asc)`, { slug, deptShort });
+                    const hodData = facultyData.find(fac => fac.isHOD) || null;
                     const deptData = await client.fetch(`*[_type == "department" && (slug.current == $slug || (short != null && $deptShort != "" && short == $deptShort))][0]`, { slug, deptShort });
                     
-                    setDepartmentFaculty(facultyData || []);
-                    setDepartmentHod(hodData || null);
+                    const getRank = (fac) => {
+                        if (fac.isHOD) return 1;
+                        if (!fac.designation) return 4;
+                        const desig = fac.designation.toLowerCase();
+                        if (desig.includes('associate')) return 2;
+                        if (desig.includes('assistant')) return 3;
+                        return 4;
+                    };
+
+                    const sortedFaculty = facultyData.sort((a, b) => getRank(a) - getRank(b));
+
+                    setDepartmentFaculty(sortedFaculty);
+                    setDepartmentHod(hodData);
                     setDepartmentInfo(deptData || null);
                 } else {
                     setDepartmentFaculty([]);
@@ -426,7 +239,7 @@ const ContentPage = () => {
         fetchContent();
     }, [slug]);
 
-    const content = sanityContent || pageContent[slug];
+    const content = sanityContent || departmentInfo;
 
     // Reset active tab on slug/content change
     useEffect(() => {
@@ -455,31 +268,18 @@ const ContentPage = () => {
     }
 
     if (!content) {
-        return (
-            <div className="min-h-[60vh] flex flex-col items-center justify-center bg-background p-8">
-                <div className="text-primary font-display font-black text-[5rem] animate-bounce">404</div>
-                <h2 className="text-2xl font-bold text-secondary mb-6 text-center tracking-wide">Information Not Found</h2>
-                <p className="text-lg text-slate-600 mb-8 max-w-md text-center">
-                    The page you are looking for doesn't exist or is still under development.
-                </p>
-                <Link to="/" className="flex items-center gap-2 bg-primary text-white px-8 py-3.5 rounded-full font-bold hover:bg-secondary transition-all shadow-lg hover:shadow-xl">
-                    <ArrowLeft size={18} /> BACK TO HOME
-                </Link>
-            </div>
-        );
+        return <NotFoundPage />;
     }
 
     if (slug.startsWith('dept-')) {
-        const hardcodedDept = departmentDetails[slug] || {};
         const fetchedDept = departmentInfo || {};
         
         const dept = {
-            ...hardcodedDept,
             ...fetchedDept,
-            fullName: fetchedDept.fullName || hardcodedDept.fullName || fetchedDept.name || hardcodedDept.name,
-            description: fetchedDept.overview || hardcodedDept.description || [],
-            programmesTable: fetchedDept.programmes || hardcodedDept.programmesTable,
-            labsExtended: fetchedDept.labsExtended || hardcodedDept.labsExtended || fetchedDept.labs || hardcodedDept.labs,
+            fullName: fetchedDept.fullName || fetchedDept.name,
+            description: fetchedDept.overview || [],
+            programmesTable: fetchedDept.programmes || [],
+            labsExtended: fetchedDept.labsExtended || fetchedDept.labs || [],
             technicalStaff: fetchedDept.technicalStaff || [],
             news: fetchedDept.news
         };
@@ -533,7 +333,7 @@ const ContentPage = () => {
                                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                                 </span>
                                 <div className="space-y-1 mt-1 text-xs sm:text-sm">
-                                    {dept.hodAddressLines.map((line, i) => <p key={i}>{line}</p>)}
+                                    {dept.hodAddressLines?.map((line, i) => <p key={i}>{line}</p>)}
                                 </div>
                             </div>
                         )}
@@ -573,7 +373,7 @@ const ContentPage = () => {
                     {/* ─── Stats Bar ─── */}
                     <div className="max-w-6xl mx-auto px-4 sm:px-6 -mt-8 sm:-mt-12 relative z-20">
                         <div className="grid grid-cols-3 gap-2 sm:gap-6">
-                            {dept.stats.map((stat, i) => (
+                            {dept.stats?.map((stat, i) => (
                                 <motion.div
                                     key={i}
                                     initial={{ opacity: 0, y: 20 }}
@@ -599,7 +399,7 @@ const ContentPage = () => {
                                         Department Overview
                                     </h2>
                                     <div className="space-y-4 sm:space-y-6">
-                                        {dept.description.map((para, i) => (
+                                        {dept.description?.map((para, i) => (
                                             <p key={i} className="text-sm sm:text-[1.15rem] leading-[1.8] text-slate-600 font-medium text-justify">
                                                 {para}
                                             </p>
@@ -645,7 +445,7 @@ const ContentPage = () => {
                                                     </tr>
                                                 </thead>
                                                 <tbody className="divide-y divide-slate-100 text-left">
-                                                    {dept.programmesTable.map((prog, idx) => (
+                                                    {dept.programmesTable?.map((prog, idx) => (
                                                         <tr key={idx} className="hover:bg-slate-50/50 transition-colors">
                                                             <td className="px-3 sm:px-6 py-3 sm:py-5 text-xs sm:text-base font-black text-primary">{prog.name}</td>
                                                             <td className="px-3 sm:px-6 py-3 sm:py-5 text-xs sm:text-base font-black text-accent">{prog.duration}</td>
@@ -676,7 +476,7 @@ const ContentPage = () => {
                                                 ) : (
                                                     <div className="space-y-4 mt-6">
                                                         <div className="space-y-4">
-                                                            {dept.psos.map((prog, idx) => (
+                                                            {dept.psos?.map((prog, idx) => (
                                                                 <DepartmentAccordion 
                                                                     key={idx}
                                                                     title={`PSOs - ${prog.programName || prog}`} 
@@ -731,7 +531,7 @@ const ContentPage = () => {
                                                     </div>
                                                 </div>
                                             );
-                                        }) : dept.labs.map((lab, i) => (
+                                        }) : dept.labs?.map((lab, i) => (
                                             <div key={i} className="flex items-start gap-3 p-3.5 bg-slate-50 rounded-xl border border-slate-100">
                                                 <span className="inline-flex items-center justify-center shrink-0 w-5 h-5 rounded-full bg-accent/15 text-accent text-[0.6rem] sm:text-xs font-black">
                                                     ✓
@@ -803,7 +603,7 @@ const ContentPage = () => {
                                                     </tr>
                                                 </thead>
                                                 <tbody className="divide-y divide-slate-100 text-left">
-                                                    {dept.technicalStaffList.map((staff, idx) => (
+                                                    {dept.technicalStaffList?.map((staff, idx) => (
                                                         <tr key={idx} className="hover:bg-slate-50/50 transition-colors">
                                                             <td className="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-base font-black text-slate-400">{idx + 1}</td>
                                                             <td className="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-base font-black text-primary">{staff.name}</td>
@@ -832,7 +632,7 @@ const ContentPage = () => {
                                                     </tr>
                                                 </thead>
                                                 <tbody className="divide-y divide-slate-100">
-                                                    {dept.technicalStaff.map((staff, idx) => (
+                                                    {dept.technicalStaff?.map((staff, idx) => (
                                                         <tr key={idx} className="hover:bg-slate-50/50 transition-colors">
                                                             <td className="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-base font-bold text-primary">{staff.name}</td>
                                                             <td className="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-base text-slate-600 font-medium">{staff.designation}</td>
@@ -862,17 +662,7 @@ const ContentPage = () => {
                                             <div className="font-bold text-sm sm:text-base text-primary">{dept.founded}</div>
                                         </div>
 
-                                        <div className="bg-white p-4 rounded-xl border border-slate-100 shadow-sm">
-                                            <div className="text-[0.65rem] sm:text-xs text-slate-400 font-black uppercase tracking-wider mb-2">Core Programs</div>
-                                            <ul className="space-y-1.5">
-                                                {dept.programs.map((prog, i) => (
-                                                    <li key={i} className="text-slate-600 text-[0.7rem] sm:text-xs font-bold flex items-center gap-2">
-                                                        <span className="w-1.5 h-1.5 bg-accent rounded-full shrink-0" />
-                                                        {prog}
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        </div>
+
                                     </div>
                                 </div>
                             </div>
@@ -907,7 +697,7 @@ const ContentPage = () => {
                                         </div>
                                     </div>
                                 )) : (
-                                    <div className="col-span-1 md:col-span-2 text-center py-12 text-slate-400 font-bold">
+                                    <div className="col-span-1 md:grid-cols-2 text-center py-12 text-slate-400 font-bold">
                                         No recent announcements at this time.
                                     </div>
                                 )}
@@ -1134,13 +924,17 @@ const ContentPage = () => {
                                 <Home size={14} /> HOME
                             </Link>
                             <ChevronRight size={12} />
-                            <span className="text-white/40 whitespace-nowrap">{content.category}</span>
+                            <span className="text-white/40 whitespace-nowrap">
+                                {['btech', 'mca', 'doctoral'].includes(slug) ? 'Programmes' : content.category}
+                            </span>
                             <ChevronRight size={12} />
-                            <span className="text-accent underline decoration-2 underline-offset-4 whitespace-nowrap">{content.title}</span>
+                            <span className="text-accent underline decoration-2 underline-offset-4 whitespace-nowrap">
+                                {slug === 'btech' ? 'B.Tech Programmes' : slug === 'mca' ? 'MCA Programme' : slug === 'doctoral' ? 'Doctoral Programmes' : content.title}
+                            </span>
                         </div>
                         
                         <h1 className="text-[1.8rem] sm:text-[3.5rem] font-display font-black leading-tight tracking-tighter max-w-4xl">
-                            {content.title}
+                            {slug === 'btech' ? 'B.Tech Programmes' : slug === 'mca' ? 'MCA Programme' : slug === 'doctoral' ? 'Doctoral Programmes' : content.title}
                         </h1>
                         <div className="w-20 sm:w-24 h-1.5 sm:h-2 bg-accent rounded-full mt-2"></div>
                     </motion.div>
@@ -1288,150 +1082,163 @@ const ContentPage = () => {
                                         </div>
                                     </div>
                                 </div>
-                            ) : slug === 'btech' ? (
-                                <div className="space-y-8 sm:space-y-12">
-
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 text-left">
-                                        {btechCourses.map((course, idx) => {
-                                            return (
-                                                <div 
-                                                    key={idx} 
-                                                    className="bg-slate-50/50 hover:bg-white rounded-2xl sm:rounded-3xl p-5 sm:p-8 border border-slate-100 hover:shadow-xl hover:border-accent/20 transition-all duration-300 flex flex-col justify-between group"
-                                                >
-                                                    <div className="space-y-5 sm:space-y-6">
-                                                        <div className="w-12 h-12 rounded-xl sm:rounded-2xl bg-primary/5 flex items-center justify-center text-primary group-hover:bg-accent/10 group-hover:text-accent transition-colors duration-300">
-                                                            <BookOpen size={24} />
-                                                        </div>
-                                                        <div className="space-y-2">
-                                                            <h3 className="text-lg sm:text-xl font-display font-black text-primary group-hover:text-accent transition-colors duration-300 leading-snug">
-                                                                {course.name}
-                                                            </h3>
-                                                        </div>
-                                                        <div className="grid grid-cols-2 gap-3 sm:gap-4 pt-2">
-                                                            <div className="bg-white p-3 rounded-xl border border-slate-100/60 shadow-sm flex items-center gap-2 sm:gap-3">
-                                                                <Clock size={16} className="text-accent shrink-0" />
-                                                                <div>
-                                                                    <div className="text-[0.6rem] sm:text-[0.65rem] text-slate-400 font-black uppercase tracking-wider">Duration</div>
-                                                                    <div className="text-[0.7rem] sm:text-xs font-black text-primary">{course.duration}</div>
-                                                                </div>
-                                                            </div>
-                                                            <div className="bg-white p-3 rounded-xl border border-slate-100/60 shadow-sm flex items-center gap-2 sm:gap-3">
-                                                                <Users size={16} className="text-accent shrink-0" />
-                                                                <div>
-                                                                    <div className="text-[0.6rem] sm:text-[0.65rem] text-slate-400 font-black uppercase tracking-wider">Intake</div>
-                                                                    <div className="text-[0.7rem] sm:text-xs font-black text-primary">{course.intake}</div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            );
-                                        })}
-                                    </div>
-
-                                    <div className="mt-8 sm:mt-12 bg-slate-50/50 rounded-2xl sm:rounded-3xl p-6 sm:p-10 border border-slate-100 text-left">
-                                        <h3 className="text-xl sm:text-2xl font-display font-black text-primary uppercase mb-6 flex items-center gap-3">
-                                            <span className="w-8 h-1 bg-accent rounded-full" />
-                                            Eligibility Requirements
-                                        </h3>
-                                        <div className="grid gap-6 md:grid-cols-3">
-                                            <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm">
-                                                <span className="font-black text-accent uppercase block mb-2 text-xs sm:text-sm tracking-wider">Academic Qualification</span>
-                                                <p className="text-slate-600 text-[0.7rem] sm:text-xs font-semibold leading-relaxed">
-                                                    {btechCourses[0].eligibility.academic}
-                                                </p>
-                                            </div>
-                                            <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm">
-                                                <span className="font-black text-accent uppercase block mb-2 text-xs sm:text-sm tracking-wider">Marks Requirement</span>
-                                                <p className="text-slate-600 text-[0.7rem] sm:text-xs font-semibold leading-relaxed">
-                                                    {btechCourses[0].eligibility.marks}
-                                                </p>
-                                            </div>
-                                            <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm">
-                                                <span className="font-black text-accent uppercase block mb-2 text-xs sm:text-sm tracking-wider">Entrance Exam</span>
-                                                <p className="text-slate-600 text-[0.7rem] sm:text-xs font-semibold leading-relaxed">
-                                                    {btechCourses[0].eligibility.entrance}
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            ) : slug === 'mca' ? (
+                            ) : slug === 'btech' || slug === 'mca' || slug === 'doctoral' ? (
                                 <div className="space-y-8 sm:space-y-12">
                                     <div className="border-b border-slate-100 pb-6 mb-8 text-left">
                                         <span className="text-xs font-black uppercase tracking-widest text-accent bg-accent/10 px-4 py-1.5 rounded-full">
                                             Programmes
                                         </span>
                                         <h2 className="text-2xl sm:text-3xl font-display font-black text-primary uppercase mt-3">
-                                            Postgraduate Course
+                                            {content.title}
                                         </h2>
                                     </div>
 
-                                    <div className="max-w-2xl mx-auto text-left">
-                                        <div 
-                                            className="bg-slate-50/50 hover:bg-white rounded-2xl sm:rounded-3xl p-5 sm:p-8 md:p-10 border border-slate-100 hover:shadow-xl hover:border-accent/20 transition-all duration-300 flex flex-col justify-between group"
-                                        >
-                                            <div className="space-y-5 sm:space-y-6">
-                                                <div className="w-12 h-12 rounded-xl sm:rounded-2xl bg-primary/5 flex items-center justify-center text-primary group-hover:bg-accent/10 group-hover:text-accent transition-colors duration-300">
-                                                    <BookOpen size={24} />
-                                                </div>
-                                                <div className="space-y-2">
-                                                    <h3 className="text-xl sm:text-2xl font-display font-black text-primary group-hover:text-accent transition-colors duration-300 leading-snug">
-                                                        {mcaCourse.name}
-                                                    </h3>
-                                                </div>
-                                                <div className="grid grid-cols-2 gap-3 sm:gap-4 pt-2">
-                                                    <div className="bg-white p-3 sm:p-4 rounded-xl border border-slate-100/60 shadow-sm flex items-center gap-2 sm:gap-3">
-                                                        <Clock size={18} className="text-accent shrink-0" />
-                                                        <div>
-                                                            <div className="text-[0.6rem] sm:text-[0.65rem] text-slate-400 font-black uppercase tracking-wider">Duration</div>
-                                                            <div className="text-xs sm:text-sm font-black text-primary">{mcaCourse.duration}</div>
+                                    {content.courses && content.courses.length > 0 ? (
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 text-left">
+                                            {content.courses.map((course, idx) => {
+                                                return (
+                                                    <div 
+                                                        key={idx} 
+                                                        className={`bg-slate-50/50 hover:bg-white rounded-2xl sm:rounded-3xl p-5 sm:p-8 border border-slate-100 hover:shadow-xl hover:border-accent/20 transition-all duration-300 flex flex-col justify-between group ${content.courses.length === 1 ? 'md:col-span-2 max-w-2xl mx-auto w-full' : ''}`}
+                                                    >
+                                                        <div className="space-y-5 sm:space-y-6">
+                                                            <div className="w-12 h-12 rounded-xl sm:rounded-2xl bg-primary/5 flex items-center justify-center text-primary group-hover:bg-accent/10 group-hover:text-accent transition-colors duration-300">
+                                                                <BookOpen size={24} />
+                                                            </div>
+                                                            <div className="space-y-2">
+                                                                <h3 className="text-lg sm:text-xl font-display font-black text-primary group-hover:text-accent transition-colors duration-300 leading-snug">
+                                                                    {course.name}
+                                                                </h3>
+                                                            </div>
+                                                            <div className="grid grid-cols-2 gap-3 sm:gap-4 pt-2">
+                                                                <div className="bg-white p-3 rounded-xl border border-slate-100/60 shadow-sm flex items-center gap-2 sm:gap-3">
+                                                                    <Clock size={16} className="text-accent shrink-0" />
+                                                                    <div>
+                                                                        <div className="text-[0.6rem] sm:text-[0.65rem] text-slate-400 font-black uppercase tracking-wider">Duration</div>
+                                                                        <div className="text-[0.7rem] sm:text-xs font-black text-primary">{course.duration}</div>
+                                                                    </div>
+                                                                </div>
+                                                                <div className="bg-white p-3 rounded-xl border border-slate-100/60 shadow-sm flex items-center gap-2 sm:gap-3">
+                                                                    <Users size={16} className="text-accent shrink-0" />
+                                                                    <div>
+                                                                        <div className="text-[0.6rem] sm:text-[0.65rem] text-slate-400 font-black uppercase tracking-wider">Intake</div>
+                                                                        <div className="text-[0.7rem] sm:text-xs font-black text-primary">{course.intake}</div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <div className="bg-white p-3 sm:p-4 rounded-xl border border-slate-100/60 shadow-sm flex items-center gap-2 sm:gap-3">
-                                                        <Users size={18} className="text-accent shrink-0" />
-                                                        <div>
-                                                            <div className="text-[0.6rem] sm:text-[0.65rem] text-slate-400 font-black uppercase tracking-wider">Intake</div>
-                                                            <div className="text-xs sm:text-sm font-black text-primary">{mcaCourse.intake}</div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
 
-                                            <div className="mt-6 sm:mt-8 border-t border-slate-100 pt-5 sm:pt-6">
-                                                <button 
-                                                    onClick={() => setActiveEligibility(activeEligibility === 'mca' ? null : 'mca')}
-                                                    className="inline-flex items-center gap-2 text-[0.65rem] sm:text-xs font-black uppercase tracking-wider text-accent hover:text-primary transition-colors cursor-pointer"
-                                                >
-                                                    <span>Eligibility Requirements</span>
-                                                    <span className="text-accent/60 font-medium">({activeEligibility === 'mca' ? 'click to collapse' : 'click here'})</span>
-                                                    <ChevronRight size={14} className={`transform transition-transform duration-300 ${activeEligibility === 'mca' ? 'rotate-90' : ''}`} />
-                                                </button>
+                                                        {course.eligibility && (
+                                                            <div className="mt-6 sm:mt-8 border-t border-slate-100 pt-5 sm:pt-6">
+                                                                <button 
+                                                                    onClick={() => setActiveEligibility(activeEligibility === idx ? null : idx)}
+                                                                    className="inline-flex items-center gap-2 text-[0.65rem] sm:text-xs font-black uppercase tracking-wider text-accent hover:text-primary transition-colors cursor-pointer"
+                                                                >
+                                                                    <span>Eligibility Requirements</span>
+                                                                    <span className="text-accent/60 font-medium">({activeEligibility === idx ? 'click to collapse' : 'click here'})</span>
+                                                                    <ChevronRight size={14} className={`transform transition-transform duration-300 ${activeEligibility === idx ? 'rotate-90' : ''}`} />
+                                                                </button>
 
-                                                <motion.div
-                                                    initial={false}
-                                                    animate={{ height: activeEligibility === 'mca' ? 'auto' : 0, opacity: activeEligibility === 'mca' ? 1 : 0 }}
-                                                    className="overflow-hidden"
-                                                    transition={{ duration: 0.3, ease: "easeInOut" }}
-                                                >
-                                                    <div className="mt-4 p-4 sm:p-6 rounded-xl sm:rounded-2xl bg-white border border-slate-100 shadow-inner space-y-3 sm:space-y-4 text-[0.7rem] sm:text-xs font-semibold text-slate-600 leading-relaxed">
-                                                        <div>
-                                                            <span className="font-black text-primary uppercase block mb-1">Academic Qualification</span>
-                                                            {mcaCourse.eligibility.academic}
-                                                        </div>
-                                                        <div>
-                                                            <span className="font-black text-primary uppercase block mb-1">Marks Requirement</span>
-                                                            {mcaCourse.eligibility.marks}
-                                                        </div>
-                                                        <div>
-                                                            <span className="font-black text-primary uppercase block mb-1">Entrance Exam</span>
-                                                            {mcaCourse.eligibility.entrance}
-                                                        </div>
+                                                                <motion.div
+                                                                    initial={false}
+                                                                    animate={{ height: activeEligibility === idx ? 'auto' : 0, opacity: activeEligibility === idx ? 1 : 0 }}
+                                                                    className="overflow-hidden"
+                                                                    transition={{ duration: 0.3, ease: "easeInOut" }}
+                                                                >
+                                                                    <div className="mt-4 p-4 sm:p-6 rounded-xl sm:rounded-2xl bg-white border border-slate-100 shadow-inner space-y-3 sm:space-y-4 text-[0.7rem] sm:text-xs font-semibold text-slate-600 leading-relaxed">
+                                                                        {course.eligibility.academic && (
+                                                                            <div>
+                                                                                <span className="font-black text-primary uppercase block mb-1">Academic Qualification</span>
+                                                                                {course.eligibility.academic}
+                                                                            </div>
+                                                                        )}
+                                                                        {course.eligibility.marks && (
+                                                                            <div>
+                                                                                <span className="font-black text-primary uppercase block mb-1">Marks Requirement</span>
+                                                                                {course.eligibility.marks}
+                                                                            </div>
+                                                                        )}
+                                                                        {course.eligibility.entrance && (
+                                                                            <div>
+                                                                                <span className="font-black text-primary uppercase block mb-1">Entrance Exam</span>
+                                                                                {course.eligibility.entrance}
+                                                                            </div>
+                                                                        )}
+                                                                        {course.eligibility.notes && course.eligibility.notes.length > 0 && (
+                                                                            <div className="pt-2">
+                                                                                <span className="font-black text-primary uppercase block mb-2">Important Notes</span>
+                                                                                <ul className="space-y-2">
+                                                                                    {course.eligibility.notes.map((note, i) => (
+                                                                                        <li key={i} className="flex gap-2">
+                                                                                            <span className="text-accent font-black">({i + 1})</span>
+                                                                                            <span>{note}</span>
+                                                                                        </li>
+                                                                                    ))}
+                                                                                </ul>
+                                                                            </div>
+                                                                        )}
+                                                                    </div>
+                                                                </motion.div>
+                                                            </div>
+                                                        )}
                                                     </div>
-                                                </motion.div>
-                                            </div>
+                                                );
+                                            })}
                                         </div>
-                                    </div>
+                                    ) : (
+                                        <div className="text-center py-12 text-slate-400 font-bold">
+                                            No courses found for this programme.
+                                        </div>
+                                    )}
+
+                                    {content.commonEligibility && (
+                                        <div className="mt-8 sm:mt-12 bg-slate-50/50 rounded-2xl sm:rounded-3xl p-6 sm:p-10 border border-slate-100 text-left">
+                                            <h3 className="text-xl sm:text-2xl font-display font-black text-primary uppercase mb-6 flex items-center gap-3">
+                                                <span className="w-8 h-1 bg-accent rounded-full" />
+                                                Eligibility Requirements
+                                            </h3>
+                                            <div className="grid gap-6 md:grid-cols-3">
+                                                {content.commonEligibility.academic && (
+                                                    <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm">
+                                                        <span className="font-black text-accent uppercase block mb-2 text-xs sm:text-sm tracking-wider">Academic Qualification</span>
+                                                        <p className="text-slate-600 text-[0.7rem] sm:text-xs font-semibold leading-relaxed">
+                                                            {content.commonEligibility.academic}
+                                                        </p>
+                                                    </div>
+                                                )}
+                                                {content.commonEligibility.marks && (
+                                                    <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm">
+                                                        <span className="font-black text-accent uppercase block mb-2 text-xs sm:text-sm tracking-wider">Marks Requirement</span>
+                                                        <p className="text-slate-600 text-[0.7rem] sm:text-xs font-semibold leading-relaxed">
+                                                            {content.commonEligibility.marks}
+                                                        </p>
+                                                    </div>
+                                                )}
+                                                {content.commonEligibility.entrance && (
+                                                    <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm">
+                                                        <span className="font-black text-accent uppercase block mb-2 text-xs sm:text-sm tracking-wider">Entrance Exam</span>
+                                                        <p className="text-slate-600 text-[0.7rem] sm:text-xs font-semibold leading-relaxed">
+                                                            {content.commonEligibility.entrance}
+                                                        </p>
+                                                    </div>
+                                                )}
+                                            </div>
+                                            {content.commonEligibility.notes && content.commonEligibility.notes.length > 0 && (
+                                                <div className="mt-6 bg-white p-5 rounded-2xl border border-slate-100 shadow-sm">
+                                                    <span className="font-black text-accent uppercase block mb-3 text-xs sm:text-sm tracking-wider">Important Notes</span>
+                                                    <ul className="space-y-2">
+                                                        {content.commonEligibility.notes.map((note, i) => (
+                                                            <li key={i} className="flex gap-2 text-slate-600 text-[0.7rem] sm:text-xs font-semibold leading-relaxed">
+                                                                <span className="text-accent font-black">({i + 1})</span>
+                                                                <span>{note}</span>
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                </div>
+                                            )}
+                                        </div>
+                                    )}
+
                                 </div>
                             ) : slug === 'right-to-info' ? (
                                 <div className="space-y-12 text-left">
@@ -1751,7 +1558,43 @@ const ContentPage = () => {
                                <p className="text-sm text-white/70 mb-8 leading-relaxed font-bold">
                                    Need more clarification on institutional policies or specific details regarding {content.title}?
                                </p>
-                               <Link to="/contact" className="block w-full bg-accent py-4 rounded-xl text-center font-black hover:bg-white hover:text-primary transition-all duration-300 tracking-wider">
+                               {slug?.includes('admission') && content.helpdeskContacts && content.helpdeskContacts.length > 0 && (
+                                   <div className="mb-8 space-y-4">
+                                       {content.helpdeskContacts.map((contact, idx) => {
+                                           const isValid = isValidPhoneNumber(contact.number);
+                                           return (
+                                               <div key={idx} className="flex items-center justify-between bg-white/5 p-3 rounded-lg border border-white/10 group">
+                                                    <div className="flex items-center gap-3">
+                                                        <Phone size={18} className="text-accent" />
+                                                        <div>
+                                                            <p className="text-[0.65rem] font-black uppercase tracking-widest text-white/50 mb-0.5">{contact.title}</p>
+                                                            <span className="font-bold text-sm text-white/90">{contact.number}</span>
+                                                        </div>
+                                                    </div>
+                                                    <div className="flex items-center gap-2">
+                                                        {isValid && (
+                                                            <a 
+                                                                href={`tel:${contact.number.replace(/\s/g, '')}`} 
+                                                                className="md:hidden p-2 bg-accent/50 hover:bg-accent text-white rounded-md transition-colors shadow-sm"
+                                                                aria-label="Call Number"
+                                                            >
+                                                                <Phone size={16} />
+                                                            </a>
+                                                        )}
+                                                        <button 
+                                                            onClick={(e) => handleCopy(contact.number, e)}
+                                                            className="p-2 bg-white/10 hover:bg-white/20 text-white rounded-md transition-colors"
+                                                            aria-label="Copy Number"
+                                                        >
+                                                            {copiedNumber === contact.number ? <Check size={16} className="text-green-400" /> : <Copy size={16} />}
+                                                        </button>
+                                                    </div>
+                                               </div>
+                                           );
+                                       })}
+                                   </div>
+                               )}
+                               <Link to="/page/contact" className="block w-full bg-accent py-4 rounded-xl text-center font-black hover:bg-white hover:text-primary transition-all duration-300 tracking-wider">
                                     CONTACT US
                                </Link>
                             </div>

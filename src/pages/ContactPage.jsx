@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { 
     Phone, Mail, MapPin, Clock, 
@@ -8,6 +8,9 @@ import {
 } from 'lucide-react';
 
 const ContactPage = () => {
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
     const contactOffices = [
         {
             title: "Reception",

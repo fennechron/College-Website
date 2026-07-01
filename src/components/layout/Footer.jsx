@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import logo from '../../assets/cec122.png';
-import { Linkedin, Instagram, Facebook, Twitter, Youtube, ArrowUp } from 'lucide-react';
+import { Linkedin, Instagram, Facebook, Twitter, Youtube, ArrowUp,Mail,Phone,Globe,MapPin } from 'lucide-react';
 
 const Footer = () => {
     const scrollToTop = () => {
@@ -36,30 +36,28 @@ const Footer = () => {
                         <h4 className="mb-4 text-[0.9rem] font-bold uppercase tracking-[0.1em] text-white">Contact</h4>
                         <div className="space-y-[10px] text-sm sm:text-[0.95rem] text-slate-400">
                             <p className="flex items-start gap-[10px]">
-                                <span className="shrink-0 text-[1.1rem]">📍</span>Chengannur - 689121, Alappuzha District, Kerala, India
+                                <span className="shrink-0 text-[1.1rem]"><MapPin size={20}/></span>Chengannur - 689121, Alappuzha District, Kerala, India
                             </p>
                             <p className="flex items-start gap-[10px]">
-                                <span className="shrink-0 text-[1.1rem]">📞</span><a className="text-slate-400 hover:text-white transition" href="tel:+914792454125">+91-479-2454125</a>
+                                <span className="shrink-0 text-[1.1rem]"><Phone size={20}/></span><a className="text-slate-400 hover:text-white transition" href="tel:+914792454125">+91-479-2454125</a>
                             </p>
                             <p className="flex items-start gap-[10px]">
-                                <span className="shrink-0 text-[1.1rem]">✉</span><a className="text-slate-400 hover:text-white transition" href="mailto:principal@ceconline.edu">principal@ceconline.edu</a>
+                                <span className="shrink-0 text-[1.1rem]"><Mail size={20}/></span><a className="text-slate-400 hover:text-white transition" href="mailto:principal@ceconline.edu">principal@ceconline.edu</a>
                             </p>
                             <p className="flex items-start gap-[10px]">
-                                <span className="shrink-0 text-[1.1rem]">🌐</span><a className="text-slate-400 hover:text-white transition" href="https://ceconline.edu">ceconline.edu</a>
+                                <span className="shrink-0 text-[1.1rem]"><Globe size={20}/></span><a className="text-slate-400 hover:text-white transition" href="https://ceconline.edu">ceconline.edu</a>
                             </p>
                         </div>
                     </div>
                     <div>
                         <h4 className="mb-4 text-[0.9rem] font-bold uppercase tracking-[0.1em] text-white">Explore</h4>
                         <ul className="space-y-[9px]">
-                            <li><Link className="text-sm sm:text-[0.95rem] text-slate-400 transition hover:text-white" to="/page/about">About CEC</Link></li>
-                            <li><Link className="text-sm sm:text-[0.95rem] text-slate-400 transition hover:text-white" to="/page/departments">Departments</Link></li>
-                            <li><Link className="text-sm sm:text-[0.95rem] text-slate-400 transition hover:text-white" to="/page/admission-2026">Admissions</Link></li>
-                            <li><a className="text-sm sm:text-[0.95rem] text-slate-400 transition hover:text-white" href="https://ktu.edu.in/eu/res/examResults.htm" target="_blank" rel="noopener noreferrer">Examination Results</a></li>
-                            <li><Link className="text-sm sm:text-[0.95rem] text-slate-400 transition hover:text-white" to="/page/placement">Placement Cell</Link></li>
                             <li><Link className="text-sm sm:text-[0.95rem] text-slate-400 transition hover:text-white" to="/page/research">Research</Link></li>
                             <li><Link className="text-sm sm:text-[0.95rem] text-slate-400 transition hover:text-white" to="/page/alumni">Alumni Association</Link></li>
                             <li><Link className="text-sm sm:text-[0.95rem] text-slate-400 transition hover:text-white" to="/page/iqac">IQAC</Link></li>
+                            <li><Link className="text-sm sm:text-[0.95rem] text-slate-400 transition hover:text-white" to="/page/anti-ragging">Anti-Ragging Cell</Link></li>
+                            <li><Link className="text-sm sm:text-[0.95rem] text-slate-400 transition hover:text-white" to="/page/admission-2026">Admissions</Link></li>
+                            <li><Link className="text-sm sm:text-[0.95rem] text-slate-400 transition hover:text-white" to="/page/placement">Placement Cell</Link></li>
                         </ul>
                     </div>
                     <div id="useful-links">
@@ -85,10 +83,10 @@ const Footer = () => {
                     
                     <button 
                         onClick={scrollToTop}
-                        className="group flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-accent rounded-full border border-white/10 hover:border-accent text-slate-400 hover:text-white transition-all duration-300 self-start md:self-auto"
+                        className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-accent rounded-full border border-white/10 hover:border-accent text-slate-400 hover:text-white transition-all duration-300 self-start md:self-auto"
                     >
                         <span className="text-xs font-bold uppercase tracking-widest">Back to Top</span>
-                        <div className="p-1 bg-white/10 rounded-full group-hover:-translate-y-1 transition-transform duration-300">
+                        <div className="p-1 bg-white/10 rounded-full">
                             <ArrowUp size={14} />
                         </div>
                     </button>

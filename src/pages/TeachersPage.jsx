@@ -40,7 +40,7 @@ const HodCard = ({ member, accentHex }) => {
                     className="absolute bottom-3 left-3 right-3 flex items-center justify-center gap-1.5 py-1.5 rounded-lg text-[0.65rem] font-black tracking-widest uppercase text-white"
                     style={{ background: `${accent}ee`, backdropFilter: 'blur(4px)' }}
                 >
-                    <Crown size={11} fill="#fde047" className="text-yellow-300" />
+
                     Head of Department
                 </div>
             </div>
@@ -231,12 +231,6 @@ const DeptSection = ({ dept }) => {
                 className="w-full flex items-center justify-between gap-4 mb-8 group"
             >
                 <div className="flex items-center gap-4 flex-1">
-                    <span
-                        className="flex items-center justify-center w-14 h-14 rounded-2xl text-2xl shadow-lg shrink-0"
-                        style={{ background: `${dept.color}15`, border: `2px solid ${dept.color}30` }}
-                    >
-                        {dept.icon}
-                    </span>
                     <div className="text-left">
                         <h3 className="text-[1.4rem] sm:text-[1.75rem] font-display font-black text-primary leading-tight">{dept.label || dept.name}</h3>
                         <p className="text-[0.78rem] text-secondary/50 font-bold uppercase tracking-widest">{(dept.faculty ? dept.faculty.length : 0) + (dept.hod ? 1 : 0)} Faculty Members</p>
@@ -268,7 +262,7 @@ const DeptSection = ({ dept }) => {
                                 className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-[0.68rem] font-black uppercase tracking-widest text-white mb-5"
                                 style={{ background: dept.color }}
                             >
-                                <Crown size={11} fill="currentColor" /> Head of Department
+                                Head of Department
                             </div>
                             <HodCard member={dept.hod} accentHex={dept.color} />
                         </div>
@@ -293,54 +287,10 @@ const DeptSection = ({ dept }) => {
 };
 
 // ─── MCA Section ───────────────────────────────────────────────────────────────
-const McaSection = ({ data }) => {
-    const mcaColor = '#4A235A';
-    const mcaAccent = '#6C3483';
-
-    return (
-        <div className="mb-12">
-            <div className="flex items-center gap-4 mb-8">
-                <span
-                    className="flex items-center justify-center w-14 h-14 rounded-2xl text-2xl shadow-lg shrink-0"
-                    style={{ background: `${mcaColor}15`, border: `2px solid ${mcaColor}30` }}
-                >🎓</span>
-                <div>
-                    <h3 className="text-[1.4rem] sm:text-[1.75rem] font-display font-black text-primary leading-tight">Master of Computer Applications</h3>
-                    <p className="text-[0.78rem] text-secondary/50 font-bold uppercase tracking-widest">{data.faculty.length + 1} Faculty Members</p>
-                </div>
-            </div>
-
-            {/* HOD */}
-            <div className="mb-8">
-                <div
-                    className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-[0.68rem] font-black uppercase tracking-widest text-white mb-5"
-                    style={{ background: mcaColor }}
-                >
-                    <Crown size={11} fill="currentColor" /> Head of Department
-                </div>
-                <HodCard member={data.hod} accentHex={mcaColor} />
-            </div>
-
-            {/* Faculty Grid */}
-            <div
-                className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-[0.68rem] font-black uppercase tracking-widest text-white mb-5"
-                style={{ background: mcaAccent }}
-            >
-                <Users size={11} /> Faculty Members
-            </div>
-            <div className="grid sm:grid-cols-2 gap-6">
-                {data.faculty.map((m, i) => <FacultyCard key={i} member={m} accentHex={mcaAccent} />)}
-            </div>
-        </div>
-    );
-};
-
 // ─── Main Page ─────────────────────────────────────────────────────────────────
 const TeachersPage = () => {
-    const [activeTab, setActiveTab] = useState('btech');
     const [activeDept, setActiveDept] = useState(null);
     const [sanityBtechDepts, setSanityBtechDepts] = useState(null);
-    const [sanityMcaData, setSanityMcaData] = useState(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -354,7 +304,6 @@ const TeachersPage = () => {
             if (data && data.length > 0) {
                 // Map to object structure expected by UI
                 const mappedBtech = {};
-                let mappedMca = null;
                 
                 data.forEach(d => {
                     const deptObj = {
@@ -367,15 +316,12 @@ const TeachersPage = () => {
                         faculty: d.faculty || []
                     };
                     
-                    if (d.short && d.short.toLowerCase() === 'mca') {
-                        mappedMca = deptObj;
-                    } else {
+                    if (d.short && d.short.toLowerCase() !== 'mca') {
                         mappedBtech[d.short ? d.short.toLowerCase() : d.name] = deptObj;
                     }
                 });
                 
                 if (Object.keys(mappedBtech).length > 0) setSanityBtechDepts(mappedBtech);
-                if (mappedMca) setSanityMcaData(mappedMca);
             }
             setLoading(false);
         }).catch(err => {
@@ -394,7 +340,6 @@ const TeachersPage = () => {
     }
 
     const btechDepts = sanityBtechDepts || {};
-    const mcaData = sanityMcaData || { faculty: [] };
     const btechDeptKeys = Object.keys(btechDepts);
 
     return (
@@ -416,14 +361,7 @@ const TeachersPage = () => {
                         </div>
                         <h1 className="text-[2.5rem] sm:text-[3.5rem] font-display font-black leading-tight tracking-tighter uppercase max-w-4xl">Our Teachers</h1>
                         <div className="w-24 h-2 bg-accent rounded-full mt-2" />
-                        <div className="flex flex-wrap gap-6 mt-4">
-                            {[{ label: 'Total Faculty', value: '25+' }, { label: 'Departments', value: '4' }, { label: 'Doctorates', value: '4' }, { label: 'Avg. Experience', value: '9 Yrs' }].map((s, i) => (
-                                <div key={i} className="flex flex-col">
-                                    <span className="text-[1.8rem] font-display font-black text-accent leading-none">{s.value}</span>
-                                    <span className="text-[0.72rem] font-bold tracking-widest text-white/50 uppercase">{s.label}</span>
-                                </div>
-                            ))}
-                        </div>
+
                     </motion.div>
                 </div>
             </div>
@@ -431,27 +369,12 @@ const TeachersPage = () => {
             {/* Tab Bar */}
             <div className="bg-white border-b border-primary/10 sticky top-0 z-50 shadow-sm">
                 <div className="max-w-[90%] lg:max-w-[1280px] mx-auto px-4 lg:px-8 flex items-center gap-2 overflow-x-auto py-3 no-scrollbar">
-                    {[{ key: 'btech', label: 'B.Tech', icon: <BookOpen size={15} /> }, { key: 'mca', label: 'MCA', icon: <GraduationCap size={15} /> }].map(tab => (
-                        <button
-                            key={tab.key}
-                            onClick={() => { setActiveTab(tab.key); setActiveDept(null); }}
-                            className={`flex items-center gap-2 px-6 py-2.5 rounded-full font-black text-[0.82rem] uppercase tracking-widest transition-all duration-300 whitespace-nowrap ${activeTab === tab.key ? 'bg-primary text-white shadow-lg' : 'bg-background text-secondary/60 hover:bg-primary/10 hover:text-primary'}`}
-                        >
-                            {tab.icon} {tab.label}
+                    <button onClick={() => setActiveDept(null)} className={`px-4 py-2 rounded-full font-bold text-[0.76rem] uppercase tracking-wider transition-all duration-300 whitespace-nowrap ${activeDept === null ? 'bg-accent text-white' : 'bg-background text-secondary/60 hover:bg-accent/10 hover:text-accent'}`}>All</button>
+                    {btechDeptKeys.map(dk => (
+                        <button key={dk} onClick={() => setActiveDept(dk)} className={`flex items-center gap-1.5 px-4 py-2 rounded-full font-bold text-[0.76rem] uppercase tracking-wider transition-all duration-300 whitespace-nowrap ${activeDept === dk ? 'bg-accent text-white' : 'bg-background text-secondary/60 hover:bg-accent/10 hover:text-accent'}`}>
+                            {btechDepts[dk].short}
                         </button>
                     ))}
-
-                    {activeTab === 'btech' && (
-                        <>
-                            <div className="w-px h-6 bg-primary/20 mx-2 shrink-0" />
-                            <button onClick={() => setActiveDept(null)} className={`px-4 py-2 rounded-full font-bold text-[0.76rem] uppercase tracking-wider transition-all duration-300 whitespace-nowrap ${activeDept === null ? 'bg-accent text-white' : 'bg-background text-secondary/60 hover:bg-accent/10 hover:text-accent'}`}>All</button>
-                            {btechDeptKeys.map(dk => (
-                                <button key={dk} onClick={() => setActiveDept(dk)} className={`flex items-center gap-1.5 px-4 py-2 rounded-full font-bold text-[0.76rem] uppercase tracking-wider transition-all duration-300 whitespace-nowrap ${activeDept === dk ? 'bg-accent text-white' : 'bg-background text-secondary/60 hover:bg-accent/10 hover:text-accent'}`}>
-                                    {btechDepts[dk].icon} {btechDepts[dk].short}
-                                </button>
-                            ))}
-                        </>
-                    )}
                 </div>
             </div>
 
@@ -459,28 +382,16 @@ const TeachersPage = () => {
             <div className="flex-grow py-14">
                 <div className="max-w-[90%] lg:max-w-[1280px] mx-auto px-4 lg:px-8">
                     <AnimatePresence mode="wait">
-                        {activeTab === 'btech' && (
-                            <motion.div key="btech" initial={{ opacity: 0, x: -16 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 16 }} transition={{ duration: 0.35 }}>
-                                <div className="mb-12">
-                                    <span className="inline-block px-3 py-1 bg-primary/10 rounded-full text-[0.7rem] font-black text-primary uppercase tracking-widest mb-3">B.Tech Programme</span>
-                                    <h2 className="text-[2rem] font-display font-black text-primary">Bachelor of Technology Faculty</h2>
-                                    <p className="text-secondary/60 mt-2 max-w-2xl">Our B.Tech faculty brings together experts across three core engineering disciplines — Computer Science, Electrical & Electronics, and Electronics & Communication Engineering.</p>
-                                </div>
-                                {btechDeptKeys.filter(dk => activeDept === null || activeDept === dk).map(dk => (
-                                    <DeptSection key={dk} dept={btechDepts[dk]} />
-                                ))}
-                            </motion.div>
-                        )}
-                        {activeTab === 'mca' && (
-                            <motion.div key="mca" initial={{ opacity: 0, x: 16 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -16 }} transition={{ duration: 0.35 }}>
-                                <div className="mb-12">
-                                    <span className="inline-block px-3 py-1 bg-primary/10 rounded-full text-[0.7rem] font-black text-primary uppercase tracking-widest mb-3">MCA Programme</span>
-                                    <h2 className="text-[2rem] font-display font-black text-primary">Master of Computer Applications Faculty</h2>
-                                    <p className="text-secondary/60 mt-2 max-w-2xl">Our MCA department is driven by faculty who bridge cutting-edge software development, data science, and emerging technologies with real-world application.</p>
-                                </div>
-                                <McaSection data={mcaData} />
-                            </motion.div>
-                        )}
+                        <motion.div key="btech" initial={{ opacity: 0, x: -16 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 16 }} transition={{ duration: 0.35 }}>
+                            <div className="mb-12">
+                                <span className="inline-block px-3 py-1 bg-primary/10 rounded-full text-[0.7rem] font-black text-primary uppercase tracking-widest mb-3">B.Tech Programme</span>
+                                <h2 className="text-[2rem] font-display font-black text-primary">Bachelor of Technology Faculty</h2>
+                                <p className="text-secondary/60 mt-2 max-w-2xl">Our B.Tech faculty brings together experts across three core engineering disciplines — Computer Science, Electrical & Electronics, and Electronics & Communication Engineering.</p>
+                            </div>
+                            {btechDeptKeys.filter(dk => activeDept === null || activeDept === dk).map(dk => (
+                                <DeptSection key={dk} dept={btechDepts[dk]} />
+                            ))}
+                        </motion.div>
                     </AnimatePresence>
                 </div>
             </div>

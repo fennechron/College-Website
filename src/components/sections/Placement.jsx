@@ -5,11 +5,53 @@ import * as LucideIcons from 'lucide-react';
 const Placement = () => {
     const [data, setData] = useState(null);
     const [placements, setPlacements] = useState([]);
+    
+    // Auto-scroll states
+    const recruitersRef = React.useRef(null);
+    const galleryRef = React.useRef(null);
+    const [isRecruitersHovered, setIsRecruitersHovered] = useState(false);
+    const [isGalleryHovered, setIsGalleryHovered] = useState(false);
 
     useEffect(() => {
         client.fetch(`*[_type == "homePage"][0]{ placementSection }`).then(res => setData(res?.placementSection)).catch(console.error);
         client.fetch(`*[_type == "placement" && defined(groupPhoto)] | order(year desc) { year, groupPhoto }`).then(res => setPlacements(res)).catch(console.error);
     }, []);
+
+    // Recruiters Auto-scroll
+    useEffect(() => {
+        const container = recruitersRef.current;
+        if (!container || !data?.recruiters?.length) return;
+        let animationId;
+        const scrollStep = () => {
+            if (!isRecruitersHovered && container) {
+                container.scrollLeft += 1;
+                if (container.scrollLeft >= container.scrollWidth / 2) {
+                    container.scrollLeft = 0;
+                }
+            }
+            animationId = requestAnimationFrame(scrollStep);
+        };
+        animationId = requestAnimationFrame(scrollStep);
+        return () => cancelAnimationFrame(animationId);
+    }, [isRecruitersHovered, data?.recruiters]);
+
+    // Gallery Auto-scroll
+    useEffect(() => {
+        const container = galleryRef.current;
+        if (!container || !placements.length) return;
+        let animationId;
+        const scrollStep = () => {
+            if (!isGalleryHovered && container) {
+                container.scrollLeft += 1;
+                if (container.scrollLeft >= container.scrollWidth / 2) {
+                    container.scrollLeft = 0;
+                }
+            }
+            animationId = requestAnimationFrame(scrollStep);
+        };
+        animationId = requestAnimationFrame(scrollStep);
+        return () => cancelAnimationFrame(animationId);
+    }, [isGalleryHovered, placements]);
 
     if (!data) return null;
 
@@ -46,21 +88,19 @@ const Placement = () => {
                             --recruiter-gap: 64px;
                         }
                     }
-                    @keyframes slide {
-                        0% { transform: translateX(0); }
-                        100% { transform: translateX(calc(-1 * (var(--recruiter-width) + var(--recruiter-gap)) * ${recruiters.length})); }
-                    }
-                    .recruiters-track {
-                        animation: slide ${recruiters.length * 4}s linear infinite;
-                    }
-                    .recruiters-track:hover {
-                        animation-play-state: paused;
-                    }
                     `}
                     </style>
 
-                    <div className="flex overflow-hidden relative py-6 md:py-12 mask-gradient">
-                        <div className="flex recruiters-track items-center min-w-max" style={{ gap: 'var(--recruiter-gap)' }}>
+                    <div className="relative py-6 md:py-12 mask-gradient">
+                        <div 
+                            ref={recruitersRef}
+                            className="flex overflow-x-auto no-scrollbar items-center" 
+                            style={{ gap: 'var(--recruiter-gap)' }}
+                            onMouseEnter={() => setIsRecruitersHovered(true)}
+                            onMouseLeave={() => setIsRecruitersHovered(false)}
+                            onTouchStart={() => setIsRecruitersHovered(true)}
+                            onTouchEnd={() => setIsRecruitersHovered(false)}
+                        >
                             {recruiters.length > 0 && [...recruiters, ...recruiters].map((rec, idx) => (
                                 <div key={idx} className="group bg-slate-50 flex items-center justify-center rounded-2xl md:rounded-3xl border-2 border-transparent hover:border-accent hover:bg-white hover:shadow-2xl transition-all duration-500 px-4 md:px-10 shrink-0" style={{ width: 'var(--recruiter-width)', height: 'calc(var(--recruiter-width) / 2)' }}>
                                     <img
@@ -116,16 +156,6 @@ const Placement = () => {
                                     --gallery-gap: 32px;
                                 }
                             }
-                            @keyframes slideGallery {
-                                0% { transform: translateX(0); }
-                                100% { transform: translateX(calc(-1 * (var(--gallery-width) + var(--gallery-gap)) * ${placements.length})); }
-                            }
-                            .gallery-track {
-                                animation: slideGallery ${placements.length * 6}s linear infinite;
-                            }
-                            .gallery-track:hover, .gallery-track:active {
-                                animation-play-state: paused;
-                            }
                             .gallery-mask {
                                 mask-image: linear-gradient(to right, transparent, black 4%, black 96%, transparent);
                                 -webkit-mask-image: linear-gradient(to right, transparent, black 4%, black 96%, transparent);
@@ -139,8 +169,16 @@ const Placement = () => {
                             `}
                             </style>
 
-                            <div className="flex overflow-hidden relative py-4 gallery-mask">
-                                <div className="flex gallery-track items-center min-w-max" style={{ gap: 'var(--gallery-gap)' }}>
+                            <div className="relative py-4 gallery-mask">
+                                <div 
+                                    ref={galleryRef}
+                                    className="flex overflow-x-auto no-scrollbar items-center" 
+                                    style={{ gap: 'var(--gallery-gap)' }}
+                                    onMouseEnter={() => setIsGalleryHovered(true)}
+                                    onMouseLeave={() => setIsGalleryHovered(false)}
+                                    onTouchStart={() => setIsGalleryHovered(true)}
+                                    onTouchEnd={() => setIsGalleryHovered(false)}
+                                >
                                     {[...placements, ...placements].map((placement, idx) => (
                                         <div key={idx} className="group relative aspect-[16/10] bg-slate-100 rounded-2xl md:rounded-3xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 flex-shrink-0" style={{ width: 'var(--gallery-width)' }}>
                                             <img

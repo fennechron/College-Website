@@ -4,6 +4,8 @@ import { client, urlFor } from '../../lib/sanity';
 const Achievements = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [slides, setSlides] = useState([]);
+    const [touchStart, setTouchStart] = useState(null);
+    const [touchEnd, setTouchEnd] = useState(null);
 
     useEffect(() => {
         client.fetch(`*[_type == "homePage"][0]{ achievements }`).then(res => {
@@ -18,7 +20,30 @@ const Achievements = () => {
             setCurrentIndex((prevIndex) => (prevIndex + 1) % slides.length);
         }, 4000);
         return () => clearInterval(interval);
-    }, [slides.length]);
+    }, [slides.length, currentIndex]); // Added currentIndex to dependency array so it resets interval on manual change
+
+    const handleTouchStart = (e) => {
+        setTouchStart(e.targetTouches[0].clientX);
+    };
+
+    const handleTouchMove = (e) => {
+        setTouchEnd(e.targetTouches[0].clientX);
+    };
+
+    const handleTouchEnd = () => {
+        if (!touchStart || !touchEnd) return;
+        const distance = touchStart - touchEnd;
+        const isLeftSwipe = distance > 50;
+        const isRightSwipe = distance < -50;
+        if (isLeftSwipe) {
+            setCurrentIndex((prev) => (prev + 1) % slides.length);
+        }
+        if (isRightSwipe) {
+            setCurrentIndex((prev) => (prev - 1 + slides.length) % slides.length);
+        }
+        setTouchStart(null);
+        setTouchEnd(null);
+    };
 
     if (!slides || slides.length === 0) return null;
 
@@ -30,11 +55,16 @@ const Achievements = () => {
                     <div className="w-16 h-1 bg-accent mx-auto"></div>
                 </div>
 
-                <div className="relative w-full overflow-hidden rounded-xl shadow-lg border border-primary/20 bg-primary">
+                <div 
+                    className="relative w-full overflow-hidden rounded-xl shadow-lg border border-primary/20 bg-primary cursor-grab active:cursor-grabbing"
+                    onTouchStart={handleTouchStart}
+                    onTouchMove={handleTouchMove}
+                    onTouchEnd={handleTouchEnd}
+                >
                     {/* Slider track */}
                     <div 
                         className="flex h-[350px] sm:h-[450px] md:h-[650px] w-full transition-transform duration-1000 ease-in-out"
-                        style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+                        style={{ transform: `translateX(-${currentIndex * 100}%)`, willChange: 'transform' }}
                     >
                         {slides.map((slide, index) => (
                             <div

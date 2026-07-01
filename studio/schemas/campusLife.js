@@ -62,8 +62,15 @@ export default {
             { name: 'title', title: 'Event Title', type: 'string' },
             { name: 'category', title: 'Category', type: 'string' },
             { name: 'date', title: 'Date String', type: 'string', description: 'e.g., March 2026' },
-            { name: 'image', title: 'Event Image', type: 'image', options: { hotspot: true } },
-            { name: 'span', title: 'Grid Span', type: 'string', description: 'e.g., md:col-span-2 md:row-span-2' }
+            { name: 'image', title: 'Event Cover Image', type: 'image', options: { hotspot: true } },
+            { name: 'span', title: 'Grid Span', type: 'string', description: 'e.g., md:col-span-2 md:row-span-2' },
+            { 
+              name: 'gallery', 
+              title: 'Event Photo Gallery', 
+              type: 'array', 
+              of: [{ type: 'image', options: { hotspot: true } }],
+              description: 'Additional photos from the event to show when clicked.'
+            }
           ]
         }
       ]

@@ -35,6 +35,8 @@ const testimonials = [
 
 const Testimonial = () => {
   const [sanityData, setSanityData] = useState([]);
+  const containerRef = React.useRef(null);
+  const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
     client.fetch('*[_type == "testimonial"]')
@@ -47,6 +49,26 @@ const Testimonial = () => {
   }, []);
 
   const displayData = sanityData.length > 0 ? sanityData : testimonials;
+
+  // Auto-scroll logic
+  useEffect(() => {
+      const container = containerRef.current;
+      if (!container) return;
+
+      let animationId;
+      const scrollStep = () => {
+          if (!isHovered && container) {
+              container.scrollLeft += 1;
+              if (container.scrollLeft >= container.scrollWidth / 2) {
+                  container.scrollLeft = 0;
+              }
+          }
+          animationId = requestAnimationFrame(scrollStep);
+      };
+
+      animationId = requestAnimationFrame(scrollStep);
+      return () => cancelAnimationFrame(animationId);
+  }, [isHovered, displayData]);
 
   return (
     <section id="testimonials" className="py-20 relative overflow-hidden bg-secondary">
@@ -74,24 +96,19 @@ const Testimonial = () => {
                 --testimonial-gap: 24px;
             }
         }
-        @keyframes scrollTestimonials {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(calc(-1 * (var(--testimonial-width) + var(--testimonial-gap)) * ${displayData.length})); }
-        }
-        .testimonials-track {
-            animation: scrollTestimonials 25s linear infinite;
-        }
-        .testimonials-track:hover {
-            animation-play-state: paused;
-        }
         `}
         </style>
 
-        <div className="relative flex overflow-hidden group">
+        <div className="relative group">
             {/* We duplicate the array to create an infinite scroll illusion */}
             <div 
-               className="flex testimonials-track min-w-max px-4 pb-8"
+               ref={containerRef}
+               className="flex overflow-x-auto no-scrollbar px-4 pb-8 items-stretch"
                style={{ gap: 'var(--testimonial-gap)' }}
+               onMouseEnter={() => setIsHovered(true)}
+               onMouseLeave={() => setIsHovered(false)}
+               onTouchStart={() => setIsHovered(true)}
+               onTouchEnd={() => setIsHovered(false)}
             >
                 {[...displayData, ...displayData].map((t, idx) => (
                     <div 

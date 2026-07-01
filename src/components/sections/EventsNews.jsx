@@ -44,6 +44,8 @@ const eventsNews = [
 
 const EventsNews = () => {
     const [sanityData, setSanityData] = useState([]);
+    const containerRef = React.useRef(null);
+    const [isHovered, setIsHovered] = useState(false);
 
     useEffect(() => {
         client.fetch('*[_type == "eventNews"]')
@@ -56,6 +58,27 @@ const EventsNews = () => {
     }, []);
 
     const displayData = sanityData.length > 0 ? sanityData : eventsNews;
+
+    // Auto-scroll logic
+    useEffect(() => {
+        const container = containerRef.current;
+        if (!container) return;
+
+        let animationId;
+        const scrollStep = () => {
+            if (!isHovered && container) {
+                container.scrollLeft += 1;
+                // If we scrolled past the first half of the duplicated content, reset back to 0 for infinite loop
+                if (container.scrollLeft >= container.scrollWidth / 2) {
+                    container.scrollLeft = 0;
+                }
+            }
+            animationId = requestAnimationFrame(scrollStep);
+        };
+
+        animationId = requestAnimationFrame(scrollStep);
+        return () => cancelAnimationFrame(animationId);
+    }, [isHovered, displayData]);
 
     return (
         <section id="events-news" className="py-20 bg-background border-t border-primary/5">
@@ -83,24 +106,25 @@ const EventsNews = () => {
                         --event-card-gap: 32px;
                     }
                 }
-                @keyframes scrollEvents {
-                    0% { transform: translateX(0); }
-                    100% { transform: translateX(calc(-1 * (var(--event-card-width) + var(--event-card-gap)) * ${displayData.length})); }
-                }
-                .events-track {
-                    animation: scrollEvents ${displayData.length * 8}s linear infinite;
-                }
-                .events-track:hover {
-                    animation-play-state: paused;
-                }
-                .mask-gradient-horizontal {
-                    mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+                @media (min-width: 768px) {
+                    .mask-gradient-horizontal {
+                        mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+                        -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+                    }
                 }
                 `}
                 </style>
 
-                <div className="overflow-hidden relative py-10 mask-gradient-horizontal">
-                    <div className="flex events-track items-stretch min-w-max" style={{ gap: 'var(--event-card-gap)' }}>
+                <div className="relative py-10 mask-gradient-horizontal">
+                    <div 
+                        ref={containerRef}
+                        className="flex overflow-x-auto no-scrollbar items-stretch" 
+                        style={{ gap: 'var(--event-card-gap)' }}
+                        onMouseEnter={() => setIsHovered(true)}
+                        onMouseLeave={() => setIsHovered(false)}
+                        onTouchStart={() => setIsHovered(true)}
+                        onTouchEnd={() => setIsHovered(false)}
+                    >
                         {[...displayData, ...displayData].map((item, idx) => (
                             <div key={`${item._id || item.id}-${idx}`} className="h-[360px] sm:h-[460px] group bg-white rounded-[1.5rem] sm:rounded-3xl border border-primary/10 overflow-hidden hover:shadow-[0_20px_50px_rgba(12,43,78,0.12)] transition-all duration-500 hover:-translate-y-2 flex flex-col shrink-0" style={{ width: 'var(--event-card-width)' }}>
                                 {/* Card Header with Date Banner */}
