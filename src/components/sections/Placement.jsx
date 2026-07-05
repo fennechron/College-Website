@@ -22,12 +22,18 @@ const Placement = () => {
         const container = recruitersRef.current;
         if (!container || !data?.recruiters?.length) return;
         let animationId;
+        let scrollPos = container.scrollLeft;
+
         const scrollStep = () => {
             if (!isRecruitersHovered && container) {
-                container.scrollLeft += 1;
-                if (container.scrollLeft >= container.scrollWidth / 2) {
-                    container.scrollLeft = 0;
+                const singleSetWidth = container.scrollWidth / 4;
+                scrollPos += 0.8;
+                if (scrollPos >= singleSetWidth) {
+                    scrollPos -= singleSetWidth;
                 }
+                container.scrollLeft = scrollPos;
+            } else if (container) {
+                scrollPos = container.scrollLeft;
             }
             animationId = requestAnimationFrame(scrollStep);
         };
@@ -40,12 +46,18 @@ const Placement = () => {
         const container = galleryRef.current;
         if (!container || !placements.length) return;
         let animationId;
+        let scrollPos = container.scrollLeft;
+
         const scrollStep = () => {
             if (!isGalleryHovered && container) {
-                container.scrollLeft += 1;
-                if (container.scrollLeft >= container.scrollWidth / 2) {
-                    container.scrollLeft = 0;
+                const singleSetWidth = container.scrollWidth / 4;
+                scrollPos += 0.8;
+                if (scrollPos >= singleSetWidth) {
+                    scrollPos -= singleSetWidth;
                 }
+                container.scrollLeft = scrollPos;
+            } else if (container) {
+                scrollPos = container.scrollLeft;
             }
             animationId = requestAnimationFrame(scrollStep);
         };
@@ -56,6 +68,8 @@ const Placement = () => {
     if (!data) return null;
 
     const { recruiters = [], stats = [] } = data;
+    const repeatedRecruiters = [...recruiters, ...recruiters, ...recruiters, ...recruiters];
+    const repeatedPlacements = [...placements, ...placements, ...placements, ...placements];
 
     return (
         <section id="placement" className="py-20 bg-background">
@@ -101,7 +115,7 @@ const Placement = () => {
                             onTouchStart={() => setIsRecruitersHovered(true)}
                             onTouchEnd={() => setIsRecruitersHovered(false)}
                         >
-                            {recruiters.length > 0 && [...recruiters, ...recruiters].map((rec, idx) => (
+                            {recruiters.length > 0 && repeatedRecruiters.map((rec, idx) => (
                                 <div key={idx} className="group bg-slate-50 flex items-center justify-center rounded-2xl md:rounded-3xl border-2 border-transparent hover:border-accent hover:bg-white hover:shadow-2xl transition-all duration-500 px-4 md:px-10 shrink-0" style={{ width: 'var(--recruiter-width)', height: 'calc(var(--recruiter-width) / 2)' }}>
                                     <img
                                         src={urlFor(rec.logo).url()}
@@ -179,7 +193,7 @@ const Placement = () => {
                                     onTouchStart={() => setIsGalleryHovered(true)}
                                     onTouchEnd={() => setIsGalleryHovered(false)}
                                 >
-                                    {[...placements, ...placements].map((placement, idx) => (
+                                    {repeatedPlacements.map((placement, idx) => (
                                         <div key={idx} className="group relative aspect-[16/10] bg-slate-100 rounded-2xl md:rounded-3xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 flex-shrink-0" style={{ width: 'var(--gallery-width)' }}>
                                             <img
                                                 src={urlFor(placement.groupPhoto).width(1200).url()}

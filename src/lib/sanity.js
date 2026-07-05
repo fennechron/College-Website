@@ -24,8 +24,8 @@ client.fetch = async function (query, params, options) {
   const cacheKey = JSON.stringify({ query, params });
   const cached = queryCache.get(cacheKey);
 
-  // Return cached result if valid and within TTL
-  if (cached && (Date.now() - cached.timestamp < CACHE_TTL)) {
+  // Return cached result if valid, within TTL, and ignoreCache is not set
+  if (!options?.ignoreCache && cached && (Date.now() - cached.timestamp < CACHE_TTL)) {
     return cached.data;
   }
 

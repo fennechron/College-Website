@@ -1406,17 +1406,31 @@ const ContentPage = () => {
                                                     </a>
                                                 </div>
                                             )}
+
+                                            {slug === 'aicte' && (
+                                                <div className="flex flex-col sm:flex-row flex-wrap gap-3 mt-auto pt-4 sm:pt-6 border-t border-slate-200/60">
+                                                    <a href="https://www.aicte.gov.in/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 bg-primary text-white font-bold rounded-xl hover:bg-accent transition-colors text-xs sm:text-sm uppercase tracking-wider text-center">
+                                                        Official AICTE Website
+                                                    </a>
+                                                </div>
+                                            )}
                                         </div>
 
                                         {/* Logo Branding Card */}
                                         <div className="flex justify-center">
-                                            <div className="bg-white p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-[2rem] border border-slate-100 shadow-[0_15px_40px_rgba(12,43,78,0.04)] flex items-center justify-center w-full transition-transform duration-500 hover:scale-[1.02]">
+                                            <a 
+                                                href={slug === 'apjaktu' ? "https://ktu.edu.in/" : "https://www.aicte.gov.in/"} 
+                                                target="_blank" 
+                                                rel="noopener noreferrer" 
+                                                className="bg-white p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-[2rem] border border-slate-100 shadow-[0_15px_40px_rgba(12,43,78,0.04)] flex items-center justify-center w-full transition-transform duration-500 hover:scale-[1.02] cursor-pointer"
+                                                title={`Visit ${content.title} Official Website`}
+                                            >
                                                 <img 
                                                     src={slug === 'apjaktu' ? "/images/apjaktu_logo.png" : "/images/aicte_logo.jpg"} 
                                                     alt={`${content.title} Logo`} 
                                                     className="w-full max-w-[140px] sm:max-w-[200px] object-contain"
                                                 />
-                                            </div>
+                                            </a>
                                         </div>
                                     </div>
                                 </div>

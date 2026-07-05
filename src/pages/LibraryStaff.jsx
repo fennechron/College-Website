@@ -3,56 +3,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Calendar, Clock, ChevronLeft, ChevronRight, Home, ChevronRight as ArrowIcon, FileText, ArrowRight, UserCheck } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-const staffMembers = [
-    { id: 1, name: "Dr. Deepa K", designation: "Librarian Grade-I" },
-    { id: 2, name: "Smt. Marymma Thomas", designation: "Librarian Grade-II" },
-    { id: 3, name: "Smt. Shinee C Thomas", designation: "Librarian Grade-III" },
-    { id: 4, name: "Sri. Shajudeen K", designation: "Librarian Grade-IV" },
-    { id: 5, name: "Sri. Sasankan Nair R", designation: "Librarian Grade-IV" },
-    { id: 6, name: "Sri. Joby Jose", designation: "Library Assistant" },
-    { id: 7, name: "Smt. Jiji Mathew", designation: "Library Assistant" }
-];
-
-const calendarEvents = {
-    // Year-Month-Day formatted keys
-    "2026-05-15": { title: "Orientation on DELNET & IEEE e-Journals", desc: "Interactive training session for S4 B.Tech students on accessing DELNET resources.", time: "10:00 AM", type: "Orientation" },
-    "2026-05-20": { title: "Central Library Committee Meeting", desc: "Meeting of library department heads and student reps for library budget allocation.", time: "02:30 PM", type: "Meeting" },
-    "2026-05-27": { title: "Book Return Deadline (S8 B.Tech)", desc: "Last day for final year B.Tech students to return reference library books without fine.", time: "04:30 PM", type: "Deadline" },
-    "2026-06-02": { title: "Annual Stock Verification", desc: "Annual physical stock verification and book indexing session. Library lending suspended.", time: "09:00 AM", type: "Maintenance" },
-    "2026-06-10": { title: "Digital Library Access Workshop", desc: "Hands-on workshop on NPTEL local chapter access and e-learning resources.", time: "11:30 AM", type: "Workshop" }
-};
-
-const recentPosts = [
-    {
-        id: "post-1",
-        date: "May 18, 2026",
-        category: "e-Resources",
-        title: "Access to IEEE Xplore and ScienceDirect Restored",
-        summary: "CEC Central Library has successfully renewed subscriptions for IEEE Xplore, ScienceDirect, and DELNET database. Students can now access these within the campus WiFi network or via remote login.",
-        readTime: "2 min read",
-        link: "/page/library"
-    },
-    {
-        id: "post-2",
-        date: "May 14, 2026",
-        category: "Circulation",
-        title: "No-Dues Certificate Guidelines for Graduating Batch",
-        summary: "All S8 B.Tech and S4 MCA students are requested to clear all outstanding books and fines at the main library circulation desk to receive their Library No-Dues Certificate.",
-        readTime: "3 min read",
-        link: "/page/downloads"
-    },
-    {
-        id: "post-3",
-        date: "May 08, 2026",
-        category: "Acquisitions",
-        title: "New Reference Books and Technical Journals Added",
-        summary: "Over 250 new books on Artificial Intelligence, Machine Learning, VLSI, and Power Electronics have been added to the Reference Section. Click to view the complete catalog.",
-        readTime: "2 min read",
-        link: "/page/library"
-    }
-];
+import { client } from '../lib/sanity';
 
 const getInitials = (name) => {
+    if (!name) return 'LT';
     const cleanName = name.replace(/^(Smt|Sri|Shri|Dr)\.?\s+/i, '');
     const parts = cleanName.trim().split(/\s+/);
     if (parts.length >= 2) {
@@ -63,14 +17,59 @@ const getInitials = (name) => {
 
 const LibraryStaff = () => {
     const [searchTerm, setSearchTerm] = useState('');
-    const [currentDate, setCurrentDate] = useState(new Date(2026, 4, 20)); // Set to mid-May 2026 to fit system context
+    const [currentDate, setCurrentDate] = useState(new Date(2026, 4, 20));
     const [selectedDateKey, setSelectedDateKey] = useState("2026-05-20");
-    const [selectedEvent, setSelectedEvent] = useState(calendarEvents["2026-05-20"]);
+    const [selectedEvent, setSelectedEvent] = useState(null);
+
+    const [staffList, setStaffList] = useState([]);
+    const [calendarEventsMap, setCalendarEventsMap] = useState({});
+    const [recentPostsList, setRecentPostsList] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    const getEventMap = (events) => {
+        if (!events) return {};
+        if (!Array.isArray(events)) return events;
+        const map = {};
+        events.forEach(evt => {
+            if (evt.dateKey) map[evt.dateKey] = evt;
+        });
+        return map;
+    };
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+        setLoading(true);
+        client.fetch(`*[_type == "administration"][0]`, {}, { ignoreCache: true })
+            .then(data => {
+                if (data) {
+                    if (data.libraryStaffMembers && Array.isArray(data.libraryStaffMembers)) {
+                        setStaffList(data.libraryStaffMembers);
+                    }
+                    const eventMap = getEventMap(data.libraryCalendarEvents);
+                    setCalendarEventsMap(eventMap);
+                    if (eventMap["2026-05-20"]) {
+                        setSelectedEvent(eventMap["2026-05-20"]);
+                    } else {
+                        const firstKey = Object.keys(eventMap)[0];
+                        if (firstKey) setSelectedEvent(eventMap[firstKey]);
+                    }
+
+                    if (data.libraryRecentPosts && Array.isArray(data.libraryRecentPosts)) {
+                        setRecentPostsList(data.libraryRecentPosts);
+                    }
+                }
+                setLoading(false);
+            })
+            .catch(err => {
+                console.error("Failed to fetch library staff data from Sanity:", err);
+                setLoading(false);
+            });
+    }, []);
 
     // Filter staff members based on search term
-    const filteredStaff = staffMembers.filter(member => 
-        member.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-        member.designation.toLowerCase().includes(searchTerm.toLowerCase())
+    const filteredStaff = staffList.filter(member => 
+        (member.name || '').toLowerCase().includes(searchTerm.toLowerCase()) || 
+        (member.designation || '').toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     // Calendar logic
@@ -80,7 +79,7 @@ const LibraryStaff = () => {
     const startOfMonth = new Date(year, month, 1);
     const endOfMonth = new Date(year, month + 1, 0);
     const totalDays = endOfMonth.getDate();
-    const startDayOfWeek = startOfMonth.getDay(); // 0: Sun, 1: Mon, etc.
+    const startDayOfWeek = startOfMonth.getDay();
 
     const prevMonth = () => {
         setCurrentDate(new Date(year, month - 1, 1));
@@ -99,17 +98,12 @@ const LibraryStaff = () => {
     const handleDateSelect = (dayNum) => {
         const dateKey = getFormattedDateString(dayNum);
         setSelectedDateKey(dateKey);
-        if (calendarEvents[dateKey]) {
-            setSelectedEvent(calendarEvents[dateKey]);
+        if (calendarEventsMap[dateKey]) {
+            setSelectedEvent(calendarEventsMap[dateKey]);
         } else {
             setSelectedEvent(null);
         }
     };
-
-    // Auto scroll to top on mount
-    useEffect(() => {
-        window.scrollTo(0, 0);
-    }, []);
 
     // Month Names
     const monthNames = [
@@ -121,17 +115,15 @@ const LibraryStaff = () => {
     const renderCalendarDays = () => {
         const days = [];
         
-        // Blank spaces for days before the 1st of the month
         for (let i = 0; i < startDayOfWeek; i++) {
             days.push(
                 <div key={`empty-${i}`} className="h-10 w-10 flex items-center justify-center text-slate-300 text-xs"></div>
             );
         }
 
-        // Days of the month
         for (let d = 1; d <= totalDays; d++) {
             const dateKey = getFormattedDateString(d);
-            const hasEvent = !!calendarEvents[dateKey];
+            const hasEvent = !!calendarEventsMap[dateKey];
             const isSelected = selectedDateKey === dateKey;
             
             days.push(
@@ -204,9 +196,9 @@ const LibraryStaff = () => {
                     transition={{ duration: 0.8 }}
                     className="lg:col-span-8 space-y-6 sm:space-y-8"
                 >
-                    {/* Search & Stats Bar */}
-                    <div className="bg-white p-4 sm:p-6 rounded-2xl sm:rounded-[2rem] shadow-[0_10px_40px_rgba(12,43,78,0.04)] border border-primary/5 flex flex-col md:flex-row gap-4 items-center justify-between">
-                        <div className="relative w-full md:max-w-md">
+                    {/* Search Bar */}
+                    <div className="bg-white p-4 sm:p-6 rounded-2xl sm:rounded-[2rem] shadow-[0_10px_40px_rgba(12,43,78,0.04)] border border-primary/5">
+                        <div className="relative w-full">
                             <span className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                                 <Search className="h-5 w-5 text-primary/40" />
                             </span>
@@ -226,12 +218,6 @@ const LibraryStaff = () => {
                                 </button>
                             )}
                         </div>
-                        <div className="flex items-center gap-2 bg-primary/5 px-3.5 py-2 rounded-xl border border-primary/10">
-                            <UserCheck className="h-4 w-4 text-accent shrink-0" />
-                            <span className="text-[0.65rem] sm:text-xs font-black uppercase text-primary tracking-wider whitespace-nowrap">
-                                {filteredStaff.length} Staff Members Found
-                            </span>
-                        </div>
                     </div>
 
                     {/* Staff Table Card */}
@@ -247,10 +233,24 @@ const LibraryStaff = () => {
                                 </thead>
                                 <tbody>
                                     <AnimatePresence mode="popLayout">
-                                        {filteredStaff.length > 0 ? (
+                                        {loading ? (
+                                            [...Array(5)].map((_, i) => (
+                                                <tr key={`skel-${i}`} className="border-b border-slate-50 animate-pulse">
+                                                    <td className="py-4 px-8">
+                                                        <div className="h-10 w-10 bg-slate-200 rounded-xl"></div>
+                                                    </td>
+                                                    <td className="py-4 px-8">
+                                                        <div className="h-4 w-36 bg-slate-200 rounded"></div>
+                                                    </td>
+                                                    <td className="py-4 px-8">
+                                                        <div className="h-4 w-28 bg-slate-200 rounded"></div>
+                                                    </td>
+                                                </tr>
+                                            ))
+                                        ) : filteredStaff.length > 0 ? (
                                             filteredStaff.map((staff, idx) => (
                                                 <motion.tr
-                                                    key={staff.id}
+                                                    key={staff._key || staff.id || idx}
                                                     initial={{ opacity: 0, y: 15 }}
                                                     animate={{ opacity: 1, y: 0 }}
                                                     exit={{ opacity: 0, scale: 0.95 }}
@@ -288,7 +288,7 @@ const LibraryStaff = () => {
                                                         </span>
                                                         <p className="text-base sm:text-lg font-bold text-primary/70">No Staff Members Found</p>
                                                         <p className="text-xs sm:text-sm max-w-xs leading-relaxed">
-                                                            We couldn't find any staff matching "{searchTerm}". Please double-check the spelling or search parameters.
+                                                            {searchTerm ? `We couldn't find any staff matching "${searchTerm}". Please double-check the spelling or search parameters.` : 'No library staff members listed in Sanity CMS.'}
                                                         </p>
                                                     </div>
                                                 </td>
@@ -412,21 +412,14 @@ const LibraryStaff = () => {
                                 Stay informed with the latest updates, subscription reports, circulars, and book collection announcements from the central library.
                             </p>
                         </div>
-                        {/* Link to central Downloads/Notice page */}
-                        <Link 
-                            to="/page/downloads" 
-                            className="flex items-center gap-2 px-6 py-3.5 bg-primary text-white rounded-full font-bold hover:bg-secondary transition-all hover:shadow-xl group shrink-0 text-xs sm:text-sm"
-                        >
-                            View All Announcements
-                            <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-                        </Link>
+                         
                     </div>
  
                     {/* Posts Cards Grid */}
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
-                        {recentPosts.map((post, index) => (
+                        {recentPostsList.map((post, index) => (
                             <motion.div 
-                                key={post.id}
+                                key={post._key || post.id || index}
                                 initial={{ opacity: 0, y: 30 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.5, delay: index * 0.1 }}

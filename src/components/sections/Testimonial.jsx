@@ -49,19 +49,27 @@ const Testimonial = () => {
   }, []);
 
   const displayData = sanityData.length > 0 ? sanityData : testimonials;
+  // Repeat data 4 times to guarantee enough scrollable width on desktop & ultra-wide displays
+  const repeatedData = [...displayData, ...displayData, ...displayData, ...displayData];
 
   // Auto-scroll logic
   useEffect(() => {
       const container = containerRef.current;
-      if (!container) return;
+      if (!container || !repeatedData.length) return;
 
       let animationId;
+      let scrollPos = container.scrollLeft;
+
       const scrollStep = () => {
           if (!isHovered && container) {
-              container.scrollLeft += 1;
-              if (container.scrollLeft >= container.scrollWidth / 2) {
-                  container.scrollLeft = 0;
+              const singleSetWidth = container.scrollWidth / 4;
+              scrollPos += 0.8;
+              if (scrollPos >= singleSetWidth) {
+                  scrollPos -= singleSetWidth;
               }
+              container.scrollLeft = scrollPos;
+          } else if (container) {
+              scrollPos = container.scrollLeft;
           }
           animationId = requestAnimationFrame(scrollStep);
       };
@@ -100,7 +108,7 @@ const Testimonial = () => {
         </style>
 
         <div className="relative group">
-            {/* We duplicate the array to create an infinite scroll illusion */}
+            {/* We duplicate the array 4 times to create a seamless infinite scroll illusion */}
             <div 
                ref={containerRef}
                className="flex overflow-x-auto no-scrollbar px-4 pb-8 items-stretch"
@@ -110,7 +118,7 @@ const Testimonial = () => {
                onTouchStart={() => setIsHovered(true)}
                onTouchEnd={() => setIsHovered(false)}
             >
-                {[...displayData, ...displayData].map((t, idx) => (
+                {repeatedData.map((t, idx) => (
                     <div 
                         key={idx} 
                         className="relative rounded-2xl bg-white/10 border border-white/20 shadow-sm hover:shadow-md transition-shadow duration-300 cursor-pointer shrink-0"
