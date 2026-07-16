@@ -66,7 +66,7 @@ const DownloadsPage = () => {
         } catch (error) {
             console.error("Error downloading file directly:", error);
             // Fallback to opening in new tab if cross-origin or fetch fails
-            window.open(url, '_blank');
+            window.open(url, '_blank', 'noopener,noreferrer');
         } finally {
             setDownloadingFile(null);
         }

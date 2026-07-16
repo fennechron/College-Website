@@ -1,0 +1,186 @@
+[
+  {
+    "name": "Dr. Hari V. S.",
+    "papers": [
+      {
+        "paper_title": "Prediction of Bus Passenger Traffic using Gaussian Process Regression",
+        "journal": "Computers, Materials & Continua",
+        "publisher": "Tech Science Press",
+        "h_index": 61,
+        "impact_factor": 1.8,
+        "indexing": "SCI/SCOPUS",
+        "citations": 3,
+        "doi": "10.1007/s11265-022-01774-3",
+        "doi_url": "https://doi.org/10.1007/s11265-022-01774-3",
+        "paper_url": "https://doi.org/10.1007/s11265-022-01774-3",
+        "pdf_url": null
+      },
+      {
+        "paper_title": "Denoising Letter Images from Scanned Invoices Using Stacked Autoencoders",
+        "journal": "Journal of Signal Processing Systems",
+        "publisher": "Springer",
+        "h_index": 138,
+        "impact_factor": 1.7,
+        "indexing": "Scopus Indexed",
+        "citations": 7,
+        "doi": "10.32604/cmc.2022.022458",
+        "doi_url": "https://doi.org/10.32604/cmc.2022.022458",
+        "paper_url": "https://doi.org/10.32604/cmc.2022.022458",
+        "pdf_url": null
+      },
+      {
+        "paper_title": "Classification of Letter Images from Scanned Invoices using CNN",
+        "journal": "Journal of Signal Processing Systems",
+        "publisher": null,
+        "h_index": 22,
+        "impact_factor": 1.28,
+        "indexing": "Scopus Indexed",
+        "citations": 3,
+        "doi": "10.47839/ijc.22.3.3232",
+        "doi_url": "https://doi.org/10.47839/ijc.22.3.3232",
+        "paper_url": "https://doi.org/10.47839/ijc.22.3.3232",
+        "pdf_url": null
+      },
+      {
+        "paper_title": "Particle Filter for Predicting Bus Passenger Traffic with LSTM Network Integrated",
+        "journal": "International Journal of Computing",
+        "publisher": null,
+        "h_index": 61,
+        "impact_factor": 2.53,
+        "indexing": "SCI/SCOPUS Indexed",
+        "citations": 8,
+        "doi": null,
+        "doi_url": null,
+        "paper_url": null,
+        "pdf_url": null
+      },
+      {
+        "paper_title": "Intelligent Deep learning Based Speech Receivers",
+        "journal": "International Journal on Communications Antenna and Propogation",
+        "publisher": "PWP",
+        "h_index": 19,
+        "impact_factor": 1.09,
+        "indexing": "Scopus Indexed",
+        "citations": 3,
+        "doi": "10.15866/irecap.v13i4.23715",
+        "doi_url": "https://doi.org/10.15866/irecap.v13i4.23715",
+        "paper_url": "https://doi.org/10.15866/irecap.v13i4.23715",
+        "pdf_url": null
+      },
+      {
+        "paper_title": "Next-Generation Noise-Resilient Communication Receiver Design using Denoising Autoencoders",
+        "journal": "Advances in Artificial Intelligence and Machine Learning",
+        "publisher": "Springer",
+        "h_index": 5,
+        "impact_factor": 0.5,
+        "indexing": "Scopus Indexed",
+        "citations": 0,
+        "doi": "10.54364/aaiml.2025.51203",
+        "doi_url": "https://doi.org/10.54364/aaiml.2025.51203",
+        "paper_url": "https://doi.org/10.54364/aaiml.2025.51203",
+        "pdf_url": null
+      }
+    ]
+  },
+  {
+    "name": "Dr. Shanu N",
+    "papers": [
+      {
+        "paper_title": "Facial emotion Recognition using convolutional neural networks",
+        "journal": "Journal of Advanced Research in Control Systems",
+        "publisher": null,
+        "h_index": null,
+        "impact_factor": null,
+        "indexing": null,
+        "citations": 10,
+        "doi": "10.22214/ijraset.2022.41536",
+        "doi_url": "https://doi.org/10.22214/ijraset.2022.41536",
+        "paper_url": "https://doi.org/10.22214/ijraset.2022.41536",
+        "pdf_url": null
+      },
+      {
+        "paper_title": "Deep learning based weed detection and classification",
+        "journal": "International Journal of Fuzzy Systems",
+        "publisher": "SAGE",
+        "h_index": null,
+        "impact_factor": null,
+        "indexing": "Scopus Indexed",
+        "citations": 0,
+        "doi": "10.48175/ijarsct-11984t",
+        "doi_url": "https://doi.org/10.48175/ijarsct-11984t",
+        "paper_url": "https://doi.org/10.48175/ijarsct-11984t",
+        "pdf_url": null
+      },
+      {
+        "paper_title": "Enhancing Radiology Workflow: Alert System for Intracranial Hemorrhages Using Deep Learning and Single-Board Computers",
+        "journal": "Ymer",
+        "publisher": "University of Stockholm",
+        "h_index": null,
+        "impact_factor": null,
+        "indexing": "Scopus Indexed",
+        "citations": 0,
+        "doi": "10.1504/ijscc.2023.10060081",
+        "doi_url": "https://doi.org/10.1504/ijscc.2023.10060081",
+        "paper_url": "https://doi.org/10.1504/ijscc.2023.10060081",
+        "pdf_url": null
+      },
+      {
+        "paper_title": "XgBoost classifier for intracranial hemorrhage (ICH) subtype detection and classification",
+        "journal": "Ymer",
+        "publisher": "University of Stockholm",
+        "h_index": null,
+        "impact_factor": null,
+        "indexing": "Scopus Indexed",
+        "citations": 0,
+        "doi": null,
+        "doi_url": null,
+        "paper_url": null,
+        "pdf_url": null
+      },
+      {
+        "paper_title": "Multi-Layer ResNet-DenseNet architecture in consort with the Residual-Based and Attention Based Deep Learning Models for Hemorrhage Detection in Head CT Images: A Comparative Study",
+        "journal": "International Journal of Biomedical Engineering and Technology",
+        "publisher": "Inderscience",
+        "h_index": null,
+        "impact_factor": null,
+        "indexing": "Scopus Indexed",
+        "citations": 0,
+        "doi": null,
+        "doi_url": null,
+        "paper_url": null,
+        "pdf_url": null
+      },
+      {
+        "paper_title": "Comparative Analysis of ResNet, ResNet-SE, and Attention-Based RaNet for Hemorrhage Classification in CT Images using Deep Learning",
+        "journal": "Biomedical Signal Processing and Control",
+        "publisher": "Elsevier B.V.",
+        "h_index": 125,
+        "impact_factor": 7.32,
+        "indexing": null,
+        "citations": 9,
+        "doi": "10.1016/j.bspc.2023.105672",
+        "doi_url": "https://doi.org/10.1016/j.bspc.2023.105672",
+        "paper_url": "https://doi.org/10.1016/j.bspc.2023.105672",
+        "pdf_url": null
+      }
+    ]
+  },
+  {
+    "name": "Dr. Sarah Jacob",
+    "papers": [
+      {
+        "paper_title": "An effective approach for sidelobe reduction in mvdr beamforming through cohesive techniques",
+        "journal": "International Journal on Communications Antenna and Propogation",
+        "publisher": "PWP",
+        "h_index": 19,
+        "impact_factor": 1.09,
+        "indexing": "Scopus Indexed",
+        "citations": 0,
+        "doi": "10.15866/irecap.v15i2.25937",
+        "doi_url": "https://doi.org/10.15866/irecap.v15i2.25937",
+        "paper_url": "https://doi.org/10.15866/irecap.v15i2.25937",
+        "pdf_url": null
+      }
+    ]
+  }
+]

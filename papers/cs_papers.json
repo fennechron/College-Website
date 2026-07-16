@@ -1,0 +1,345 @@
+[
+  {
+    "name": "Dr. Geetha S",
+    "papers": [
+      {
+        "paper_title": "Document Image Binarization using Attention augmented residual autoencoder",
+        "journal": "International Journal of Computing and Digital Systems",
+        "publisher": null,
+        "h_index": 172,
+        "impact_factor": 1.2,
+        "indexing": "SCIE",
+        "citations": 3,
+        "doi": "10.1007/978-981-99-4277-0_2",
+        "doi_url": "https://doi.org/10.1007/978-981-99-4277-0_2",
+        "paper_url": "https://doi.org/10.1007/978-981-99-4277-0_2",
+        "pdf_url": null
+      },
+      {
+        "paper_title": "Specular Highlight Mitigation: A Dual Mode Approach",
+        "journal": "SN Computer Science",
+        "publisher": null,
+        "h_index": 49,
+        "impact_factor": 2.38,
+        "indexing": "SCI/Scopus",
+        "citations": 1,
+        "doi": null,
+        "doi_url": null,
+        "paper_url": null,
+        "pdf_url": null
+      },
+      {
+        "paper_title": "Flexible Colon Polyp Detection and Segmentation of Colon Polyps with Optional Inpainting",
+        "journal": "BIOMEDICAL ENGINEERING- APPLICATIONS, BASIS AND COMMUNICATIONS",
+        "publisher": null,
+        "h_index": 27,
+        "impact_factor": 0.66,
+        "indexing": "Scopus",
+        "citations": 0,
+        "doi": "10.1007/s42979-024-02932-z",
+        "doi_url": "https://doi.org/10.1007/s42979-024-02932-z",
+        "paper_url": "https://doi.org/10.1007/s42979-024-02932-z",
+        "pdf_url": null
+      }
+    ]
+  },
+  {
+    "name": "Dr. Sabeena K",
+    "papers": [
+      {
+        "paper_title": "A Hybrid model for efficient cervical cell classification",
+        "journal": null,
+        "publisher": "Elsevier",
+        "h_index": null,
+        "impact_factor": null,
+        "indexing": "SCIE/Scopus",
+        "citations": 25,
+        "doi": "10.1016/j.bspc.2021.103288",
+        "doi_url": "https://doi.org/10.1016/j.bspc.2021.103288",
+        "paper_url": "https://www.sciencedirect.com/science/article/pii/S174680942100688X",
+        "pdf_url": null
+      },
+      {
+        "paper_title": "Detection of Eloped Juvenile Using AI",
+        "journal": "International Journal of Innovative Research in Science, Engineering and Technology",
+        "publisher": "Springer",
+        "h_index": 0,
+        "impact_factor": 8.223,
+        "indexing": "Scopus",
+        "citations": 0,
+        "doi": null,
+        "doi_url": null,
+        "paper_url": null,
+        "pdf_url": null
+      },
+      {
+        "paper_title": "Next Generation EV charging A hybrid approach with seamless automated fee collection",
+        "journal": "International Journal of Innovative Science and Research Technology",
+        "publisher": null,
+        "h_index": 0,
+        "impact_factor": 8.223,
+        "indexing": "Scopus",
+        "citations": 0,
+        "doi": "10.1109/ictbig64922.2024.10911456",
+        "doi_url": "https://doi.org/10.1109/ictbig64922.2024.10911456",
+        "paper_url": "https://doi.org/10.1109/ictbig64922.2024.10911456",
+        "pdf_url": null
+      },
+      {
+        "paper_title": "Multivariate Feature Driven Optimized Heterogeneous classifier and classification using Deep learning",
+        "journal": "Computational Intelligence",
+        "publisher": null,
+        "h_index": null,
+        "impact_factor": null,
+        "indexing": "ESCI",
+        "citations": 0,
+        "doi": null,
+        "doi_url": null,
+        "paper_url": null,
+        "pdf_url": null
+      }
+    ]
+  },
+  {
+    "name": "Manjusha Nair S",
+    "papers": [
+      {
+        "paper_title": "Review Paper on Biometric Template Security",
+        "journal": "SERT",
+        "publisher": "Sage",
+        "h_index": null,
+        "impact_factor": null,
+        "indexing": null,
+        "citations": null,
+        "doi": null,
+        "doi_url": null,
+        "paper_url": null,
+        "pdf_url": null
+      },
+      {
+        "paper_title": "Application of multimodal biometric protection system by generation of a revocable cryptographic key using convolutional neural network with bat optimization",
+        "journal": "Multimedia tools and Applications",
+        "publisher": "Springer",
+        "h_index": 326,
+        "impact_factor": null,
+        "indexing": null,
+        "citations": 2,
+        "doi": "10.1007/s11042-025-21070-z",
+        "doi_url": "https://doi.org/10.1007/s11042-025-21070-z",
+        "paper_url": "https://doi.org/10.1007/s11042-025-21070-z",
+        "pdf_url": null
+      }
+    ]
+  },
+  {
+    "name": "Princy Sugathan S",
+    "papers": [
+      {
+        "paper_title": "Review Paper on Image Dehazing Techniques",
+        "journal": "International Journal of Engineering Research and Technology",
+        "publisher": null,
+        "h_index": 11,
+        "impact_factor": 0.4,
+        "indexing": null,
+        "citations": 3,
+        "doi": null,
+        "doi_url": null,
+        "paper_url": null,
+        "pdf_url": null
+      }
+    ]
+  },
+  {
+    "name": "Premy P Jacob",
+    "papers": [
+      {
+        "paper_title": "A Review on Age and Gender Recognition using various datasets and deep learning models",
+        "journal": "International Journal of Engineering Research Technology (IJERT)",
+        "publisher": "ICCIDT 2022 Conference Proceedings",
+        "h_index": 11,
+        "impact_factor": 0.4,
+        "indexing": null,
+        "citations": null,
+        "doi": "10.22214/ijraset.2023.52346",
+        "doi_url": "https://doi.org/10.22214/ijraset.2023.52346",
+        "paper_url": "https://doi.org/10.22214/ijraset.2023.52346",
+        "pdf_url": null
+      },
+      {
+        "paper_title": "A Comprehensive Survey on AI Driven Fashion Technologies Clothing Detection, Recommendation Systems, and Virtual Try On Solution",
+        "journal": "IJAEM",
+        "publisher": null,
+        "h_index": null,
+        "impact_factor": 7.4,
+        "indexing": null,
+        "citations": 5,
+        "doi": "10.35629/5252-0611247252",
+        "doi_url": "https://doi.org/10.35629/5252-0611247252",
+        "paper_url": "https://doi.org/10.35629/5252-0611247252",
+        "pdf_url": null
+      }
+    ]
+  },
+  {
+    "name": "Dr. Manju S Nair",
+    "papers": [
+      {
+        "paper_title": "Quantum Computing Simulation",
+        "journal": "International Journal of Science and Research",
+        "publisher": "IJSRD",
+        "h_index": 0,
+        "impact_factor": 7.67,
+        "indexing": null,
+        "citations": 0,
+        "doi": "10.48175/ijarsct-11984s",
+        "doi_url": "https://doi.org/10.48175/ijarsct-11984s",
+        "paper_url": "https://doi.org/10.48175/ijarsct-11984s",
+        "pdf_url": null
+      }
+    ]
+  },
+  {
+    "name": "Sreelekshmi K R",
+    "papers": [
+      {
+        "paper_title": "Survey on AI Driven Gym Assistant with Pose Recognition",
+        "journal": "IJAEM",
+        "publisher": null,
+        "h_index": 0,
+        "impact_factor": 7.4,
+        "indexing": null,
+        "citations": 0,
+        "doi": "10.35629/5252-0611314320",
+        "doi_url": "https://doi.org/10.35629/5252-0611314320",
+        "paper_url": "https://doi.org/10.35629/5252-0611314320",
+        "pdf_url": null
+      }
+    ]
+  },
+  {
+    "name": "Syama S",
+    "papers": [
+      {
+        "paper_title": "Survey of OCR Techniques",
+        "journal": "IJAEM",
+        "publisher": null,
+        "h_index": 0,
+        "impact_factor": 7.4,
+        "indexing": null,
+        "citations": 0,
+        "doi": null,
+        "doi_url": null,
+        "paper_url": null,
+        "pdf_url": null
+      }
+    ]
+  },
+  {
+    "name": "Jithy John",
+    "papers": [
+      {
+        "paper_title": "Comprehensive Study of Mobile and Web Applications for on-Demand Services",
+        "journal": "International Journal of Scientific Research and Engineering Trends",
+        "publisher": "IJSRET",
+        "h_index": null,
+        "impact_factor": 3.24,
+        "indexing": null,
+        "citations": 0,
+        "doi": "10.61137/ijsret.vol.10.issue6.430",
+        "doi_url": "https://doi.org/10.61137/ijsret.vol.10.issue6.430",
+        "paper_url": "https://doi.org/10.61137/ijsret.vol.10.issue6.430",
+        "pdf_url": null
+      }
+    ]
+  },
+  {
+    "name": "Syeatha Thampy",
+    "papers": [
+      {
+        "paper_title": "Comprehensive Review of Speech-To-Text Technologies: Incorporating Translation, Summarization, And Beyond",
+        "journal": "IJAEM",
+        "publisher": null,
+        "h_index": null,
+        "impact_factor": 7.4,
+        "indexing": null,
+        "citations": 0,
+        "doi": null,
+        "doi_url": null,
+        "paper_url": null,
+        "pdf_url": null
+      }
+    ]
+  },
+  {
+    "name": "Chinchu M Pillai",
+    "papers": [
+      {
+        "paper_title": "Survey on Warehouse Monitoring and Management using AI",
+        "journal": "IJAEM",
+        "publisher": null,
+        "h_index": null,
+        "impact_factor": 7.4,
+        "indexing": null,
+        "citations": 0,
+        "doi": "10.35629/5252-0611391397",
+        "doi_url": "https://doi.org/10.35629/5252-0611391397",
+        "paper_url": "https://doi.org/10.35629/5252-0611391397",
+        "pdf_url": null
+      }
+    ]
+  },
+  {
+    "name": "Reshma Mathews",
+    "papers": [
+      {
+        "paper_title": "A Comprehensive Survey on mock interview evaluation systems",
+        "journal": "IJAEM",
+        "publisher": null,
+        "h_index": null,
+        "impact_factor": 7.4,
+        "indexing": null,
+        "citations": 0,
+        "doi": "10.35629/5252-06127174",
+        "doi_url": "https://doi.org/10.35629/5252-06127174",
+        "paper_url": "https://doi.org/10.35629/5252-06127174",
+        "pdf_url": null
+      }
+    ]
+  },
+  {
+    "name": "Ann Sulaja Sanal",
+    "papers": [
+      {
+        "paper_title": "A Comprehensive Survey of AI Content Generator",
+        "journal": "IJAEM",
+        "publisher": null,
+        "h_index": null,
+        "impact_factor": 7.4,
+        "indexing": null,
+        "citations": 0,
+        "doi": null,
+        "doi_url": null,
+        "paper_url": null,
+        "pdf_url": null
+      }
+    ]
+  },
+  {
+    "name": "Alka Vijay",
+    "papers": [
+      {
+        "paper_title": "Application of multimodal biometric protection system by generation of a revocable cryptographic key using convolutional neural network with bat optimization",
+        "journal": "Multimedia tools and Applications",
+        "publisher": "Springer",
+        "h_index": 326,
+        "impact_factor": null,
+        "indexing": null,
+        "citations": 2,
+        "doi": "10.1007/s11042-025-21070-z",
+        "doi_url": "https://doi.org/10.1007/s11042-025-21070-z",
+        "paper_url": "https://doi.org/10.1007/s11042-025-21070-z",
+        "pdf_url": null
+      }
+    ]
+  }
+]

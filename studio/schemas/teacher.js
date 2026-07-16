@@ -105,7 +105,15 @@ export default {
       name: 'publications',
       title: 'Publications',
       type: 'array',
-      of: [{type: 'string'}],
+      of: [
+        {
+          type: 'object',
+          fields: [
+            { name: 'title', title: 'Publication Details (Title, Journal, etc.)', type: 'text' },
+            { name: 'link', title: 'URL / DOI Link', type: 'url' }
+          ]
+        }
+      ],
       description: 'List of academic publications/papers published by this teacher',
     },
     {

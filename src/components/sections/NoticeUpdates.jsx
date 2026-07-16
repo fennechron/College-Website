@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronDown, GraduationCap, Building2, Key, Info, FileText, Newspaper, BookOpen } from 'lucide-react';
+import { ChevronDown, GraduationCap, Building2, Key, Info, FileText, Newspaper, BookOpen ,ArrowRight} from 'lucide-react';
 import { client } from '../../lib/sanity';
+import { Link } from 'react-router-dom';
 
 const quickLinks = [
     { name: 'FACILITIES', icon: Building2, color: 'bg-white text-primary border border-primary/20 hover:border-accent hover:bg-accent/5', hasDropdown: true },
@@ -202,6 +203,16 @@ const NoticeUpdates = () => {
                         </div>
                         <ScrollList items={displayNotices} />
                     </div>
+                </div>
+                
+                {/* View All Button (Desktop Only) */}
+                <div className="mt-10 hidden md:flex justify-center">
+                    <Link to="/page/notifications" className="bg-white text-primary border-2 border-primary/10 hover:border-accent hover:bg-accent hover:text-white font-display font-black text-sm uppercase tracking-widest px-10 py-4 rounded-full transition-all duration-300 shadow-[0_8px_30px_rgba(10,22,40,0.06)] hover:shadow-[0_15px_40px_rgba(29,84,108,0.2)] flex items-center gap-3 group">
+                        View All Notifications
+                        <span className="w-6 h-6 rounded-full bg-primary/5 group-hover:bg-white/20 flex items-center justify-center transition-colors">
+                            <span className="transform translate-x-0"><ArrowRight className="w-4 h-4" /></span>
+                        </span>
+                    </Link>
                 </div>
             </div>
         </section>

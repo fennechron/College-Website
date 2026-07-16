@@ -1,6 +1,19 @@
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteBase /
+
+  # ==========================================
+  # MAINTENANCE MODE
+  # ==========================================
+  # To enable maintenance mode, remove the '#' from the 3 lines below:
+  # RewriteCond %{REQUEST_URI} !^/maintenance\.html$ [NC]
+  # RewriteCond %{REQUEST_URI} !^/PageMaintanence\.png$ [NC]
+  # RewriteRule ^(.*)$ /maintenance.html [R=503,L]
+  #
+  # Tell the server to properly recognize the 503 Service Unavailable status
+  # ErrorDocument 503 /maintenance.html
+  # ==========================================
+
   RewriteRule ^index\.html$ - [L]
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d

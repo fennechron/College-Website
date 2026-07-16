@@ -109,6 +109,7 @@ export default {
               fields: [
                 { name: 'title', title: 'Title', type: 'string' },
                 { name: 'desc', title: 'Description', type: 'text' },
+                { name: 'url', title: 'URL', type: 'url' },
               ],
             },
           ],
@@ -123,6 +124,7 @@ export default {
               fields: [
                 { name: 'title', title: 'Title', type: 'string' },
                 { name: 'desc', title: 'Description', type: 'text' },
+                { name: 'url', title: 'URL', type: 'url' },
               ],
             },
           ],
@@ -137,6 +139,7 @@ export default {
               fields: [
                 { name: 'title', title: 'Title', type: 'string' },
                 { name: 'desc', title: 'Description', type: 'text' },
+                { name: 'url', title: 'URL', type: 'url' },
               ],
             },
           ],
@@ -151,6 +154,7 @@ export default {
               fields: [
                 { name: 'title', title: 'Title', type: 'string' },
                 { name: 'desc', title: 'Description', type: 'text' },
+                { name: 'url', title: 'URL', type: 'url' },
               ],
             },
           ],

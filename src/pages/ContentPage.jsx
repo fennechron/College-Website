@@ -1314,10 +1314,38 @@ const ContentPage = () => {
                                 <div className="space-y-10 sm:space-y-12 text-left">
                                     {/* Introduction Card */}
                                     {content.description && (
-                                        <div className="bg-slate-50/50 p-6 sm:p-8 rounded-2xl border border-slate-100/80 shadow-sm">
-                                            <p className="text-base sm:text-xl font-medium text-slate-700 leading-relaxed whitespace-pre-wrap">
-                                                {content.description}
-                                            </p>
+                                        <div className="bg-slate-50/50 p-6 sm:p-8 rounded-2xl border border-slate-100/80 shadow-sm space-y-4">
+                                            {content.description.split('\n').map((line, i) => {
+                                                const trimmed = line.trim();
+                                                if (!trimmed) return null;
+                                                
+                                                const isBullet = trimmed.startsWith('•') || trimmed.startsWith('-');
+                                                if (isBullet) {
+                                                    return (
+                                                        <div key={i} className="flex items-start gap-3 pl-2 sm:pl-4">
+                                                            <span className="inline-flex items-center justify-center shrink-0 w-6 h-6 rounded-full bg-primary/10 text-primary font-black text-[0.7rem] mt-0.5">✓</span>
+                                                            <p className="text-base sm:text-lg text-slate-700 font-medium leading-relaxed">
+                                                                {renderTextWithBold(trimmed.substring(1).trim())}
+                                                            </p>
+                                                        </div>
+                                                    );
+                                                }
+                                                
+                                                const isHeader = trimmed.endsWith(':');
+                                                if (isHeader) {
+                                                    return (
+                                                        <h4 key={i} className="text-lg sm:text-xl font-display font-black text-primary uppercase pt-4 pb-2">
+                                                            {renderTextWithBold(trimmed)}
+                                                        </h4>
+                                                    );
+                                                }
+
+                                                return (
+                                                    <p key={i} className="text-base sm:text-lg text-slate-700 font-medium leading-relaxed">
+                                                        {renderTextWithBold(trimmed)}
+                                                    </p>
+                                                );
+                                            })}
                                         </div>
                                     )}
 
@@ -1341,9 +1369,39 @@ const ContentPage = () => {
                                                         {category.heading}
                                                     </h3>
                                                     {category.shortDescription && (
-                                                        <p className="text-sm text-slate-500 font-medium leading-relaxed whitespace-pre-wrap max-w-xl">
-                                                            {category.shortDescription}
-                                                        </p>
+                                                        <div className="space-y-4 max-w-xl mt-4">
+                                                            {category.shortDescription.split('\n').map((line, i) => {
+                                                                const trimmed = line.trim();
+                                                                if (!trimmed) return null;
+                                                                
+                                                                const isBullet = trimmed.startsWith('•') || trimmed.startsWith('-');
+                                                                if (isBullet) {
+                                                                    return (
+                                                                        <div key={i} className="flex items-start gap-3 pl-2">
+                                                                            <span className="inline-flex items-center justify-center shrink-0 w-5 h-5 rounded-full bg-accent/10 text-accent font-black text-[0.65rem] mt-0.5">✓</span>
+                                                                            <p className="text-sm text-slate-600 font-medium leading-relaxed">
+                                                                                {renderTextWithBold(trimmed.substring(1).trim())}
+                                                                            </p>
+                                                                        </div>
+                                                                    );
+                                                                }
+                                                                
+                                                                const isHeader = trimmed.endsWith(':');
+                                                                if (isHeader) {
+                                                                    return (
+                                                                        <h4 key={i} className="text-sm sm:text-base font-black text-primary uppercase pt-3 pb-1 border-b border-slate-100">
+                                                                            {renderTextWithBold(trimmed)}
+                                                                        </h4>
+                                                                    );
+                                                                }
+
+                                                                return (
+                                                                    <p key={i} className="text-sm text-slate-500 font-medium leading-relaxed text-justify">
+                                                                        {renderTextWithBold(trimmed)}
+                                                                    </p>
+                                                                );
+                                                            })}
+                                                        </div>
                                                     )}
                                                 </div>
 

@@ -226,17 +226,24 @@ const PrincipalPage = () => {
                                         </div>
 
                                         <div className="grid gap-6 sm:gap-10">
-                                            {principal?.professionalDetails?.[activeTab]?.map((item, i) => (
-                                                <div key={i} className="group relative pl-6 sm:pl-12 border-l-2 border-slate-500 hover:border-accent transition-colors">
-
-                                                    <h4 className="text-base sm:text-xl font-display font-black text-primary group-hover:text-accent transition-colors mb-1 sm:mb-2">
-                                                        {item.title}
-                                                    </h4>
-                                                    <p className="text-slate-500 font-medium text-sm sm:text-lg leading-relaxed text-justify">
-                                                        {item.desc}
-                                                    </p>
-                                                </div>
-                                            ))}
+                                            {principal?.professionalDetails?.[activeTab]?.map((item, i) => {
+                                                const Wrapper = item.url ? 'a' : 'div';
+                                                const linkProps = item.url ? { href: item.url, target: "_blank", rel: "noopener noreferrer" } : {};
+                                                
+                                                return (
+                                                    <Wrapper key={i} {...linkProps} className={`block group relative pl-6 sm:pl-12 border-l-2 border-slate-500 hover:border-accent transition-all ${item.url ? 'cursor-pointer hover:bg-slate-50 rounded-r-2xl py-3 -my-3' : ''}`}>
+                                                        <h4 className="text-base sm:text-xl font-display font-black text-primary group-hover:text-accent transition-colors mb-1 sm:mb-2 flex items-start gap-2">
+                                                            <span>{item.title}</span>
+                                                            {item.url && (
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="opacity-0 group-hover:opacity-100 transition-opacity text-accent mt-1 shrink-0"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
+                                                            )}
+                                                        </h4>
+                                                        <p className="text-slate-500 font-medium text-sm sm:text-lg leading-relaxed text-justify">
+                                                            {item.desc}
+                                                        </p>
+                                                    </Wrapper>
+                                                );
+                                            })}
                                             {!principal?.professionalDetails?.[activeTab] && (
                                                  <p className="text-slate-500 font-medium text-lg leading-relaxed">
                                                  No details available.
