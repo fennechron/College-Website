@@ -34,7 +34,9 @@ export default {
     {
       name: 'qualification',
       title: 'Qualification',
-      type: 'string',
+      type: 'array',
+      of: [{type: 'string'}],
+      description: 'Add multiple qualifications one by one',
     },
     {
       name: 'email',
@@ -54,8 +56,9 @@ export default {
     {
       name: 'experience',
       title: 'Experience',
-      type: 'string',
-      description: 'e.g., 10 Years',
+      type: 'array',
+      of: [{type: 'string'}],
+      description: 'Add multiple professional experiences one by one',
     },
     {
       name: 'photo',
@@ -104,6 +107,48 @@ export default {
       type: 'array',
       of: [{type: 'string'}],
       description: 'List of academic publications/papers published by this teacher',
+    },
+    {
+      name: 'fields_of_expertise',
+      title: 'Fields of Expertise',
+      type: 'array',
+      of: [{type: 'string'}],
+      description: 'List of fields of expertise',
+    },
+    {
+      name: 'research',
+      title: 'Research',
+      type: 'array',
+      of: [{type: 'string'}],
+      description: 'List of research projects or topics',
+    },
+    {
+      name: 'industry_interaction',
+      title: 'Industry Interaction',
+      type: 'array',
+      of: [{type: 'string'}],
+      description: 'List of industry interactions',
+    },
+    {
+      name: 'patents',
+      title: 'Patents',
+      type: 'array',
+      of: [{type: 'string'}],
+      description: 'List of patents',
+    },
+    {
+      name: 'books_published',
+      title: 'Books Published',
+      type: 'array',
+      of: [{type: 'string'}],
+      description: 'List of books published by this teacher',
+    },
+    {
+      name: 'other_details',
+      title: 'Other Details',
+      type: 'array',
+      of: [{type: 'string'}],
+      description: 'Any other relevant details',
     },
   ],
 }

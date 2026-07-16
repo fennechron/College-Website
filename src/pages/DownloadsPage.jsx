@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
     Download, Search, FileText, BookOpen, 
@@ -11,6 +12,77 @@ const DownloadsPage = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [activeCategory, setActiveCategory] = useState('all');
     const [categories, setCategories] = useState([]);
+    
+    // PDF Viewer State
+    const [viewPdfUrl, setViewPdfUrl] = useState(null);
+    const [viewPdfTitle, setViewPdfTitle] = useState('');
+    const [isPdfLoading, setIsPdfLoading] = useState(false);
+
+    const handleViewPdf = async (url, title) => {
+        setIsPdfLoading(true);
+        setViewPdfUrl('loading');
+        setViewPdfTitle(title);
+        
+        try {
+            // Fetch as blob to completely hide the original Sanity CDN URL
+            const response = await fetch(url);
+            const blob = await response.blob();
+            const objectUrl = URL.createObjectURL(blob);
+            setViewPdfUrl(objectUrl);
+        } catch (error) {
+            console.error("Error fetching PDF:", error);
+            // Fallback to direct URL if CORS or other network issue blocks the blob fetch
+            setViewPdfUrl(url);
+        } finally {
+            setIsPdfLoading(false);
+        }
+    };
+
+    const closePdfModal = () => {
+        if (viewPdfUrl && viewPdfUrl.startsWith('blob:')) {
+            URL.revokeObjectURL(viewPdfUrl);
+        }
+        setViewPdfUrl(null);
+    };
+
+    // Track which file is currently being downloaded to show a spinner
+    const [downloadingFile, setDownloadingFile] = useState(null);
+
+    const handleDirectDownload = async (url, title) => {
+        try {
+            setDownloadingFile(title);
+            const response = await fetch(url);
+            const blob = await response.blob();
+            const objectUrl = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = objectUrl;
+            a.download = `${title.replace(/\s+/g, '_')}.pdf`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            
+            setTimeout(() => URL.revokeObjectURL(objectUrl), 100);
+        } catch (error) {
+            console.error("Error downloading file directly:", error);
+            // Fallback to opening in new tab if cross-origin or fetch fails
+            window.open(url, '_blank');
+        } finally {
+            setDownloadingFile(null);
+        }
+    };
+
+    const handleDownload = (e) => {
+        e.stopPropagation();
+        if (viewPdfUrl && viewPdfUrl !== 'loading') {
+            const a = document.createElement('a');
+            a.href = viewPdfUrl;
+            a.download = `${viewPdfTitle.replace(/\s+/g, '_')}.pdf`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+    };
 
     const iconMap = {
         BookOpen: <BookOpen />,
@@ -189,15 +261,30 @@ const DownloadsPage = () => {
                                                 </div>
                                                 
                                                 {item.fileUrl ? (
-                                                    <a 
-                                                        href={item.fileUrl} 
-                                                        target="_blank" 
-                                                        rel="noopener noreferrer"
-                                                        download
-                                                        className="mt-4 sm:mt-6 flex items-center justify-center gap-2 w-full py-2.5 sm:py-3 bg-slate-50 rounded-lg sm:rounded-xl text-[0.65rem] sm:text-[0.7rem] font-black uppercase tracking-widest text-primary hover:bg-primary hover:text-white transition-all cursor-pointer"
-                                                    >
-                                                        <Download size={12} className="sm:w-3.5 sm:h-3.5" /> Download
-                                                    </a>
+                                                    <div className="mt-4 sm:mt-6 flex gap-2 w-full">
+                                                        <button 
+                                                            onClick={() => handleViewPdf(item.fileUrl, item.title)}
+                                                            className="flex-1 flex items-center justify-center gap-1.5 sm:gap-2 py-2.5 sm:py-3 bg-slate-50 rounded-lg sm:rounded-xl text-[0.6rem] sm:text-[0.65rem] font-black uppercase tracking-widest text-primary hover:bg-primary hover:text-white transition-all cursor-pointer"
+                                                        >
+                                                            <FileText size={12} className="sm:w-3.5 sm:h-3.5" /> View
+                                                        </button>
+                                                        <button 
+                                                            onClick={() => handleDirectDownload(item.fileUrl, item.title)}
+                                                            disabled={downloadingFile === item.title}
+                                                            className={`flex-1 flex items-center justify-center gap-1.5 sm:gap-2 py-2.5 sm:py-3 rounded-lg sm:rounded-xl text-[0.6rem] sm:text-[0.65rem] font-black uppercase tracking-widest transition-all ${
+                                                                downloadingFile === item.title 
+                                                                ? 'bg-slate-100 text-slate-400 cursor-wait' 
+                                                                : 'bg-accent/10 text-accent hover:bg-accent hover:text-white cursor-pointer'
+                                                            }`}
+                                                        >
+                                                            {downloadingFile === item.title ? (
+                                                                <div className="w-3 h-3 sm:w-3.5 sm:h-3.5 border-2 border-slate-400 border-t-transparent rounded-full animate-spin"></div>
+                                                            ) : (
+                                                                <Download size={12} className="sm:w-3.5 sm:h-3.5" /> 
+                                                            )}
+                                                            {downloadingFile === item.title ? 'Downloading...' : 'Download'}
+                                                        </button>
+                                                    </div>
                                                 ) : (
                                                     <button className="mt-4 sm:mt-6 flex items-center justify-center gap-2 w-full py-2.5 sm:py-3 bg-slate-50 rounded-lg sm:rounded-xl text-[0.65rem] sm:text-[0.7rem] font-black uppercase tracking-widest text-primary hover:bg-primary hover:text-white transition-all">
                                                         <Download size={12} className="sm:w-3.5 sm:h-3.5" /> Download
@@ -235,6 +322,74 @@ const DownloadsPage = () => {
                     </button>
                 </div>
             </div>
+
+            {/* ─── PDF Viewer Modal ─── */}
+            {createPortal(
+                <AnimatePresence>
+                    {viewPdfUrl && (
+                        <motion.div 
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="fixed inset-0 z-[99999] flex items-center justify-center bg-primary/90 backdrop-blur-sm"
+                        >
+                            <motion.div 
+                                initial={{ scale: 0.98, opacity: 0, y: 10 }}
+                                animate={{ scale: 1, opacity: 1, y: 0 }}
+                                exit={{ scale: 0.98, opacity: 0, y: 10 }}
+                                className="bg-white w-full h-full flex flex-col overflow-hidden relative"
+                            >
+                                {/* Modal Header */}
+                                <div className="flex items-center justify-between p-4 sm:p-6 border-b border-slate-100 bg-white z-10 shrink-0">
+                                    <div className="flex items-center gap-4 overflow-hidden">
+                                        <div className="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0 hidden sm:flex">
+                                            <FileText size={20} />
+                                        </div>
+                                        <h3 className="text-base sm:text-xl font-display font-black text-primary truncate">
+                                            {viewPdfTitle}
+                                        </h3>
+                                    </div>
+                                    <div className="flex items-center gap-2 sm:gap-4 shrink-0 pl-4">
+                                        {viewPdfUrl !== 'loading' && (
+                                            <button 
+                                                onClick={handleDownload}
+                                                className="hidden sm:flex items-center gap-2 px-4 py-2 bg-slate-50 hover:bg-primary hover:text-white text-primary rounded-xl font-black text-xs uppercase tracking-widest transition-colors"
+                                            >
+                                                <Download size={14} /> Download File
+                                            </button>
+                                        )}
+                                        <button 
+                                            onClick={closePdfModal}
+                                            className="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 hover:bg-red-50 hover:text-red-500 transition-colors shrink-0"
+                                            aria-label="Close"
+                                        >
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                {/* Modal Body */}
+                                <div className="flex-1 bg-slate-200/50 relative">
+                                    {isPdfLoading || viewPdfUrl === 'loading' ? (
+                                        <div className="absolute inset-0 flex flex-col items-center justify-center">
+                                            <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-primary mb-6"></div>
+                                            <p className="text-primary font-black uppercase tracking-widest text-sm">Preparing Document...</p>
+                                            <p className="text-slate-400 font-medium text-xs mt-2">Securely fetching file</p>
+                                        </div>
+                                    ) : (
+                                        <iframe 
+                                            src={viewPdfUrl} 
+                                            className="w-full h-full border-none"
+                                            title={viewPdfTitle}
+                                        />
+                                    )}
+                                </div>
+                            </motion.div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>,
+                document.body
+            )}
         </div>
     );
 };
