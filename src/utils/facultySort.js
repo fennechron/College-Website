@@ -56,7 +56,8 @@ export const sortFaculty = (facultyList) => {
     const indexed = [];
 
     facultyList.forEach((fac) => {
-        const idx = parseFacultyIndex(fac?.index);
+        const rawIdx = fac?.idx !== undefined ? fac?.idx : fac?.index;
+        const idx = parseFacultyIndex(rawIdx);
         if (idx !== null) {
             indexed.push({ ...fac, _parsedIndex: idx });
         } else {
