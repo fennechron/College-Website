@@ -8,6 +8,7 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 
 import { client, urlFor } from '../lib/sanity';
+import { sortFaculty } from '../utils/facultySort';
 
 // ─── HOD Card — Premium full-width university profile card ──────────────────────
 const HodCard = ({ member, accentHex }) => {
@@ -313,7 +314,7 @@ const TeachersPage = () => {
                         accentColor: d.accentColor,
                         icon: d.icon,
                         hod: d.hod || {},
-                        faculty: d.faculty || []
+                        faculty: sortFaculty(d.faculty || [])
                     };
                     
                     if (d.short && d.short.toLowerCase() !== 'mca') {

@@ -19,6 +19,7 @@ This schema manages the faculty directory.
 - **Name**: Full name with title (e.g., *Dr. John Doe*).
 - **Department**: Select from the dropdown.
 - **Is Head of Department?**: Toggle on if applicable.
+- **Display Position / Index**: (Optional) Numeric position for custom display ordering (e.g. `1` for 1st position, `4` for 4th position). If left blank, the faculty directory automatically sorts by role hierarchy: Principal -> HOD -> Professor -> Associate Professor -> Assistant Professor.
 - **Designation**: Current role (e.g., *Assistant Professor*).
 - **Specialization**: Core area of expertise (e.g., *Machine Learning*).
 - **Qualification**: Highest degree (e.g., *Ph.D., M.Tech*).

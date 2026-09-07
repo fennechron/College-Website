@@ -21,6 +21,12 @@ export default {
       initialValue: false,
     },
     {
+      name: 'index',
+      title: 'Display Position / Index',
+      type: 'number',
+      description: 'Numeric position where this faculty member should appear (e.g. 1 for 1st position, 4 for 4th position). If not specified, default order is used: Principal -> HOD -> Professor -> Associate Professor -> Assistant Professor.',
+    },
+    {
       name: 'designation',
       title: 'Designation',
       type: 'string',

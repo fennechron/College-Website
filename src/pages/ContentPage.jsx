@@ -4,6 +4,8 @@ import { client, urlFor } from '../lib/sanity';
 import { ChevronRight, Home, ArrowLeft, Calendar, Users, BookOpen, Clock, FileText, ExternalLink, Phone, Copy, Check } from 'lucide-react';
 import { motion } from 'framer-motion';
 import NotFoundPage from './NotFoundPage';
+import { sortFaculty } from '../utils/facultySort';
+import GrievanceForm from '../components/sections/GrievanceForm';
 
 const AccordionItem = ({ title, items }) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -38,6 +40,7 @@ const AccordionItem = ({ title, items }) => {
 };
 
 const parseContent = (text) => {
+    if (!text || typeof text !== 'string') return [];
     const lines = text.split('\n');
     const segments = [];
     let currentAccordion = null;
@@ -62,7 +65,7 @@ const parseContent = (text) => {
 
 // Helper to render bold text marked with **
 const renderTextWithBold = (text) => {
-    if (!text) return text;
+    if (!text || typeof text !== 'string') return text || '';
     const parts = text.split(/(\*\*.*?\*\*)/g);
     return parts.map((part, index) => {
         if (part.startsWith('**') && part.endsWith('**')) {
@@ -208,16 +211,7 @@ const ContentPage = () => {
                     const hodData = facultyData.find(fac => fac.isHOD) || null;
                     const deptData = await client.fetch(`*[_type == "department" && (slug.current == $slug || (short != null && $deptShort != "" && short == $deptShort))][0]`, { slug, deptShort });
                     
-                    const getRank = (fac) => {
-                        if (fac.isHOD) return 1;
-                        if (!fac.designation) return 4;
-                        const desig = fac.designation.toLowerCase();
-                        if (desig.includes('associate')) return 2;
-                        if (desig.includes('assistant')) return 3;
-                        return 4;
-                    };
-
-                    const sortedFaculty = facultyData.sort((a, b) => getRank(a) - getRank(b));
+                    const sortedFaculty = sortFaculty(facultyData);
 
                     setDepartmentFaculty(sortedFaculty);
                     setDepartmentHod(hodData);
@@ -569,10 +563,14 @@ const ContentPage = () => {
                                                             </td>
                                                             <td className="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-base font-semibold text-slate-600">
                                                                 <span className={`inline-block px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md text-[0.6rem] sm:text-[0.7rem] font-black uppercase tracking-wider ${
-                                                                    fac.designation && fac.designation.toLowerCase().includes('head')
+                                                                    fac.designation && (fac.designation.toLowerCase().includes('principal') || fac.isPrincipal)
+                                                                        ? 'bg-amber-500/15 text-amber-700 border border-amber-500/25'
+                                                                        : (fac.isHOD || (fac.designation && (fac.designation.toLowerCase().includes('head') || /\bhod\b/i.test(fac.designation))))
                                                                         ? 'bg-accent/15 text-accent border border-accent/25'
                                                                         : fac.designation && fac.designation.toLowerCase().includes('associate')
                                                                         ? 'bg-primary/10 text-primary border border-primary/20'
+                                                                        : fac.designation && fac.designation.toLowerCase().includes('professor')
+                                                                        ? 'bg-blue-50 text-blue-700 border border-blue-200'
                                                                         : 'bg-slate-100 text-slate-600'
                                                                 }`}>
                                                                     {fac.designation}
@@ -1551,6 +1549,10 @@ const ContentPage = () => {
                                         );
                                     })}
                                 </div>
+                            )}
+
+                            {slug === 'grievance' && (
+                                <GrievanceForm />
                             )}
 
                             {content.category !== 'Committees' && slug !== 'btech' && slug !== 'mca' && slug !== 'doctoral' && slug !== 'apjaktu' && slug !== 'aicte' && slug !== 'admission-2026' && (
