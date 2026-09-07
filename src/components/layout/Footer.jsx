@@ -79,6 +79,7 @@ const Footer = () => {
                         <span>© 2025 College of Engineering Chengannur · Government of Kerala</span>
                         <span className="hidden md:inline text-slate-700">|</span>
                         <span className="flex items-center gap-1.5">Developed by <a href="https://fennechron.com" target="_blank" rel="noopener noreferrer" className="text-accent font-black tracking-wider hover:text-white transition">Fennechron Labs</a></span>
+                        <span className="hidden md:inline text-slate-700">The website is under development</span>
                     </div>
                     
                     <button 
