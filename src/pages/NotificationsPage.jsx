@@ -6,7 +6,7 @@ const NotificationsPage = () => {
     const [sanityData, setSanityData] = useState({
         Announcements: [],
         Notifications: [],
-        'Notice Board': []
+        'Quick Links': []
     });
     const [activeTab, setActiveTab] = useState('Announcements');
     const [loading, setLoading] = useState(true);
@@ -20,7 +20,7 @@ const NotificationsPage = () => {
                     setSanityData({
                         Announcements: data.filter(d => d.category === 'Announcements'),
                         Notifications: data.filter(d => d.category === 'Notifications'),
-                        'Notice Board': data.filter(d => d.category === 'Notice Board')
+                        'Quick Links': data.filter(d => d.category === 'Quick Links')
                     });
                 }
                 setLoading(false);
@@ -34,7 +34,7 @@ const NotificationsPage = () => {
     const tabs = [
         { id: 'Announcements', label: 'Announcements', icon: Bell },
         { id: 'Notifications', label: 'Notifications', icon: AlertCircle },
-        { id: 'Notice Board', label: 'Notice Board', icon: FileText }
+        { id: 'Quick Links', label: 'Quick Links', icon: FileText }
     ];
 
     const currentItems = sanityData[activeTab] || [];
