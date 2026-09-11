@@ -140,9 +140,7 @@ const NoticeUpdates = () => {
             .catch(err => console.error("Sanity fetch error:", err));
     }, []);
 
-    const displayAnnouncements = sanityAnnouncements.length > 0 ? sanityAnnouncements : [];
-    const displayNotifications = sanityNotifications.length > 0 ? sanityNotifications : [];
-    const displayNotices = sanityQuick.length > 0 ? sanityNotices : [];
+
 
     return (
         <section className="relative w-full bg-background py-12 overflow-hidden">
@@ -165,7 +163,7 @@ const NoticeUpdates = () => {
                             <h3 className="font-display text-[1.3rem] font-extrabold text-white uppercase tracking-[0.1em]">Notifications</h3>
                         </div>
                         {sanityNotifications.length>0?
-                        <ScrollList items={displayNotifications} />
+                        <ScrollList items={sanityNotifications} />
                         :<h3 className='text-[1.3rem] m-10 text-center font-extrabold text-primary'>No Notifications!</h3>
                         }
                         
@@ -177,7 +175,7 @@ const NoticeUpdates = () => {
                             <h3 className="font-display text-[1.3rem] font-extrabold text-white uppercase tracking-[0.1em]">Quick Links</h3>
                         </div>
                         {sanityQuick.length>0?
-                        <ScrollList items={displayNotices} />
+                        <ScrollList items={sanityQuick} />
                         :<h3 className='text-[1.3rem] m-10 text-center font-extrabold text-primary'>No Quick Links!</h3>
                         }
                     </div>
