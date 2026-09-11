@@ -3,37 +3,6 @@ import { ChevronDown, GraduationCap, Building2, Key, Info, FileText, Newspaper, 
 import { client } from '../../lib/sanity';
 import { Link } from 'react-router-dom';
 
-const quickLinks = [
-    { name: 'FACILITIES', icon: Building2, color: 'bg-white text-primary border border-primary/20 hover:border-accent hover:bg-accent/5', hasDropdown: true },
-    { name: 'ADMISSION', icon: GraduationCap, color: 'bg-accent text-white border border-accent hover:bg-primary', hasDropdown: false },
-    { name: 'HOSTEL', icon: Building2, color: 'bg-white text-primary border border-primary/20 hover:border-accent hover:bg-accent/5', hasDropdown: false },
-    { name: 'LOGIN', icon: Key, color: 'bg-white text-primary border border-primary/20 hover:border-accent hover:bg-accent/5', hasDropdown: true },
-    { name: 'DISCLOSURES', icon: Info, color: 'bg-white text-primary border border-primary/20 hover:border-accent hover:bg-accent/5', hasDropdown: false },
-    { name: 'BLOG', icon: FileText, color: 'bg-white text-primary border border-primary/20 hover:border-accent hover:bg-accent/5', hasDropdown: false },
-    { name: 'NEWS-EVENTS', icon: Newspaper, color: 'bg-white text-primary border border-primary/20 hover:border-accent hover:bg-accent/5', hasDropdown: false },
-    { name: 'CENTRAL LIBRARY', icon: BookOpen, color: 'bg-white text-primary border border-primary/20 hover:border-accent hover:bg-accent/5', hasDropdown: false },
-];
-
-const announcements = [
-    "New Result - B.Tech S6 (S) Exam, November 2025 (2022 Scheme)",
-    "New Result - B.Tech S1 (R) Exam, December 2025 (2023 Scheme)",
-    "Registration open for Annual Technical Fest 2025",
-    "Notification regarding odd semester fee payment",
-    "Guidelines for B.Tech Honors Registration published",
-];
-
-const upcomingEvents = [
-    "» College of Engineering Chengannur is organizing the National Conference on Emerging Technologies from 19th to 21st December 2025.",
-    "» The Department of Computer Science is organizing a Six-day AICTE Training and Learning (ATAL) Online Faculty Development Programme.",
-    "» Annual Techfest 'Drishti 2025' dates announced.",
-];
-
-const events = [
-    "» The 7th International Conference on Modelling and Simulation",
-    "» Summer internship program - Computer Science Dept",
-    "» Internship on Optical Communication Design with Opticystem",
-    "» Workshop on Advanced AI and Machine Learning",
-];
 
 // Helper to duplicate items for smooth infinite scrolling
 const ScrollList = ({ items }) => {
@@ -199,7 +168,7 @@ const NoticeUpdates = () => {
                     {/* Events */}
                     <div className="bg-white rounded-[16px] shadow-[0_8px_30px_rgba(10,22,40,0.06)] border border-primary/10 overflow-hidden hover:shadow-[0_12px_40px_rgba(10,22,40,0.1)] transition-shadow duration-300">
                         <div className="bg-gradient-to-r from-primary to-secondary py-5 px-6 text-center border-b-[3px] border-accent">
-                            <h3 className="font-display text-[1.3rem] font-extrabold text-white uppercase tracking-[0.1em]">Notice Board</h3>
+                            <h3 className="font-display text-[1.3rem] font-extrabold text-white uppercase tracking-[0.1em]">Quick Links</h3>
                         </div>
                         <ScrollList items={displayNotices} />
                     </div>
