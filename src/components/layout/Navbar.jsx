@@ -338,13 +338,13 @@ const Navbar = () => {
                     <div className="flex flex-col sm:flex-row items-center gap-[10px] sm:gap-[20px] text-center sm:text-left">
                         <img src={collegeLogo} alt="CEC Logo" className="h-[50px] w-[50px] sm:h-[70px] sm:w-[70px] lg:h-[100px] lg:w-[100px] shrink-0 object-contain rounded-sm shadow-sm" />
                         <div className="flex flex-col justify-center">
-                            <h1 className="font-display text-[1.1rem] sm:text-[1.5rem] lg:text-[2.2rem] font-extrabold leading-tight text-primary uppercase mb-1 tracking-wide">
+                            <h1 className="font-display text-[1rem] sm:text-[1.5rem] lg:text-[2.2rem] font-extrabold leading-tight text-primary uppercase mb-1 tracking-wide">
                                 College Of Engineering Chengannur
                             </h1>
-                            <p className="text-[0.75rem] sm:text-[0.85rem] lg:text-[1.1rem] font-bold tracking-[0.02em] text-secondary">
+                            <p className="text-[0.65rem] sm:text-[0.85rem] lg:text-[1.1rem] font-bold tracking-[0.02em] text-secondary">
                                 ESTD : 1993 Institute of Human Resource Development(IHRD), Government of Kerala
                             </p>
-                            <p className="text-[0.7rem] sm:text-[0.8rem] lg:text-[1.05rem] font-semibold tracking-[0.02em] text-primary/80 mt-[2px]">
+                            <p className="text-[0.6rem] sm:text-[0.8rem] lg:text-[1.05rem] font-semibold tracking-[0.02em] text-primary/80 mt-[2px]">
                                 Affiliated to APJ Abdul Kalam Technological University, Kerala
                             </p>
                         </div>
@@ -421,10 +421,7 @@ const Navbar = () => {
                 {/* Drawer Header */}
                 <div className="flex items-center justify-between p-4 border-b border-white/10 shrink-0">
                     <div className="flex items-center gap-2">
-                        <img src={collegeLogo} alt="CEC Mini Logo" className="h-[28px] w-[28px] object-contain rounded bg-white p-0.5 shrink-0" />
-                        <span className="font-display text-[0.85rem] font-black uppercase tracking-wider text-white">
-                            CEC Navigation
-                        </span>
+                         
                     </div>
                     <button 
                         onClick={closeMobileMenu}

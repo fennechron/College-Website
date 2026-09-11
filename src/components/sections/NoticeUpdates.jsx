@@ -115,7 +115,7 @@ const ScrollList = ({ items }) => {
             {/* Scroll to Top / Latest Button */}
             <button
                 onClick={scrollToTop}
-                className={`absolute bottom-4 right-4 bg-primary text-white text-xs font-bold px-3 py-2 rounded-full shadow-lg hover:bg-accent hover:scale-105 transition-all duration-300 flex items-center gap-1 z-20 ${showLatestBtn ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'}`}
+                className={`absolute bottom-4 right-4 bg-primary text-white text-xs font-bold px-3 py-2 rounded-full shadow-lg hover:bg-accent hover:scale-105 transition-all duration-200 flex items-center gap-1 z-20 ${showLatestBtn ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'}`}
             >
                 ↑ LATEST
             </button>
@@ -126,7 +126,7 @@ const ScrollList = ({ items }) => {
 const NoticeUpdates = () => {
     const [sanityAnnouncements, setSanityAnnouncements] = useState([]);
     const [sanityNotifications, setSanityNotifications] = useState([]);
-    const [sanityNotices, setSanityNotices] = useState([]);
+    const [sanityQuick, setSanityQuick] = useState([]);
 
     useEffect(() => {
         client.fetch('*[_type == "announcement"] | order(date desc) { text, category, externalLink, "pdfUrl": pdf.asset->url }')
@@ -134,15 +134,15 @@ const NoticeUpdates = () => {
                 if (data && data.length > 0) {
                     setSanityAnnouncements(data.filter(d => d.category === 'Announcements'));
                     setSanityNotifications(data.filter(d => d.category === 'Notifications'));
-                    setSanityNotices(data.filter(d => d.category === 'Notice Board'));
+                    setSanityQuick(data.filter(d => d.category === 'Quick Links'));
                 }
             })
             .catch(err => console.error("Sanity fetch error:", err));
     }, []);
 
-    const displayAnnouncements = sanityAnnouncements.length > 0 ? sanityAnnouncements : announcements;
-    const displayNotifications = sanityNotifications.length > 0 ? sanityNotifications : upcomingEvents;
-    const displayNotices = sanityNotices.length > 0 ? sanityNotices : events;
+    const displayAnnouncements = sanityAnnouncements.length > 0 ? sanityAnnouncements : [];
+    const displayNotifications = sanityNotifications.length > 0 ? sanityNotifications : [];
+    const displayNotices = sanityQuick.length > 0 ? sanityNotices : [];
 
     return (
         <section className="relative w-full bg-background py-12 overflow-hidden">
@@ -150,35 +150,44 @@ const NoticeUpdates = () => {
             <div className="w-full px-4 lg:px-10">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
                     {/* Announcement */}
-                    <div className="bg-white rounded-[16px] shadow-[0_8px_30px_rgba(10,22,40,0.06)] border border-primary/10 overflow-hidden hover:shadow-[0_12px_40px_rgba(10,22,40,0.1)] transition-shadow duration-300">
+                    <div className="bg-white rounded-[12px] shadow-[0_8px_30px_rgba(10,22,40,0.06)] border border-primary/10 overflow-hidden hover:shadow-[0_12px_40px_rgba(10,22,40,0.1)] transition-shadow duration-300">
                         <div className="bg-gradient-to-r from-primary to-secondary py-5 px-6 text-center border-b-[3px] border-accent">
                             <h3 className="font-display text-[1.3rem] font-extrabold text-white uppercase tracking-[0.1em]">Announcements</h3>
                         </div>
-                        <ScrollList items={displayAnnouncements} />
+                        {sanityAnnouncements.length > 0?
+                        <ScrollList items={sanityAnnouncements} />
+                        :<h3 className='text-[1.3rem] m-10 text-center font-extrabold text-primary'>No Annoucements!</h3>}
                     </div>
 
                     {/* Upcoming Events */}
-                    <div className="bg-white rounded-[16px] shadow-[0_8px_30px_rgba(10,22,40,0.06)] border border-primary/10 overflow-hidden hover:shadow-[0_12px_40px_rgba(10,22,40,0.1)] transition-shadow duration-300">
+                    <div className="bg-white rounded-[12px] shadow-[0_8px_30px_rgba(10,22,40,0.06)] border border-primary/10 overflow-hidden hover:shadow-[0_12px_40px_rgba(10,22,40,0.1)] transition-shadow duration-300">
                         <div className="bg-gradient-to-r from-primary to-secondary py-5 px-6 text-center border-b-[3px] border-accent">
                             <h3 className="font-display text-[1.3rem] font-extrabold text-white uppercase tracking-[0.1em]">Notifications</h3>
                         </div>
+                        {sanityNotifications.length>0?
                         <ScrollList items={displayNotifications} />
+                        :<h3 className='text-[1.3rem] m-10 text-center font-extrabold text-primary'>No Notifications!</h3>
+                        }
+                        
                     </div>
 
                     {/* Events */}
-                    <div className="bg-white rounded-[16px] shadow-[0_8px_30px_rgba(10,22,40,0.06)] border border-primary/10 overflow-hidden hover:shadow-[0_12px_40px_rgba(10,22,40,0.1)] transition-shadow duration-300">
+                    <div className="bg-white rounded-[12px] shadow-[0_8px_30px_rgba(10,22,40,0.06)] border border-primary/10 overflow-hidden hover:shadow-[0_12px_40px_rgba(10,22,40,0.1)] transition-shadow duration-300">
                         <div className="bg-gradient-to-r from-primary to-secondary py-5 px-6 text-center border-b-[3px] border-accent">
                             <h3 className="font-display text-[1.3rem] font-extrabold text-white uppercase tracking-[0.1em]">Quick Links</h3>
                         </div>
+                        {sanityQuick.length>0?
                         <ScrollList items={displayNotices} />
+                        :<h3 className='text-[1.3rem] m-10 text-center font-extrabold text-primary'>No Quick Links!</h3>
+                        }
                     </div>
                 </div>
                 
                 {/* View All Button (Desktop Only) */}
                 <div className="mt-10 hidden md:flex justify-center">
-                    <Link to="/page/notifications" className="bg-white text-primary border-2 border-primary/10 hover:border-accent hover:bg-accent hover:text-white font-display font-black text-sm uppercase tracking-widest px-10 py-4 rounded-full transition-all duration-300 shadow-[0_8px_30px_rgba(10,22,40,0.06)] hover:shadow-[0_15px_40px_rgba(29,84,108,0.2)] flex items-center gap-3 group">
+                    <Link to="/page/notifications" className="bg-white text-primary border-2 border-primary/10 hover:border-accent hover:bg-accent hover:text-white font-display font-black text-sm uppercase tracking-widest px-10 py-4 rounded-[12px] transition-all duration-300 shadow-[0_8px_30px_rgba(10,22,40,0.06)] hover:shadow-[0_15px_40px_rgba(29,84,108,0.2)] flex items-center gap-3 group">
                         View All Notifications
-                        <span className="w-6 h-6 rounded-full bg-primary/5 group-hover:bg-white/20 flex items-center justify-center transition-colors">
+                        <span className="w-6 h-6 rounded-full flex items-center justify-center transition-colors">
                             <span className="transform translate-x-0"><ArrowRight className="w-4 h-4" /></span>
                         </span>
                     </Link>

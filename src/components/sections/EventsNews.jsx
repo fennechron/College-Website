@@ -84,7 +84,7 @@ const EventsNews = () => {
         <section id="events-news" className="py-20 bg-background border-t border-primary/5">
             <div className="max-w-[95%] mx-auto px-4 lg:px-8">
                 <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
-                    <div className="text-left text-center md:text-left">
+                    <div className="text-left   md:text-left">
                         <h2 className="text-[2rem] md:text-[2.5rem] font-display font-black text-primary uppercase tracking-tight leading-tight">
                             Events & <span className="text-accent underline decoration-primary decoration-4 underline-offset-8">News</span>
                         </h2>
@@ -126,7 +126,7 @@ const EventsNews = () => {
                         onTouchEnd={() => setIsHovered(false)}
                     >
                         {[...displayData, ...displayData].map((item, idx) => (
-                            <div key={`${item._id || item.id}-${idx}`} className="h-[360px] sm:h-[460px] group bg-white rounded-[1.5rem] sm:rounded-3xl border border-primary/10 overflow-hidden hover:shadow-[0_20px_50px_rgba(12,43,78,0.12)] transition-all duration-500 hover:-translate-y-2 flex flex-col shrink-0" style={{ width: 'var(--event-card-width)' }}>
+                            <div key={`${item._id || item.id}-${idx}`} className="h-[360px] sm:h-[460px] group bg-white rounded-[12px] sm:rounded-[12px] border border-primary/10 overflow-hidden hover:shadow-[0_20px_50px_rgba(12,43,78,0.12)] transition-all duration-500 hover:-translate-y-2 flex flex-col shrink-0" style={{ width: 'var(--event-card-width)' }}>
                                 {/* Card Header with Date Banner */}
                                 <div className="h-32 sm:h-48 shrink-0 relative bg-primary/5 flex items-center justify-center overflow-hidden">
                                     {item.image ? (

@@ -84,10 +84,10 @@ const Footer = () => {
                     
                     <button 
                         onClick={scrollToTop}
-                        className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-accent rounded-full border border-white/10 hover:border-accent text-slate-400 hover:text-white transition-all duration-300 self-start md:self-auto"
+                        className="flex items-center gap-2 px-4 py-2 hover:bg-accent rounded-[12px] border border-white/10 hover:border-accent text-slate-400 hover:text-white transition-all duration-300 self-start md:self-auto"
                     >
                         <span className="text-xs font-bold uppercase tracking-widest">Back to Top</span>
-                        <div className="p-1 bg-white/10 rounded-full">
+                        <div className="p-1">
                             <ArrowUp size={14} />
                         </div>
                     </button>

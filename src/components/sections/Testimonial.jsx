@@ -121,10 +121,10 @@ const Testimonial = () => {
                 {repeatedData.map((t, idx) => (
                     <div 
                         key={idx} 
-                        className="relative rounded-2xl bg-white/10 border border-white/20 shadow-sm hover:shadow-md transition-shadow duration-300 cursor-pointer shrink-0"
+                        className="relative rounded-[12px] bg-white/10 border border-white/20 shadow-sm hover:shadow-md transition-shadow duration-300 cursor-pointer shrink-0"
                         style={{ width: 'var(--testimonial-width)' }}
                     >
-                        <div className="h-full w-full rounded-2xl p-4 sm:p-8 flex flex-col justify-between">
+                        <div className="h-full w-full  p-4 sm:p-8 flex flex-col justify-between">
                             <div>
                                 <div className="text-accent text-3xl sm:text-5xl font-serif leading-none mb-1 sm:mb-2 opacity-50">"</div>
                                 <p className="text-white text-xs sm:text-base leading-relaxed font-body mb-4 sm:mb-8">

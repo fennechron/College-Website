@@ -27,7 +27,7 @@ const PhotoGallery = () => {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
                     {photos.slice(0, 6).map((photo, idx) => (
-                        <div key={idx} className="group relative overflow-hidden rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 aspect-[4/3] w-full">
+                        <div key={idx} className="group relative overflow-hidden rounded-[12px] shadow-sm hover:shadow-xl transition-all duration-300 aspect-[4/3] w-full">
                             <img 
                                 src={urlFor(photo.image).url()} 
                                 alt={photo.altText || "Gallery Image"} 
@@ -46,7 +46,7 @@ const PhotoGallery = () => {
                 <div className="mt-12 text-center">
                     <Link
                         to="/page/photo-gallery"
-                        className="inline-flex items-center gap-3 px-8 py-4 bg-primary text-white font-display font-black text-sm uppercase tracking-wider rounded-full hover:bg-accent shadow-lg shadow-primary/20 hover:shadow-accent/30 transition-all duration-300 group"
+                        className="inline-flex items-center gap-3 px-8 py-4 bg-primary text-white font-display font-black text-sm uppercase tracking-wider rounded-[12px] hover:bg-accent shadow-lg shadow-primary/20 hover:shadow-accent/30 transition-all duration-300 group"
                     >
                         <ImageIcon size={18} />
                         <span>View All Photos</span>

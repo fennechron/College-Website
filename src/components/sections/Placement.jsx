@@ -81,7 +81,7 @@ const Placement = () => {
                     <div className="w-32 h-1.5 bg-accent mx-auto rounded-full"></div>
                 </div>
 
-                <div className="bg-white border text-secondary border-primary/20 rounded-[1.5rem] md:rounded-[2.5rem] p-4 sm:p-8 md:p-16 relative overflow-hidden shadow-[0_10px_50px_rgba(12,43,78,0.12)]">
+                <div className="bg-white border text-secondary border-primary/20 rounded-[1.5rem] md:rounded-[1rem] p-4 sm:p-8 md:p-16 relative overflow-hidden shadow-[0_10px_50px_rgba(12,43,78,0.12)]">
                     {/* Decorative Elements */}
                     <div className="absolute top-0 right-0 w-32 h-32 bg-accent/5 rounded-bl-full animate-pulse-dot"></div>
                     <div className="absolute bottom-0 left-0 w-24 h-24 bg-primary/5 rounded-tr-full"></div>
@@ -116,7 +116,7 @@ const Placement = () => {
                             onTouchEnd={() => setIsRecruitersHovered(false)}
                         >
                             {recruiters.length > 0 && repeatedRecruiters.map((rec, idx) => (
-                                <div key={idx} className="group bg-slate-50 flex items-center justify-center rounded-2xl md:rounded-3xl border-2 border-transparent hover:border-accent hover:bg-white hover:shadow-2xl transition-all duration-500 px-4 md:px-10 shrink-0" style={{ width: 'var(--recruiter-width)', height: 'calc(var(--recruiter-width) / 2)' }}>
+                                <div key={idx} className="group bg-slate-50 flex items-center justify-center rounded-[1.5rem] md:rounded-[1rem] border-2 border-transparent hover:border-accent hover:bg-white hover:shadow-2xl transition-all duration-500 px-4 md:px-10 shrink-0" style={{ width: 'var(--recruiter-width)', height: 'calc(var(--recruiter-width) / 2)' }}>
                                     <img
                                         src={urlFor(rec.logo).url()}
                                         alt={rec.name}
@@ -136,12 +136,12 @@ const Placement = () => {
                         </div>
                     </div>
 
-                    <div className="mt-13 grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8 text-center bg-primary rounded-2xl sm:rounded-3xl p-4 sm:p-10 backdrop-blur-sm border border-accent/20">
+                    <div className="mt-13 grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8 text-center bg-primary rounded-1xl sm:rounded-2xl p-4 sm:p-10 backdrop-blur-sm border border-accent/20">
                         {stats.map((stat, idx) => {
                             const IconComponent = LucideIcons[stat.icon] || LucideIcons.HelpCircle;
                             return (
                                 <div key={idx} className="group flex flex-col items-center">
-                                    <div className="w-12 h-12 bg-accent/20 rounded-xl flex items-center justify-center mb-4 group-hover:bg-accent/40 transition-colors duration-300">
+                                    <div className="w-12 h-12 bg-accent/20 rounded-[12px] flex items-center justify-center mb-4 group-hover:bg-accent/40 transition-colors duration-300">
                                         <IconComponent className="text-accent" size={20} />
                                     </div>
                                     <div className="text-[1rem] md:text-[1.5rem] font-display font-black text-white mb-1 transition-transform group-hover:scale-110 duration-300">{stat.value}</div>
@@ -154,7 +154,7 @@ const Placement = () => {
                     {/* Placement Gallery Section */}
                     {placements.length > 0 && (
                         <div className="mt-5 pt-10 border-t border-primary/10">
-                            <h3 className="text-xl md:text-2xl font-display font-bold text-primary text-center mb-12 uppercase tracking-[0.2em] relative">
+                            <h3 className="text-sm mb-4 md:text-2xl font-display font-bold text-primary text-center uppercase tracking-[0.2em] relative">
                                 Placed Students Gallery
                             </h3>
 
@@ -194,7 +194,7 @@ const Placement = () => {
                                     onTouchEnd={() => setIsGalleryHovered(false)}
                                 >
                                     {repeatedPlacements.map((placement, idx) => (
-                                        <div key={idx} className="group relative aspect-[16/10] bg-slate-100 rounded-2xl md:rounded-3xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 flex-shrink-0" style={{ width: 'var(--gallery-width)' }}>
+                                        <div key={idx} className="group relative aspect-[16/10] bg-slate-100 rounded-xl md:rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 flex-shrink-0" style={{ width: 'var(--gallery-width)' }}>
                                             <img
                                                 src={urlFor(placement.groupPhoto).width(1200).url()}
                                                 alt={`Placed Students ${placement.year}`}
