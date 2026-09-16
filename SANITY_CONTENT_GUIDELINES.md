@@ -99,3 +99,14 @@ This schema is used to dynamically build standalone pages (e.g., Facilities, Lib
 - **Main Content**: Text body of the page.
 - **Tabs**: Used for complex pages (like Library) to separate content into tabbed sections. Provide a Tab Name and Tab Content for each.
 - **Gallery Images**: List of URLs for a photo gallery at the bottom of the page.
+
+---
+
+## 6. Downloads & Resources
+
+For each item in a **Download Category**, choose one document source:
+
+- **Upload a file**: Upload the document directly to Sanity. The website uses the Sanity-hosted file and automatically shows its size and upload date when those fields are not entered manually.
+- **Use an external URL**: Paste a direct, publicly accessible URL to the document. This is useful for files hosted by KTU, AICTE, Google Drive, or another provider. The website displays an **Open File** button and leaves downloading to the provider.
+
+Enter a title for every item. The optional size and date fields are useful for external URLs because that metadata cannot be determined automatically. Only the selected source is used on the website.

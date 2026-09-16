@@ -72,6 +72,10 @@ const DownloadsPage = () => {
         }
     };
 
+    const handleOpenExternalFile = (url) => {
+        window.open(url, '_blank', 'noopener,noreferrer');
+    };
+
     const handleDownload = (e) => {
         e.stopPropagation();
         if (viewPdfUrl && viewPdfUrl !== 'loading') {
@@ -99,7 +103,11 @@ const DownloadsPage = () => {
                 ...,
                 "fileUrl": file.asset->url,
                 "fileSize": file.asset->size,
-                "fileDate": file.asset->_createdAt
+                "fileDate": file.asset->_createdAt,
+                "documentUrl": select(
+                    fileSource == "url" => externalUrl,
+                    file.asset->url
+                )
             }
         }`;
         
@@ -253,37 +261,52 @@ const DownloadsPage = () => {
                                                     <div>
                                                         <h3 className="font-bold text-sm sm:text-base text-primary leading-tight group-hover:text-accent transition-colors">{item.title}</h3>
                                                         <div className="flex items-center gap-3 sm:gap-4 mt-2 text-[0.6rem] sm:text-[0.65rem] font-black uppercase tracking-widest text-slate-400">
-                                                            <span>{item.size || formatBytes(item.fileSize)}</span>
-                                                            <span className="w-1 h-1 rounded-full bg-slate-200" />
+                                                            {item.fileSource !== 'url' && (
+                                                                <>
+                                                                    <span>{item.size || formatBytes(item.fileSize)}</span>
+                                                                    <span className="w-1 h-1 rounded-full bg-slate-200" />
+                                                                </>
+                                                            )}
                                                             <span>{item.date ? formatDate(item.date) : formatDate(item.fileDate)}</span>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 
-                                                {item.fileUrl ? (
+                                                {item.documentUrl || item.fileUrl || item.externalUrl ? (
                                                     <div className="mt-4 sm:mt-6 flex gap-2 w-full">
-                                                        <button 
-                                                            onClick={() => handleViewPdf(item.fileUrl, item.title)}
-                                                            className="flex-1 flex items-center justify-center gap-1.5 sm:gap-2 py-2.5 sm:py-3 bg-slate-50 rounded-lg sm:rounded-xl text-[0.6rem] sm:text-[0.65rem] font-black uppercase tracking-widest text-primary hover:bg-primary hover:text-white transition-all cursor-pointer"
-                                                        >
-                                                            <FileText size={12} className="sm:w-3.5 sm:h-3.5" /> View
-                                                        </button>
-                                                        <button 
-                                                            onClick={() => handleDirectDownload(item.fileUrl, item.title)}
-                                                            disabled={downloadingFile === item.title}
-                                                            className={`flex-1 flex items-center justify-center gap-1.5 sm:gap-2 py-2.5 sm:py-3 rounded-lg sm:rounded-xl text-[0.6rem] sm:text-[0.65rem] font-black uppercase tracking-widest transition-all ${
-                                                                downloadingFile === item.title 
-                                                                ? 'bg-slate-100 text-slate-400 cursor-wait' 
-                                                                : 'bg-accent/10 text-accent hover:bg-accent hover:text-white cursor-pointer'
-                                                            }`}
-                                                        >
-                                                            {downloadingFile === item.title ? (
-                                                                <div className="w-3 h-3 sm:w-3.5 sm:h-3.5 border-2 border-slate-400 border-t-transparent rounded-full animate-spin"></div>
-                                                            ) : (
-                                                                <Download size={12} className="sm:w-3.5 sm:h-3.5" /> 
-                                                            )}
-                                                            {downloadingFile === item.title ? 'Downloading...' : 'Download'}
-                                                        </button>
+                                                        {item.fileSource === 'url' ? (
+                                                            <button
+                                                                onClick={() => handleOpenExternalFile(item.externalUrl)}
+                                                                className="flex-1 flex items-center justify-center gap-1.5 sm:gap-2 py-2.5 sm:py-3 bg-slate-50 rounded-lg sm:rounded-xl text-[0.6rem] sm:text-[0.65rem] font-black uppercase tracking-widest text-primary hover:bg-primary hover:text-white transition-all cursor-pointer"
+                                                            >
+                                                                <FileText size={12} className="sm:w-3.5 sm:h-3.5" /> Open File
+                                                            </button>
+                                                        ) : (
+                                                            <>
+                                                                <button
+                                                                    onClick={() => handleViewPdf(item.documentUrl || item.fileUrl, item.title)}
+                                                                    className="flex-1 flex items-center justify-center gap-1.5 sm:gap-2 py-2.5 sm:py-3 bg-slate-50 rounded-lg sm:rounded-xl text-[0.6rem] sm:text-[0.65rem] font-black uppercase tracking-widest text-primary hover:bg-primary hover:text-white transition-all cursor-pointer"
+                                                                >
+                                                                    <FileText size={12} className="sm:w-3.5 sm:h-3.5" /> View
+                                                                </button>
+                                                                <button
+                                                                    onClick={() => handleDirectDownload(item.documentUrl || item.fileUrl, item.title)}
+                                                                    disabled={downloadingFile === item.title}
+                                                                    className={`flex-1 flex items-center justify-center gap-1.5 sm:gap-2 py-2.5 sm:py-3 rounded-lg sm:rounded-xl text-[0.6rem] sm:text-[0.65rem] font-black uppercase tracking-widest transition-all ${
+                                                                        downloadingFile === item.title
+                                                                        ? 'bg-slate-100 text-slate-400 cursor-wait'
+                                                                        : 'bg-accent/10 text-accent hover:bg-accent hover:text-white cursor-pointer'
+                                                                    }`}
+                                                                >
+                                                                    {downloadingFile === item.title ? (
+                                                                        <div className="w-3 h-3 sm:w-3.5 sm:h-3.5 border-2 border-slate-400 border-t-transparent rounded-full animate-spin"></div>
+                                                                    ) : (
+                                                                        <Download size={12} className="sm:w-3.5 sm:h-3.5" />
+                                                                    )}
+                                                                    {downloadingFile === item.title ? 'Downloading...' : 'Download'}
+                                                                </button>
+                                                            </>
+                                                        )}
                                                     </div>
                                                 ) : (
                                                     <button className="mt-4 sm:mt-6 flex items-center justify-center gap-2 w-full py-2.5 sm:py-3 bg-slate-50 rounded-lg sm:rounded-xl text-[0.65rem] sm:text-[0.7rem] font-black uppercase tracking-widest text-primary hover:bg-primary hover:text-white transition-all">
