@@ -1,13 +1,13 @@
 export default {
   name: 'announcement',
-  title: 'Announcement / Notice',
+  title: 'Announcement, Notice or Quick Links',
   type: 'document',
   fields: [
     {
       name: 'text',
       title: 'Text / Content',
       type: 'text',
-      description: 'The content of the announcement or notice.',
+      description: 'The content of the announcement, notice or quick links',
     },
     {
       name: 'category',
@@ -17,7 +17,7 @@ export default {
         list: [
           { title: 'Announcements', value: 'Announcements' },
           { title: 'Notifications', value: 'Notifications' },
-          { title: 'Notice Board', value: 'Notice Board' },
+          { title: 'Quick Links', value: 'Quick Links' },
         ],
       },
     },

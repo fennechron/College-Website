@@ -178,7 +178,7 @@ const ContentPage = () => {
             setLoading(true);
             try {
                 let data;
-                if (slug === 'admission-2026') {
+                if (slug.startsWith('admission')) {
                     data = await client.fetch(`*[_type == "admission"][0] {
                         ...,
                         categories[]{
@@ -456,7 +456,7 @@ const ContentPage = () => {
                                     <section className="space-y-6">
                                         {dept.peos && (
                                             <DepartmentAccordion 
-                                                title="Program Educational Objectives (PEOs)" 
+                                                title="Program Educational Objectives (PEO)" 
                                                 items={dept.peos} 
                                             />
                                         )}
@@ -473,7 +473,7 @@ const ContentPage = () => {
                                                             {dept.psos?.map((prog, idx) => (
                                                                 <DepartmentAccordion 
                                                                     key={idx}
-                                                                    title={`PSOs - ${prog.programName || prog}`} 
+                                                                    title={`PSO - ${prog.programName || prog}`} 
                                                                     items={prog.outcomes || prog} 
                                                                 />
                                                             ))}
@@ -509,7 +509,7 @@ const ContentPage = () => {
                                             return (
                                                 <div key={i} className="bg-slate-50 p-4 sm:p-6 rounded-xl sm:rounded-2xl border border-slate-100 hover:shadow-md transition-all duration-300">
                                                     <div className="flex items-start gap-3 sm:gap-4">
-                                                        <span className="inline-flex items-center justify-center shrink-0 w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-accent text-primary font-black text-xs sm:text-sm">
+                                                        <span className="inline-flex items-center justify-center shrink-0 w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-accent text-white font-black text-xs sm:text-sm">
                                                             {i + 1}
                                                         </span>
                                                         <div className="space-y-1">
@@ -948,10 +948,10 @@ const ContentPage = () => {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ duration: 0.8, delay: 0.2 }}
-                        className={`${(slug === 'parents-teachers' || slug === 'right-to-info' || slug === 'btech' || slug === 'mca' || slug === 'doctoral' || slug === 'apjaktu' || slug === 'aicte') ? 'lg:col-span-12' : 'lg:col-span-8'} bg-white ${slug === 'admission-2026' ? 'py-4 sm:py-8 md:py-14 px-2 sm:px-4 md:px-8' : 'p-4 sm:p-8 md:p-14'} rounded-2xl sm:rounded-[2.5rem] shadow-[0_10px_50px_rgba(12,43,78,0.06)] border border-primary/5`}
+                        className={`${(slug === 'parents-teachers' || slug === 'right-to-info' || slug === 'btech' || slug === 'mca' || slug === 'doctoral' || slug === 'apjaktu' || slug === 'aicte') ? 'lg:col-span-12' : 'lg:col-span-8'} bg-white ${slug?.startsWith('admission') ? 'py-4 sm:py-8 md:py-14 px-2 sm:px-4 md:px-8' : 'p-4 sm:p-8 md:p-14'} rounded-2xl sm:rounded-[2.5rem] shadow-[0_10px_50px_rgba(12,43,78,0.06)] border border-primary/5`}
                     >
                         <div className="prose prose-lg max-w-none prose-headings:text-primary prose-p:text-secondary/80 prose-p:leading-relaxed prose-li:text-secondary/80">
-                            {slug !== 'parents-teachers' && slug !== 'right-to-info' && slug !== 'btech' && slug !== 'mca' && slug !== 'doctoral' && slug !== 'apjaktu' && slug !== 'aicte' && slug !== 'admission-2026' && (
+                            {slug !== 'parents-teachers' && slug !== 'right-to-info' && slug !== 'btech' && slug !== 'mca' && slug !== 'doctoral' && slug !== 'apjaktu' && slug !== 'aicte' && !slug?.startsWith('admission') && (
                                 <h2 className="text-3xl font-bold text-primary mb-8 flex items-center gap-4">
                                     Section Overview
                                     <div className="flex-1 h-px bg-primary/10"></div>
@@ -1308,7 +1308,7 @@ const ContentPage = () => {
                                         ))}
                                     </div>
                                 </div>
-                            ) : slug === 'admission-2026' ? (
+                            ) : slug?.startsWith('admission') ? (
                                 <div className="space-y-10 sm:space-y-12 text-left">
                                     {/* Introduction Card */}
                                     {content.description && (
@@ -1555,7 +1555,7 @@ const ContentPage = () => {
                                 <GrievanceForm />
                             )}
 
-                            {content.category !== 'Committees' && slug !== 'btech' && slug !== 'mca' && slug !== 'doctoral' && slug !== 'apjaktu' && slug !== 'aicte' && slug !== 'admission-2026' && (
+                            {content.category !== 'Committees' && slug !== 'btech' && slug !== 'mca' && slug !== 'doctoral' && slug !== 'apjaktu' && slug !== 'aicte' && !slug?.startsWith('admission') && (
                                 <>
                                     <h3 className="text-2xl font-bold text-primary mb-6">Key Details & Context</h3>
                                     <p className="text-[1.15rem] mb-10">
