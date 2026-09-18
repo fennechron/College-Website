@@ -113,7 +113,7 @@ const DownloadsPage = () => {
         
         client.fetch(query)
             .then(data => {
-                let combinedCategories = [...localCategories];
+                let combinedCategories = [];
                 
                 if (data && data.length > 0) {
                     // Merge Sanity data with local data (Sanity takes precedence for matching IDs)
