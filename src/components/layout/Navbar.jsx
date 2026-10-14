@@ -35,6 +35,7 @@ const navItems = [
             {
                 label: 'Committees', path: '#', hasSubDropdown: true,
                 subItems: [
+                    { label: 'Alumni Relations Cell (ARC)', path: '/page/arc' },
                     { label: 'Parents Teachers Association (PTA)', path: '/page/parents-teachers' },
                     { label: 'Women Cell', path: '/page/women-cell' },
                     { label: 'Grievance Redressal', path: '/page/grievance' },
@@ -126,7 +127,7 @@ const NavItem = ({ item, closeMobileMenu }) => {
                 <Link
                     to={item.path}
                     onClick={closeMobileMenu}
-                    className="flex items-center gap-1 block whitespace-nowrap px-4 py-3 transition hover:bg-secondary hover:text-white md:py-[14px] text-white"
+                    className="flex items-center gap-1 block whitespace-nowrap px-4 py-3 transition hover:bg-secondary hover:text-white lg:py-[14px] text-white"
                 >
                     {item.isHome && <Home size={18} />} {item.name}
                 </Link>
@@ -139,7 +140,7 @@ const NavItem = ({ item, closeMobileMenu }) => {
             {/* Desktop link rendering */}
             <Link
                 to={item.path}
-                className="hidden md:flex items-center gap-1 whitespace-nowrap px-4 py-[14px] transition hover:bg-secondary hover:text-white cursor-pointer text-white"
+                className="hidden lg:flex items-center gap-1 whitespace-nowrap px-4 py-[14px] transition hover:bg-secondary hover:text-white cursor-pointer text-white"
             >
                 {item.name}
                 <ChevronDown size={14} className="group-hover:rotate-180 transition-transform duration-300" />
@@ -153,7 +154,7 @@ const NavItem = ({ item, closeMobileMenu }) => {
                         setIsMobileExpanded(!isMobileExpanded);
                     }
                 }}
-                className="md:hidden flex items-center justify-between px-4 py-3 transition hover:bg-secondary hover:text-white cursor-pointer"
+                className="lg:hidden flex items-center justify-between px-4 py-3 transition hover:bg-secondary hover:text-white cursor-pointer"
             >
                 {item.path === '#' ? (
                     <span className="flex-grow whitespace-nowrap font-semibold tracking-[0.03em]">
@@ -169,6 +170,8 @@ const NavItem = ({ item, closeMobileMenu }) => {
                     </Link>
                 )}
                 <button
+                    aria-label={`${isMobileExpanded ? 'Collapse' : 'Expand'} ${item.name} menu`}
+                    aria-expanded={isMobileExpanded}
                     onClick={(e) => { 
                         e.stopPropagation(); 
                         e.preventDefault(); 
@@ -181,18 +184,18 @@ const NavItem = ({ item, closeMobileMenu }) => {
             </div>
 
             {/* Desktop Dropdown */}
-            <div className="hidden md:block absolute top-[100%] left-0 bg-primary shadow-[0_10px_30px_rgba(0,0,0,0.3)] min-w-[220px] z-[1000] border-t-2 border-accent rounded-b-md opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-300 pt-1">
+            <div className="hidden lg:block absolute top-[100%] left-0 bg-primary shadow-[0_10px_30px_rgba(0,0,0,0.3)] min-w-[220px] z-[1000] border-t-2 border-accent rounded-b-md opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto group-focus-within:opacity-100 group-focus-within:pointer-events-auto transition-all duration-300 pt-1">
                 <ul className="flex flex-col py-2">
                     {item.dropdownItems.map((subItem, idx) => (
                         <li key={idx} className={subItem.hasSubDropdown ? "relative group/sub" : ""}>
                             {subItem.hasSubDropdown ? (
                                 <>
-                                    <div className="flex items-center justify-between px-6 py-3.5 hover:bg-secondary cursor-pointer group-hover/sub:bg-secondary">
+                                    <button type="button" aria-haspopup="true" className="flex w-full items-center justify-between px-6 py-3.5 text-left hover:bg-secondary cursor-pointer group-hover/sub:bg-secondary group-focus-within/sub:bg-secondary">
                                         <span className="text-[0.95rem] font-medium tracking-wide text-white/95">{subItem.label}</span>
                                         <ChevronRight size={14} className="text-white/70" />
-                                    </div>
+                                    </button>
                                     <div 
-                                        className={`absolute ${subItem.label === 'Committees' ? 'top-[-100px]' : 'top-[-10px]'} left-full -ml-[2px] bg-primary shadow-[0_10px_30px_rgba(0,0,0,0.3)] min-w-[320px] max-h-[calc(100vh-200px)] overflow-y-auto z-[1000] border-l-2 border-accent rounded-r-md opacity-0 pointer-events-none group-hover/sub:opacity-100 group-hover/sub:pointer-events-auto hidden md:block transition-all duration-300 custom-scrollbar`}
+                                        className={`absolute ${subItem.label === 'Committees' ? 'top-[-100px]' : 'top-[-10px]'} left-full -ml-[2px] bg-primary shadow-[0_10px_30px_rgba(0,0,0,0.3)] min-w-[320px] max-h-[calc(100vh-200px)] overflow-y-auto z-[1000] border-l-2 border-accent rounded-r-md opacity-0 pointer-events-none group-hover/sub:opacity-100 group-hover/sub:pointer-events-auto group-focus-within/sub:opacity-100 group-focus-within/sub:pointer-events-auto hidden lg:block transition-all duration-300 custom-scrollbar`}
                                         data-lenis-prevent="true"
                                     >
                                         <ul className="flex flex-col py-2">
@@ -225,7 +228,7 @@ const NavItem = ({ item, closeMobileMenu }) => {
             </div>
 
             {/* Mobile Dropdown */}
-            <div className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${isMobileExpanded ? 'max-h-[1000px]' : 'max-h-0'}`}>
+            <div className={`lg:hidden overflow-hidden transition-all duration-300 ease-in-out ${isMobileExpanded ? 'max-h-[1000px]' : 'max-h-0'}`}>
                 <ul className="bg-secondary flex flex-col">
                     {item.dropdownItems.map((subItem, idx) => (
                         <li key={idx} className="border-b border-primary/20 border-solid last:border-b-0">
@@ -235,7 +238,7 @@ const NavItem = ({ item, closeMobileMenu }) => {
                                         <div onClick={(e) => toggleSubMenu(e, idx)} className="flex-1 cursor-pointer flex items-center gap-2">
                                             • {subItem.label}
                                         </div>
-                                        <button onClick={(e) => toggleSubMenu(e, idx)} className="p-1">
+                                        <button aria-label={`${expandedSubMenu === idx ? 'Collapse' : 'Expand'} ${subItem.label}`} aria-expanded={expandedSubMenu === idx} onClick={(e) => toggleSubMenu(e, idx)} className="p-1">
                                             <ChevronDown size={16} className={`transition transform duration-300 ${expandedSubMenu === idx ? 'rotate-180' : ''}`} />
                                         </button>
                                     </div>
@@ -309,7 +312,7 @@ const Navbar = () => {
     // Close mobile menu automatically if user expands window to desktop size
     useEffect(() => {
         const handleResize = () => {
-            if (window.innerWidth >= 768) {
+            if (window.innerWidth >= 1024) {
                 setIsOpen(false);
             }
         };
@@ -367,7 +370,7 @@ const Navbar = () => {
 
             {/* Bottom Tier: Sticky Navigation Links */}
             <nav className="sticky top-0 z-[1000] bg-primary transition-colors duration-300 shadow-[0_2px_20px_rgba(10,22,40,0.08)]">
-                <div className="relative flex w-full items-center px-4 lg:px-8 justify-between md:justify-start h-14 md:h-auto">
+                <div className="relative flex w-full items-center px-4 lg:px-8 justify-between lg:justify-start h-14 lg:h-auto">
                     {/* Mobile-only Branding on Sticky Navbar */}
                     <div className="flex items-center gap-2 lg:hidden">
                         <img src={collegeLogo} alt="CEC Mini Logo" className="h-[32px] w-[32px] object-contain rounded bg-white p-0.5 shrink-0" />
@@ -377,7 +380,7 @@ const Navbar = () => {
                     </div>
 
                     {/* Desktop Navigation Links */}
-                    <ul className="hidden lg:flex w-full md:w-auto md:flex-row md:py-0 md:shadow-none justify-between flex-nowrap text-[0.75rem] xl:text-[0.95rem] 2xl:text-[1rem] font-semibold tracking-[0.03em] text-white">
+                    <ul className="hidden lg:flex w-full lg:w-auto lg:flex-row lg:py-0 lg:shadow-none justify-between flex-nowrap text-[0.75rem] xl:text-[0.95rem] 2xl:text-[1rem] font-semibold tracking-[0.03em] text-white">
                         {dynamicNavItems.map((item, index) => (
                             <NavItem key={index} item={item} closeMobileMenu={closeMobileMenu} />
                         ))}
@@ -406,7 +409,7 @@ const Navbar = () => {
             {/* Mobile Navigation Drawer */}
             {/* Backdrop overlay */}
             <div 
-                className={`fixed inset-0 z-[1001] bg-black/60 backdrop-blur-sm md:hidden transition-opacity duration-300 ${
+                className={`fixed inset-0 z-[1001] bg-black/60 backdrop-blur-sm lg:hidden transition-opacity duration-300 ${
                     isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
                 }`}
                 onClick={closeMobileMenu}
@@ -414,7 +417,7 @@ const Navbar = () => {
 
             {/* Side Drawer Panel */}
             <div
-                className={`fixed top-0 right-0 bottom-0 z-[1002] w-[290px] max-w-[85vw] bg-primary text-white shadow-2xl flex flex-col md:hidden transition-transform duration-300 ease-in-out transform ${
+                className={`fixed top-0 right-0 bottom-0 z-[1002] w-[290px] max-w-[85vw] bg-primary text-white shadow-2xl flex flex-col lg:hidden transition-transform duration-300 ease-in-out transform ${
                     isOpen ? 'translate-x-0' : 'translate-x-full'
                 }`}
             >

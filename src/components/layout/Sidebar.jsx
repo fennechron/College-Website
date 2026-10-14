@@ -32,6 +32,7 @@ const navItems = [
             {
                 label: 'Committees', path: '#', hasSubDropdown: true,
                 subItems: [
+                    { label: 'Alumni Relations Cell (ARC)', path: '/page/arc' },
                     { label: 'PTA', path: '/page/parents-teachers' },
                     { label: 'Women Cell', path: '/page/women-cell' },
                     { label: 'Grievance Redressal', path: '/page/grievance' },

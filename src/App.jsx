@@ -24,6 +24,7 @@ import NotFoundPage from './pages/NotFoundPage.jsx';
 import MaintenancePage from './pages/MaintenancePage.jsx';
 import NotificationsPage from './pages/NotificationsPage.jsx';
 import GalleryPage from './pages/GalleryPage.jsx';
+import ARCPage from './pages/ARCPage.jsx';
 import { client } from './lib/sanity.js';
 
 /**
@@ -150,6 +151,7 @@ function App() {
                             <Route path="/page/campus-life" element={<CampusLifePage />} />
                             <Route path="/page/notifications" element={<NotificationsPage />} />
                             <Route path="/page/photo-gallery" element={<GalleryPage />} />
+                            <Route path="/page/arc" element={<ARCPage />} />
                             <Route path="/page/:slug" element={<ContentPage />} />
                             <Route path="/maintenance" element={<MaintenancePage />} />
                             <Route path="*" element={<NotFoundPage />} />
