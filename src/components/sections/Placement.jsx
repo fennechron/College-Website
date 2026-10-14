@@ -1,75 +1,28 @@
 import React, { useState, useEffect } from 'react';
-import { client, urlFor } from '../../lib/sanity';
-import * as LucideIcons from 'lucide-react';
+import { client, fetchHomePage, urlFor } from '../../lib/sanity';
+import { Award, Banknote, BookOpen, Briefcase, Building, Building2, CheckCircle, Globe, GraduationCap, HelpCircle, Lightbulb, Percent, Target, TrendingUp, Trophy, Users } from 'lucide-react';
+import useAutoScroll from '../../hooks/useAutoScroll';
+
+// Named imports keep unused icons out of the homepage bundle.
+const statIcons = { Award, Banknote, BookOpen, Briefcase, Building, Building2, CheckCircle, Globe, GraduationCap, HelpCircle, Lightbulb, Percent, Target, TrendingUp, Trophy, Users };
 
 const Placement = () => {
     const [data, setData] = useState(null);
     const [placements, setPlacements] = useState([]);
     
-    // Auto-scroll states
-    const recruitersRef = React.useRef(null);
-    const galleryRef = React.useRef(null);
-    const [isRecruitersHovered, setIsRecruitersHovered] = useState(false);
-    const [isGalleryHovered, setIsGalleryHovered] = useState(false);
+    const recruitersScroll = useAutoScroll({ contentKey: data?.recruiters, enabled: Boolean(data?.recruiters?.length) });
+    const galleryScroll = useAutoScroll({ contentKey: placements, enabled: Boolean(data && placements.length) });
 
     useEffect(() => {
-        client.fetch(`*[_type == "homePage"][0]{ placementSection }`).then(res => setData(res?.placementSection)).catch(console.error);
+        fetchHomePage().then(res => setData(res?.placementSection)).catch(console.error);
         client.fetch(`*[_type == "placement" && defined(groupPhoto)] | order(year desc) { year, groupPhoto }`).then(res => setPlacements(res)).catch(console.error);
     }, []);
-
-    // Recruiters Auto-scroll
-    useEffect(() => {
-        const container = recruitersRef.current;
-        if (!container || !data?.recruiters?.length) return;
-        let animationId;
-        let scrollPos = container.scrollLeft;
-
-        const scrollStep = () => {
-            if (!isRecruitersHovered && container) {
-                const singleSetWidth = container.scrollWidth / 4;
-                scrollPos += 0.8;
-                if (scrollPos >= singleSetWidth) {
-                    scrollPos -= singleSetWidth;
-                }
-                container.scrollLeft = scrollPos;
-            } else if (container) {
-                scrollPos = container.scrollLeft;
-            }
-            animationId = requestAnimationFrame(scrollStep);
-        };
-        animationId = requestAnimationFrame(scrollStep);
-        return () => cancelAnimationFrame(animationId);
-    }, [isRecruitersHovered, data?.recruiters]);
-
-    // Gallery Auto-scroll
-    useEffect(() => {
-        const container = galleryRef.current;
-        if (!container || !placements.length) return;
-        let animationId;
-        let scrollPos = container.scrollLeft;
-
-        const scrollStep = () => {
-            if (!isGalleryHovered && container) {
-                const singleSetWidth = container.scrollWidth / 4;
-                scrollPos += 0.8;
-                if (scrollPos >= singleSetWidth) {
-                    scrollPos -= singleSetWidth;
-                }
-                container.scrollLeft = scrollPos;
-            } else if (container) {
-                scrollPos = container.scrollLeft;
-            }
-            animationId = requestAnimationFrame(scrollStep);
-        };
-        animationId = requestAnimationFrame(scrollStep);
-        return () => cancelAnimationFrame(animationId);
-    }, [isGalleryHovered, placements]);
 
     if (!data) return null;
 
     const { recruiters = [], stats = [] } = data;
-    const repeatedRecruiters = [...recruiters, ...recruiters, ...recruiters, ...recruiters];
-    const repeatedPlacements = [...placements, ...placements, ...placements, ...placements];
+    const repeatedRecruiters = [...recruiters, ...recruiters];
+    const repeatedPlacements = [...placements, ...placements];
 
     return (
         <section id="placement" className="py-20 bg-background">
@@ -107,18 +60,17 @@ const Placement = () => {
 
                     <div className="relative py-6 md:py-12 mask-gradient">
                         <div 
-                            ref={recruitersRef}
-                            className="flex overflow-x-auto no-scrollbar items-center" 
+                            ref={recruitersScroll.containerRef}
+                            className="auto-scroll-track flex overflow-x-auto no-scrollbar items-center"
                             style={{ gap: 'var(--recruiter-gap)' }}
-                            onMouseEnter={() => setIsRecruitersHovered(true)}
-                            onMouseLeave={() => setIsRecruitersHovered(false)}
-                            onTouchStart={() => setIsRecruitersHovered(true)}
-                            onTouchEnd={() => setIsRecruitersHovered(false)}
+                            {...recruitersScroll.pauseHandlers}
                         >
                             {recruiters.length > 0 && repeatedRecruiters.map((rec, idx) => (
                                 <div key={idx} className="group bg-slate-50 flex items-center justify-center rounded-[1.5rem] md:rounded-[1rem] border-2 border-transparent hover:border-accent hover:bg-white hover:shadow-2xl transition-all duration-500 px-4 md:px-10 shrink-0" style={{ width: 'var(--recruiter-width)', height: 'calc(var(--recruiter-width) / 2)' }}>
                                     <img
-                                        src={urlFor(rec.logo).url()}
+                                        src={urlFor(rec.logo).width(400).url()}
+                                        loading="lazy"
+                                        decoding="async"
                                         alt={rec.name}
                                         className="max-w-full max-h-[85%] object-contain grayscale-[0.2] opacity-90 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500 transform group-hover:scale-110"
                                         onError={(e) => {
@@ -138,7 +90,7 @@ const Placement = () => {
 
                     <div className="mt-13 grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8 text-center bg-primary rounded-1xl sm:rounded-2xl p-4 sm:p-10 backdrop-blur-sm border border-accent/20">
                         {stats.map((stat, idx) => {
-                            const IconComponent = LucideIcons[stat.icon] || LucideIcons.HelpCircle;
+                            const IconComponent = statIcons[stat.icon] || HelpCircle;
                             return (
                                 <div key={idx} className="group flex flex-col items-center">
                                     <div className="w-12 h-12 bg-accent/20 rounded-[12px] flex items-center justify-center mb-4 group-hover:bg-accent/40 transition-colors duration-300">
@@ -185,18 +137,17 @@ const Placement = () => {
 
                             <div className="relative py-4 gallery-mask">
                                 <div 
-                                    ref={galleryRef}
-                                    className="flex overflow-x-auto no-scrollbar items-center" 
+                                    ref={galleryScroll.containerRef}
+                                    className="auto-scroll-track flex overflow-x-auto no-scrollbar items-center"
                                     style={{ gap: 'var(--gallery-gap)' }}
-                                    onMouseEnter={() => setIsGalleryHovered(true)}
-                                    onMouseLeave={() => setIsGalleryHovered(false)}
-                                    onTouchStart={() => setIsGalleryHovered(true)}
-                                    onTouchEnd={() => setIsGalleryHovered(false)}
+                                    {...galleryScroll.pauseHandlers}
                                 >
                                     {repeatedPlacements.map((placement, idx) => (
                                         <div key={idx} className="group relative aspect-[16/10] bg-slate-100 rounded-xl md:rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 flex-shrink-0" style={{ width: 'var(--gallery-width)' }}>
                                             <img
                                                 src={urlFor(placement.groupPhoto).width(1200).url()}
+                                                loading="lazy"
+                                                decoding="async"
                                                 alt={`Placed Students ${placement.year}`}
                                                 className="w-full h-full object-contain bg-white transform group-hover:scale-[1.03] transition-transform duration-700"
                                             />

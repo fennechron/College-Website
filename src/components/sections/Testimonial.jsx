@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
 import { client, urlFor } from '../../lib/sanity';
+import useAutoScroll from '../../hooks/useAutoScroll';
 
 const testimonials = [
   {
@@ -35,8 +35,6 @@ const testimonials = [
 
 const Testimonial = () => {
   const [sanityData, setSanityData] = useState([]);
-  const containerRef = React.useRef(null);
-  const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
     client.fetch('*[_type == "testimonial"]')
@@ -52,31 +50,7 @@ const Testimonial = () => {
   // Repeat data 4 times to guarantee enough scrollable width on desktop & ultra-wide displays
   const repeatedData = [...displayData, ...displayData, ...displayData, ...displayData];
 
-  // Auto-scroll logic
-  useEffect(() => {
-      const container = containerRef.current;
-      if (!container || !repeatedData.length) return;
-
-      let animationId;
-      let scrollPos = container.scrollLeft;
-
-      const scrollStep = () => {
-          if (!isHovered && container) {
-              const singleSetWidth = container.scrollWidth / 4;
-              scrollPos += 0.8;
-              if (scrollPos >= singleSetWidth) {
-                  scrollPos -= singleSetWidth;
-              }
-              container.scrollLeft = scrollPos;
-          } else if (container) {
-              scrollPos = container.scrollLeft;
-          }
-          animationId = requestAnimationFrame(scrollStep);
-      };
-
-      animationId = requestAnimationFrame(scrollStep);
-      return () => cancelAnimationFrame(animationId);
-  }, [isHovered, displayData]);
+  const { containerRef, pauseHandlers } = useAutoScroll({ contentKey: displayData, copies: 4 });
 
   return (
     <section id="testimonials" className="py-20 relative overflow-hidden bg-secondary">
@@ -111,12 +85,9 @@ const Testimonial = () => {
             {/* We duplicate the array 4 times to create a seamless infinite scroll illusion */}
             <div 
                ref={containerRef}
-               className="flex overflow-x-auto no-scrollbar px-4 pb-8 items-stretch"
+               className="auto-scroll-track flex overflow-x-auto no-scrollbar px-4 pb-8 items-stretch"
                style={{ gap: 'var(--testimonial-gap)' }}
-               onMouseEnter={() => setIsHovered(true)}
-               onMouseLeave={() => setIsHovered(false)}
-               onTouchStart={() => setIsHovered(true)}
-               onTouchEnd={() => setIsHovered(false)}
+               {...pauseHandlers}
             >
                 {repeatedData.map((t, idx) => (
                     <div 
@@ -133,10 +104,11 @@ const Testimonial = () => {
                             </div>
                             <div className="flex items-center gap-2 sm:gap-4 mt-auto">
                                 <img 
-                                    src={t.image && t.image.asset ? urlFor(t.image).url() : t.image} 
+                                    src={t.image && t.image.asset ? urlFor(t.image).width(128).url() : t.image}
                                     alt={t.name} 
                                     className="w-8 h-8 sm:w-12 sm:h-12 rounded-full object-cover border border-white/20"
                                     loading="lazy"
+                                    decoding="async"
                                 />
                                 <div>
                                     <h4 className="text-white font-bold tracking-wide text-xs sm:text-sm">{t.name}</h4>

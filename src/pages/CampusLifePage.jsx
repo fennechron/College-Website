@@ -68,7 +68,7 @@ const CampusLifePage = () => {
                 <motion.div style={{ y: y1 }} className="absolute inset-0 z-0">
                     {heroImage && (
                         <img 
-                            src={urlFor(heroImage).url()} 
+                            src={urlFor(heroImage).width(1920).url()} decoding="async"
                             alt="Campus Life at CEC" 
                             className="w-full h-full object-cover opacity-70 mix-blend-luminosity"
                         />
@@ -133,7 +133,7 @@ const CampusLifePage = () => {
                             >
                                 {facility.image && (
                                     <img 
-                                        src={urlFor(facility.image).url()} 
+                                        src={urlFor(facility.image).width(960).url()} loading="lazy" decoding="async"
                                         alt={facility.title} 
                                         className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                                     />
@@ -217,7 +217,7 @@ const CampusLifePage = () => {
                                 >
                                     {event.image && (
                                         <img 
-                                            src={urlFor(event.image).url()} 
+                                            src={urlFor(event.image).width(960).url()} loading="lazy" decoding="async"
                                             alt={event.title} 
                                             className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                                         />

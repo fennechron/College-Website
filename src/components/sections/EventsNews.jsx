@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Calendar, ArrowRight } from 'lucide-react';
 import { client, urlFor } from '../../lib/sanity';
 import { Link } from 'react-router-dom';
+import useAutoScroll from '../../hooks/useAutoScroll';
 const truncateText = (text, maxLength) => {
     if (!text) return '';
     return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
@@ -44,8 +45,6 @@ const eventsNews = [
 
 const EventsNews = () => {
     const [sanityData, setSanityData] = useState([]);
-    const containerRef = React.useRef(null);
-    const [isHovered, setIsHovered] = useState(false);
 
     useEffect(() => {
         client.fetch('*[_type == "eventNews"]')
@@ -59,26 +58,7 @@ const EventsNews = () => {
 
     const displayData = sanityData.length > 0 ? sanityData : eventsNews;
 
-    // Auto-scroll logic
-    useEffect(() => {
-        const container = containerRef.current;
-        if (!container) return;
-
-        let animationId;
-        const scrollStep = () => {
-            if (!isHovered && container) {
-                container.scrollLeft += 1;
-                // If we scrolled past the first half of the duplicated content, reset back to 0 for infinite loop
-                if (container.scrollLeft >= container.scrollWidth / 2) {
-                    container.scrollLeft = 0;
-                }
-            }
-            animationId = requestAnimationFrame(scrollStep);
-        };
-
-        animationId = requestAnimationFrame(scrollStep);
-        return () => cancelAnimationFrame(animationId);
-    }, [isHovered, displayData]);
+    const { containerRef, pauseHandlers } = useAutoScroll({ contentKey: displayData, speed: 60 });
 
     return (
         <section id="events-news" className="py-20 bg-background border-t border-primary/5">
@@ -118,12 +98,9 @@ const EventsNews = () => {
                 <div className="relative py-10 mask-gradient-horizontal">
                     <div 
                         ref={containerRef}
-                        className="flex overflow-x-auto no-scrollbar items-stretch" 
+                        className="auto-scroll-track flex overflow-x-auto no-scrollbar items-stretch"
                         style={{ gap: 'var(--event-card-gap)' }}
-                        onMouseEnter={() => setIsHovered(true)}
-                        onMouseLeave={() => setIsHovered(false)}
-                        onTouchStart={() => setIsHovered(true)}
-                        onTouchEnd={() => setIsHovered(false)}
+                        {...pauseHandlers}
                     >
                         {[...displayData, ...displayData].map((item, idx) => (
                             <div key={`${item._id || item.id}-${idx}`} className="h-[360px] sm:h-[460px] group bg-white rounded-[12px] sm:rounded-[12px] border border-primary/10 overflow-hidden hover:shadow-[0_20px_50px_rgba(12,43,78,0.12)] transition-all duration-500 hover:-translate-y-2 flex flex-col shrink-0" style={{ width: 'var(--event-card-width)' }}>
@@ -131,7 +108,9 @@ const EventsNews = () => {
                                 <div className="h-32 sm:h-48 shrink-0 relative bg-primary/5 flex items-center justify-center overflow-hidden">
                                     {item.image ? (
                                         <img 
-                                            src={urlFor(item.image).url()} 
+                                            src={urlFor(item.image).width(800).url()}
+                                            loading="lazy"
+                                            decoding="async"
                                             alt={item.title} 
                                             className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                                         />

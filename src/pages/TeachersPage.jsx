@@ -26,7 +26,7 @@ const HodCard = ({ member, accentHex }) => {
         >
             {/* ── Photo Column ── */}
             <div className="relative sm:w-56 lg:w-64 shrink-0 min-h-[280px] overflow-hidden">
-                <img
+                <img loading="lazy" decoding="async"
                     src={member.photo && member.photo.asset ? urlFor(member.photo).width(500).height(500).fit('crop').url() : member.photo}
                     alt={member.name}
                     className="absolute inset-0 w-full h-full object-cover"
@@ -147,7 +147,7 @@ const FacultyCard = ({ member, accentHex }) => {
 
             {/* Photo Section */}
             <div className="relative w-24 h-24 sm:w-28 sm:h-28 shrink-0 rounded-xl overflow-hidden shadow-sm border border-slate-100">
-                <img
+                <img loading="lazy" decoding="async"
                     src={member.photo && member.photo.asset ? urlFor(member.photo).width(400).height(400).fit('crop').url() : member.photo}
                     alt={member.name}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"

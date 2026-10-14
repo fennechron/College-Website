@@ -79,7 +79,7 @@ function ARCPage() {
                             </div>
                         </div>
                         <figure className="overflow-hidden rounded-2xl border border-white/15 bg-secondary">
-                            <img src={arcImages.nexum} alt="Alumni and professionals sharing their experiences at NEXUM" className="aspect-[4/3] w-full object-cover" fetchPriority="high" />
+                            <img src={arcImages.nexum} alt="Alumni and professionals sharing their experiences at NEXUM" className="aspect-[4/3] w-full object-cover" fetchpriority="high" />
                             <figcaption className="px-5 py-4 text-sm text-slate-200">NEXUM · Conversations that connect generations of CECians</figcaption>
                         </figure>
                     </div>

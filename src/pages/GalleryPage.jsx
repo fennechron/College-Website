@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Home, ChevronRight, Image as ImageIcon, X, ChevronLeft, ChevronRight as ChevronRightIcon, Maximize2, Sparkles, Filter } from 'lucide-react';
-import { client, urlFor } from '../lib/sanity';
+import { client, optimizedImageUrl, urlFor } from '../lib/sanity';
 
 // Curated fallback gallery items in case Sanity CMS data is sparse
 const fallbackGallery = [
@@ -278,7 +278,7 @@ const GalleryPage = () => {
                                             className="group relative overflow-hidden rounded-2xl bg-slate-900 shadow-md hover:shadow-2xl transition-all duration-500 aspect-[4/3] cursor-pointer border border-slate-200/50"
                                         >
                                             <img 
-                                                src={photo.url} 
+                                                src={optimizedImageUrl(photo.url, 800)} decoding="async"
                                                 alt={photo.altText || photo.title || "Gallery photo"} 
                                                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out opacity-95 group-hover:opacity-100" 
                                                 loading="lazy"

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { client, urlFor } from '../../lib/sanity';
+import { fetchHomePage, urlFor } from '../../lib/sanity';
+import { useAutoplay } from '../../hooks/useAutoScroll';
 
 const Achievements = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -8,19 +9,12 @@ const Achievements = () => {
     const [touchEnd, setTouchEnd] = useState(null);
 
     useEffect(() => {
-        client.fetch(`*[_type == "homePage"][0]{ achievements }`).then(res => {
+        fetchHomePage().then(res => {
             if (res?.achievements) setSlides(res.achievements);
         }).catch(console.error);
     }, []);
 
-    // Automatic sliding effect
-    useEffect(() => {
-        if (slides.length <= 1) return;
-        const interval = setInterval(() => {
-            setCurrentIndex((prevIndex) => (prevIndex + 1) % slides.length);
-        }, 4000);
-        return () => clearInterval(interval);
-    }, [slides.length, currentIndex]); // Added currentIndex to dependency array so it resets interval on manual change
+    const sectionRef = useAutoplay(slides.length, () => setCurrentIndex(index => (index + 1) % slides.length), 4000, currentIndex);
 
     const handleTouchStart = (e) => {
         setTouchStart(e.targetTouches[0].clientX);
@@ -48,7 +42,7 @@ const Achievements = () => {
     if (!slides || slides.length === 0) return null;
 
     return (
-        <section id="achievements" className="py-10 bg-transparent border-t border-primary/10">
+        <section ref={sectionRef} id="achievements" className="py-10 bg-transparent border-t border-primary/10">
             <div className="max-w-[95%] mx-auto px-4 lg:px-6">
                 <div className="mb-10 text-center">
                     <h2 className="text-[1.8rem] md:text-[2.25rem] font-display font-bold text-primary mb-4 uppercase tracking-wide">Our Achievements</h2>
@@ -64,14 +58,14 @@ const Achievements = () => {
                     {/* Slider track */}
                     <div 
                         className="flex h-[350px] sm:h-[450px] md:h-[650px] w-full transition-transform duration-1000 ease-in-out"
-                        style={{ transform: `translateX(-${currentIndex * 100}%)`, willChange: 'transform' }}
+                        style={{ transform: `translateX(-${currentIndex * 100}%)` }}
                     >
                         {slides.map((slide, index) => (
                             <div
                                 key={index}
-                                className="relative h-full min-w-full bg-contain bg-center bg-no-repeat"
-                                style={{ backgroundImage: `url(${urlFor(slide.image).url()})` }}
+                                className="relative h-full min-w-full"
                             >
+                                {slide.image && <img src={urlFor(slide.image).width(1600).url()} alt={slide.title || 'CEC achievement'} loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-contain" />}
                                 {/* Overlay removed as per user request */}
                                 
                                 {/* Text Content */}

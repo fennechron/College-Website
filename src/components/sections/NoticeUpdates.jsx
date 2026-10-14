@@ -2,67 +2,52 @@ import React, { useState, useEffect } from 'react';
 import { ChevronDown, GraduationCap, Building2, Key, Info, FileText, Newspaper, BookOpen ,ArrowRight} from 'lucide-react';
 import { client } from '../../lib/sanity';
 import { Link } from 'react-router-dom';
+import useAutoScroll from '../../hooks/useAutoScroll';
 
 
 // Helper to duplicate items for smooth infinite scrolling
 const ScrollList = ({ items }) => {
-    const containerRef = React.useRef(null);
-    const [isHovered, setIsHovered] = useState(false);
     const [showLatestBtn, setShowLatestBtn] = useState(false);
     
     const needsScroll = items.length > 3;
 
-    useEffect(() => {
-        const container = containerRef.current;
-        if (!container || items.length === 0 || !needsScroll) return;
-
-        let animationId;
-        const scrollStep = () => {
-            if (!isHovered && container) {
-                container.scrollTop += 1;
-                // If we scrolled past the first half of the duplicated content, reset back to 0
-                if (container.scrollTop >= container.scrollHeight / 2) {
-                    container.scrollTop = 0;
-                }
-                
-                // Show button if scrolled down a bit
-                setShowLatestBtn(container.scrollTop > 50);
-            }
-            animationId = requestAnimationFrame(scrollStep);
-        };
-
-        animationId = requestAnimationFrame(scrollStep);
-        return () => cancelAnimationFrame(animationId);
-    }, [isHovered, items.length, needsScroll]);
+    const { containerRef, pause, resume, pauseHandlers } = useAutoScroll({ axis: 'y', contentKey: items, enabled: needsScroll, speed: 60 });
+    const latestTimer = React.useRef(null);
+    const latestVisible = React.useRef(false);
+    useEffect(() => () => clearTimeout(latestTimer.current), []);
 
     // Handle manual scroll to update button visibility when user swipes manually
     const handleScroll = () => {
         if (containerRef.current) {
-            setShowLatestBtn(containerRef.current.scrollTop > 50);
+            const visible = containerRef.current.scrollTop > 50;
+            if (visible !== latestVisible.current) {
+                latestVisible.current = visible;
+                setShowLatestBtn(visible);
+            }
         }
     };
 
     const scrollToTop = () => {
         if (containerRef.current) {
+            pause();
             containerRef.current.scrollTo({ top: 0, behavior: 'smooth' });
             // Temporarily pause auto-scroll so user can read the top item
-            setIsHovered(true);
-            setTimeout(() => setIsHovered(false), 2000);
+            clearTimeout(latestTimer.current);
+            latestTimer.current = setTimeout(() => {
+                if (!containerRef.current?.parentElement.matches(':hover') && !containerRef.current?.contains(document.activeElement)) resume();
+            }, 2000);
         }
     };
 
     return (
         <div 
             className="relative h-[300px] w-full overflow-hidden"
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-            onTouchStart={() => setIsHovered(true)}
-            onTouchEnd={() => setIsHovered(false)}
+            {...pauseHandlers}
         >
             <div 
                 ref={containerRef}
                 onScroll={handleScroll}
-                className="w-full h-full overflow-y-hidden no-scrollbar px-4 pb-4" 
+                className="auto-scroll-track w-full h-full overflow-y-auto no-scrollbar px-4 pb-4"
             >
                 <ul className="flex flex-col gap-6 pb-6 pt-4 pr-4">
                     {items.map((item, idx) => (

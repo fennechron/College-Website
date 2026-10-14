@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link, useLocation } from 'react-router-dom';
-import { client, urlFor } from '../lib/sanity';
+import { client, optimizedImageUrl, urlFor } from '../lib/sanity';
 import { ChevronRight, Home, ArrowLeft, Calendar, Users, BookOpen, Clock, FileText, ExternalLink, Phone, Copy, Check } from 'lucide-react';
 import { motion } from 'framer-motion';
 import NotFoundPage from './NotFoundPage';
@@ -343,7 +343,7 @@ const ContentPage = () => {
                     <div className="h-[40vh] sm:h-[60vh] min-h-[300px] relative overflow-hidden flex items-center justify-center">
                         <div className="absolute inset-0 z-0">
                             <img 
-                                src={dept.heroImage} 
+                                src={optimizedImageUrl(dept.heroImage, 1920)} decoding="async"
                                 alt={dept.name} 
                                 className="w-full h-full object-cover"
                             />
@@ -715,7 +715,7 @@ const ContentPage = () => {
                     <div className="absolute inset-0 z-0">
                         {content.image ? (
                             <img 
-                                src={content.image} 
+                                src={optimizedImageUrl(content.image, 1600)} decoding="async"
                                 alt={content.title} 
                                 className="w-full h-full object-cover"
                             />
@@ -856,7 +856,7 @@ const ContentPage = () => {
                                         {content.gallery.map((image, i) => (
                                             <div key={i} className="rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 aspect-video bg-slate-100 group">
                                                 <img 
-                                                    src={image} 
+                                                    src={optimizedImageUrl(image, 960)} loading="lazy" decoding="async"
                                                     alt={`Gallery view ${i + 1}`} 
                                                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
                                                 />
@@ -1587,7 +1587,7 @@ const ContentPage = () => {
                                         {content.gallery.map((image, i) => (
                                             <div key={i} className="rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 aspect-video bg-slate-100 group">
                                                 <img 
-                                                    src={image} 
+                                                    src={optimizedImageUrl(image, 960)} loading="lazy" decoding="async"
                                                     alt={`Gallery view ${i + 1}`} 
                                                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
                                                 />

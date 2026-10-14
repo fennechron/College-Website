@@ -187,7 +187,7 @@ const OrganizationDetail = () => {
                                             <div className="h-40 sm:h-48 overflow-hidden relative">
                                                 {achieve.image && (
                                                     <img 
-                                                        src={urlFor(achieve.image).url()} 
+                                                        src={urlFor(achieve.image).width(800).url()} loading="lazy" decoding="async"
                                                         alt={achieve.title}
                                                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
                                                     />
@@ -297,7 +297,7 @@ const OrganizationDetail = () => {
                                 >
                                     {item.image && (
                                         <img 
-                                            src={urlFor(item.image).url()} 
+                                            src={urlFor(item.image).width(800).url()} loading="lazy" decoding="async"
                                             alt={item.title} 
                                             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                                         />

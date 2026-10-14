@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Image as ImageIcon } from 'lucide-react';
-import { client, urlFor } from '../../lib/sanity';
+import { fetchHomePage, urlFor } from '../../lib/sanity';
 
 const PhotoGallery = () => {
     const [photos, setPhotos] = useState([]);
 
     useEffect(() => {
-        client.fetch(`*[_type == "homePage"][0]{ gallery }`).then(res => {
+        fetchHomePage().then(res => {
             if (res?.gallery) setPhotos(res.gallery);
         }).catch(console.error);
     }, []);
@@ -29,7 +29,9 @@ const PhotoGallery = () => {
                     {photos.slice(0, 6).map((photo, idx) => (
                         <div key={idx} className="group relative overflow-hidden rounded-[12px] shadow-sm hover:shadow-xl transition-all duration-300 aspect-[4/3] w-full">
                             <img 
-                                src={urlFor(photo.image).url()} 
+                                src={urlFor(photo.image).width(960).url()}
+                                loading="lazy"
+                                decoding="async"
                                 alt={photo.altText || "Gallery Image"} 
                                 className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500 ease-in-out" 
                             />

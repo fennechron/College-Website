@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { client, urlFor } from '../../lib/sanity';
+import { client, fetchHomePage, urlFor } from '../../lib/sanity';
 import { Link } from 'react-router-dom';
 
 const AboutUs = () => {
@@ -7,7 +7,7 @@ const AboutUs = () => {
     const [principalImage, setPrincipalImage] = useState(null);
 
     useEffect(() => {
-        client.fetch(`*[_type == "homePage"][0]`).then(setData).catch(console.error);
+        fetchHomePage().then(setData).catch(console.error);
         client.fetch(`*[_type == "principal"][0]{ image }`).then(res => setPrincipalImage(res?.image)).catch(console.error);
     }, []);
 
@@ -22,7 +22,7 @@ const AboutUs = () => {
                     <div className="w-full md:w-2/5 lg:w-1/3 flex flex-col items-center md:items-start text-center md:text-left md:pr-4">
                         <div className="w-48 h-48 sm:w-64 sm:h-64 md:w-72 md:h-72 lg:w-80 lg:h-80 xl:w-96 xl:h-96 rounded-full overflow-hidden border-[6px] border-slate-100 shadow-md mb-6 flex-shrink-0 relative bg-slate-200">
                             {principalImage && (
-                                <img src={urlFor(principalImage).url()} alt="Principal" className="w-full h-full object-cover" />
+                                <img src={urlFor(principalImage).width(800).url()} alt="Principal" loading="lazy" decoding="async" className="w-full h-full object-cover" />
                             )}
                         </div>
                         <h3 className="text-2xl md:text-3xl lg:text-4xl font-display font-bold text-primary mb-2">Principal</h3>

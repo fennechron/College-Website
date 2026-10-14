@@ -1,12 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { client } from '../../lib/sanity';
-
-import bg1 from '../../assets/cec11.jpeg';
-import bg2 from '../../assets/cec12.jpg';
-import bg3 from '../../assets/cec14.png';
-import bg4 from '../../assets/cec15.webp';
-
+import { client, urlFor } from '../../lib/sanity';
+import { useAutoplay } from '../../hooks/useAutoScroll';
 
 const Hero = () => {
     const [images, setImages] = useState([]);
@@ -17,7 +12,7 @@ const Hero = () => {
         const query = `*[_type == "carouselImage"] | order(order asc){
             title,
             subtitle,
-            "src": image.asset->url
+            image
         }`;
         client.fetch(query)
             .then(data => {
@@ -30,25 +25,18 @@ const Hero = () => {
             });
     }, []);
 
-    // Automatic sliding effect (change slide every 5 seconds)
-    useEffect(() => {
-        if (images.length === 0) return;
-        const interval = setInterval(() => {
-            setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
-        }, 5000);
-        return () => clearInterval(interval);
-    }, [images.length]);
+    const heroRef = useAutoplay(images.length, () => setCurrentIndex(index => (index + 1) % images.length), 5000);
 
     const prevSlide = () => {
-        setCurrentIndex((prevIndex) => (prevIndex === 0 ? images.length - 1 : prevIndex - 1));
+        if (images.length > 1) setCurrentIndex((prevIndex) => (prevIndex === 0 ? images.length - 1 : prevIndex - 1));
     };
 
     const nextSlide = () => {
-        setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
+        if (images.length > 1) setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
     };
 
     return (
-        <section id="home" className="relative group w-full overflow-hidden bg-slate-900 aspect-[4/3] sm:aspect-[16/9] lg:aspect-[21/9] max-h-[550px]">
+        <section ref={heroRef} id="home" className="relative group w-full overflow-hidden bg-slate-900 aspect-[4/3] sm:aspect-[16/9] lg:aspect-[21/9] max-h-[550px]">
             {/* Slider track */}
             <div 
                 className="flex h-full w-full transition-transform duration-1000 ease-in-out"
@@ -57,9 +45,20 @@ const Hero = () => {
                 {images.map((imgObj, index) => (
                     <div
                         key={index}
-                        className="relative h-full min-w-full bg-cover bg-center flex items-center justify-center text-center"
-                        style={{ backgroundImage: `url(${imgObj.src})` }}
+                        className="relative h-full min-w-full flex items-center justify-center text-center"
                     >
+                        {imgObj.image && (
+                            <img
+                                src={urlFor(imgObj.image).width(1920).url()}
+                                srcSet={`${urlFor(imgObj.image).width(960).url()} 960w, ${urlFor(imgObj.image).width(1440).url()} 1440w, ${urlFor(imgObj.image).width(1920).url()} 1920w`}
+                                sizes="100vw"
+                                alt={imgObj.title || 'CEC campus'}
+                                loading={index === currentIndex ? 'eager' : 'lazy'}
+                                fetchpriority={index === currentIndex ? 'high' : 'low'}
+                                decoding="async"
+                                className="absolute inset-0 h-full w-full object-cover"
+                            />
+                        )}
                         {imgObj.title && (
                             <>
                                 <div className="absolute inset-0 bg-black/40"></div>
@@ -81,6 +80,7 @@ const Hero = () => {
             <button
                 onClick={prevSlide}
                 aria-label="Previous image"
+                disabled={images.length < 2}
                 className="absolute left-4 top-1/2 -translate-y-1/2 rounded-full bg-black/20 p-2 text-white/80 opacity-0 backdrop-blur-sm transition-all duration-300 hover:bg-black/50 hover:text-white hover:scale-110 group-hover:opacity-100 md:left-8 md:p-3 z-10"
             >
                 <ChevronLeft size={36} />
@@ -88,6 +88,7 @@ const Hero = () => {
             <button
                 onClick={nextSlide}
                 aria-label="Next image"
+                disabled={images.length < 2}
                 className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full bg-black/20 p-2 text-white/80 opacity-0 backdrop-blur-sm transition-all duration-300 hover:bg-black/50 hover:text-white hover:scale-110 group-hover:opacity-100 md:right-8 md:p-3 z-10"
             >
                 <ChevronRight size={36} />
